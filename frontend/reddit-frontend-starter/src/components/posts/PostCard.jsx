@@ -1,0 +1,1029 @@
+import { useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+
+import api from "../../services/api";
+
+import CommentList from "../comments/CommentList";
+
+import AddCommentForm from "../comments/AddCommentForm";
+
+function PostCard({
+
+  id,
+  title,
+  content,
+  imageUrl,
+  votes,
+  author,
+  comments,
+  communityName,
+  communityId,
+  onPostUpdated
+
+}) {
+
+  const navigate = useNavigate();
+
+  /* =========================================
+     States
+  ========================================= */
+
+  const [showComments, setShowComments] =
+    useState(false);
+
+  const [voteCount, setVoteCount] =
+    useState(votes || 0);
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [editing, setEditing] =
+    useState(false);
+
+  const [deleted, setDeleted] =
+    useState(false);
+
+  /* =========================================
+     Edit States
+  ========================================= */
+
+  const [editTitle, setEditTitle] =
+    useState(title);
+
+  const [editContent, setEditContent] =
+    useState(content);
+
+  const [editImageUrl, setEditImageUrl] =
+    useState(imageUrl || "");
+
+  /* =========================================
+     Logged User
+  ========================================= */
+
+  const loggedInUser =
+
+    localStorage.getItem("username")
+
+    ||
+
+    "User";
+
+  /* =========================================
+     Clean Author
+  ========================================= */
+
+  const cleanAuthor =
+
+    author &&
+
+    typeof author === "string" &&
+
+    author.trim() !== "" &&
+
+    author !== "undefined" &&
+
+    author !== "null"
+
+      ? author
+
+      : null;
+
+  /* =========================================
+     Display Author
+  ========================================= */
+
+  const displayAuthor =
+
+    cleanAuthor
+
+      ? cleanAuthor.split("@")[0]
+
+      : "Anonymous";
+
+  /* =========================================
+     Check Owner
+  ========================================= */
+
+  const isOwner =
+
+    loggedInUser &&
+
+    cleanAuthor &&
+
+    loggedInUser
+      .trim()
+      .toLowerCase()
+
+    ===
+
+    cleanAuthor
+      .trim()
+      .toLowerCase();
+
+  /* =========================================
+     Hide Deleted
+  ========================================= */
+
+  if (deleted) {
+
+    return null;
+
+  }
+
+  /* =========================================
+     Upvote
+  ========================================= */
+
+  const handleUpvote = async () => {
+
+    try {
+
+      setLoading(true);
+
+      const response = await api.put(
+        `/posts/${id}/upvote`
+      );
+
+      setVoteCount(
+        response.data.votes
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+  /* =========================================
+     Downvote
+  ========================================= */
+
+  const handleDownvote = async () => {
+
+    try {
+
+      setLoading(true);
+
+      const response = await api.put(
+        `/posts/${id}/downvote`
+      );
+
+      setVoteCount(
+        response.data.votes
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+  /* =========================================
+     Delete
+  ========================================= */
+
+  const handleDelete = async () => {
+
+    const confirmDelete =
+      window.confirm(
+        "Delete this post?"
+      );
+
+    if (!confirmDelete) {
+
+      return;
+
+    }
+
+    try {
+
+      await api.delete(
+        `/posts/${id}`
+      );
+
+      setDeleted(true);
+
+      if (onPostUpdated) {
+
+        onPostUpdated();
+
+      }
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert(
+        "Failed to delete ❌"
+      );
+
+    }
+
+  };
+
+  /* =========================================
+     Save Edit
+  ========================================= */
+
+  const handleSaveEdit = async () => {
+
+    try {
+
+      await api.put(
+
+        `/posts/${id}`,
+
+        {
+
+          title: editTitle,
+
+          content: editContent,
+
+          imageUrl: editImageUrl
+
+        }
+
+      );
+
+      setEditing(false);
+
+      if (onPostUpdated) {
+
+        onPostUpdated();
+
+      }
+
+      alert(
+        "Post Updated Successfully 🚀"
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert(
+        "Failed to update ❌"
+      );
+
+    }
+
+  };
+
+  return (
+
+    <div
+
+      style={{
+
+        background:
+          "linear-gradient(135deg,#0f172a,#111827)",
+
+        border:
+          "1px solid rgba(59,130,246,0.10)",
+
+        borderRadius: "22px",
+
+        padding: "18px",
+
+        boxShadow:
+          "0 8px 24px rgba(0,0,0,0.24)",
+
+        overflow: "hidden",
+
+        backdropFilter: "blur(10px)"
+
+      }}
+
+    >
+
+      {/* =========================================
+         Community Badge
+      ========================================= */}
+
+      {
+
+        communityName && (
+
+          <button
+
+            onClick={() =>
+
+              navigate(
+                `/community/${communityId}`
+              )
+
+            }
+
+            style={{
+
+              background:
+                "rgba(37,99,235,0.12)",
+
+              border:
+                "1px solid rgba(59,130,246,0.14)",
+
+              color: "#60a5fa",
+
+              padding: "5px 12px",
+
+              borderRadius: "999px",
+
+              fontSize: "10px",
+
+              fontWeight: "600",
+
+              cursor: "pointer",
+
+              marginBottom: "14px"
+
+            }}
+
+          >
+
+            {communityName}
+
+          </button>
+
+        )
+
+      }
+
+      {/* =========================================
+         Header
+      ========================================= */}
+
+      <div
+
+        style={{
+
+          display: "flex",
+
+          justifyContent: "space-between",
+
+          alignItems: "center",
+
+          marginBottom: "14px"
+
+        }}
+
+      >
+
+        {/* User */}
+
+        <div
+
+          style={{
+
+            display: "flex",
+
+            alignItems: "center",
+
+            gap: "10px"
+
+          }}
+
+        >
+
+          {/* Avatar */}
+
+          <div
+
+            style={{
+
+              width: "42px",
+
+              height: "42px",
+
+              borderRadius: "50%",
+
+              background:
+                "linear-gradient(to right,#2563eb,#38bdf8)",
+
+              display: "flex",
+
+              alignItems: "center",
+
+              justifyContent: "center",
+
+              color: "white",
+
+              fontWeight: "700",
+
+              fontSize: "14px"
+
+            }}
+
+          >
+
+            {
+
+              displayAuthor
+                .charAt(0)
+                .toUpperCase()
+
+            }
+
+          </div>
+
+          {/* Info */}
+
+          <div>
+
+            <h4
+
+              style={{
+
+                margin: 0,
+
+                color: "#f8fafc",
+
+                fontSize: "15px"
+
+              }}
+
+            >
+
+              {displayAuthor}
+
+            </h4>
+
+            <p
+
+              style={{
+
+                margin: "3px 0 0 0",
+
+                color: "#94a3b8",
+
+                fontSize: "11px"
+
+              }}
+
+            >
+
+              Posted in community
+
+            </p>
+
+          </div>
+
+        </div>
+
+        {/* Votes */}
+
+        <div
+
+          style={{
+
+            background:
+              "rgba(37,99,235,0.12)",
+
+            color: "#60a5fa",
+
+            padding: "7px 12px",
+
+            borderRadius: "10px",
+
+            fontSize: "11px",
+
+            fontWeight: "700"
+
+          }}
+
+        >
+
+          {voteCount} Votes
+
+        </div>
+
+      </div>
+
+      {/* =========================================
+         Edit Mode
+      ========================================= */}
+
+      {
+
+        editing ? (
+
+          <div>
+
+            <input
+
+              type="text"
+
+              value={editTitle}
+
+              onChange={(e) =>
+
+                setEditTitle(
+                  e.target.value
+                )
+
+              }
+
+              style={{
+
+                width: "100%",
+
+                padding: "12px",
+
+                marginBottom: "12px",
+
+                borderRadius: "12px",
+
+                border: "none",
+
+                background: "#1e293b",
+
+                color: "white",
+
+                fontSize: "15px"
+
+              }}
+
+            />
+
+            <textarea
+
+              value={editContent}
+
+              onChange={(e) =>
+
+                setEditContent(
+                  e.target.value
+                )
+
+              }
+
+              rows={5}
+
+              style={{
+
+                width: "100%",
+
+                padding: "12px",
+
+                marginBottom: "12px",
+
+                borderRadius: "12px",
+
+                border: "none",
+
+                background: "#1e293b",
+
+                color: "white",
+
+                fontSize: "14px"
+
+              }}
+
+            />
+
+            <input
+
+              type="text"
+
+              value={editImageUrl}
+
+              onChange={(e) =>
+
+                setEditImageUrl(
+                  e.target.value
+                )
+
+              }
+
+              placeholder="Image URL"
+
+              style={{
+
+                width: "100%",
+
+                padding: "12px",
+
+                marginBottom: "12px",
+
+                borderRadius: "12px",
+
+                border: "none",
+
+                background: "#1e293b",
+
+                color: "white",
+
+                fontSize: "14px"
+
+              }}
+
+            />
+
+            <button
+
+              onClick={handleSaveEdit}
+
+              style={{
+
+                background:
+                  "linear-gradient(to right,#2563eb,#3b82f6)",
+
+                border: "none",
+
+                color: "white",
+
+                padding: "10px 16px",
+
+                borderRadius: "12px",
+
+                fontWeight: "700",
+
+                cursor: "pointer"
+
+              }}
+
+            >
+
+              Save Changes
+
+            </button>
+
+          </div>
+
+        ) : (
+
+          <>
+
+            {/* Title */}
+
+            <h2
+
+              style={{
+
+                color: "#f8fafc",
+
+                fontSize: "21px",
+
+                fontWeight: "700",
+
+                marginBottom: "10px"
+
+              }}
+
+            >
+
+              {editTitle}
+
+            </h2>
+
+            {/* Content */}
+
+            <p
+
+              style={{
+
+                color: "#cbd5e1",
+
+                fontSize: "14px",
+
+                lineHeight: "26px",
+
+                marginBottom: "16px"
+
+              }}
+
+            >
+
+              {editContent}
+
+            </p>
+
+            {/* Image */}
+
+            {
+
+              editImageUrl && (
+
+                <div
+
+                  style={{
+
+                    width: "100%",
+
+                    overflow: "hidden",
+
+                    borderRadius: "18px",
+
+                    marginBottom: "18px"
+
+                  }}
+
+                >
+
+                  <img
+
+                    src={editImageUrl}
+
+                    alt="Post"
+
+                    style={{
+
+                      width: "100%",
+
+                      objectFit: "cover"
+
+                    }}
+
+                  />
+
+                </div>
+
+              )
+
+            }
+
+          </>
+
+        )
+
+      }
+
+      {/* =========================================
+         Action Buttons
+      ========================================= */}
+
+      <div
+
+        style={{
+
+          display: "flex",
+
+          gap: "12px",
+
+          flexWrap: "wrap",
+
+          marginTop: "18px",
+
+          paddingTop: "16px",
+
+          borderTop:
+            "1px solid rgba(255,255,255,0.06)"
+
+        }}
+
+      >
+
+        {/* Upvote */}
+
+        <button
+
+          onClick={handleUpvote}
+
+          disabled={loading}
+
+          style={{
+
+            background:
+              "linear-gradient(to right,#16a34a,#22c55e)",
+
+            border: "none",
+
+            color: "white",
+
+            padding: "10px 16px",
+
+            borderRadius: "12px",
+
+            fontWeight: "700",
+
+            cursor: "pointer",
+
+            fontSize: "13px"
+
+          }}
+
+        >
+
+          👍 Upvote
+
+        </button>
+
+        {/* Downvote */}
+
+        <button
+
+          onClick={handleDownvote}
+
+          disabled={loading}
+
+          style={{
+
+            background:
+              "linear-gradient(to right,#dc2626,#ef4444)",
+
+            border: "none",
+
+            color: "white",
+
+            padding: "10px 16px",
+
+            borderRadius: "12px",
+
+            fontWeight: "700",
+
+            cursor: "pointer",
+
+            fontSize: "13px"
+
+          }}
+
+        >
+
+          👎 Downvote
+
+        </button>
+
+        {/* Comments */}
+
+        <button
+
+          onClick={() =>
+
+            setShowComments(
+
+              !showComments
+
+            )
+
+          }
+
+          style={{
+
+            background:
+              "linear-gradient(to right,#2563eb,#3b82f6)",
+
+            border: "none",
+
+            color: "white",
+
+            padding: "10px 16px",
+
+            borderRadius: "12px",
+
+            fontWeight: "700",
+
+            cursor: "pointer",
+
+            fontSize: "13px"
+
+          }}
+
+        >
+
+          💬 {comments || 0}
+
+        </button>
+
+        {/* Edit */}
+
+        {
+
+          isOwner && (
+
+            <button
+
+              onClick={() =>
+
+                setEditing(!editing)
+
+              }
+
+              style={{
+
+                background:
+                  "linear-gradient(to right,#f59e0b,#fbbf24)",
+
+                border: "none",
+
+                color: "white",
+
+                padding: "10px 16px",
+
+                borderRadius: "12px",
+
+                fontWeight: "700",
+
+                cursor: "pointer",
+
+                fontSize: "13px"
+
+              }}
+
+            >
+
+              ✏ Edit
+
+            </button>
+
+          )
+
+        }
+
+        {/* Delete */}
+
+        {
+
+          isOwner && (
+
+            <button
+
+              onClick={handleDelete}
+
+              style={{
+
+                background:
+                  "linear-gradient(to right,#dc2626,#ef4444)",
+
+                border: "none",
+
+                color: "white",
+
+                padding: "10px 16px",
+
+                borderRadius: "12px",
+
+                fontWeight: "700",
+
+                cursor: "pointer",
+
+                fontSize: "13px"
+
+              }}
+
+            >
+
+              🗑 Delete
+
+            </button>
+
+          )
+
+        }
+
+      </div>
+
+      {/* =========================================
+         Comments Section
+      ========================================= */}
+
+      {
+
+        showComments && (
+
+          <div
+
+            style={{
+
+              marginTop: "20px"
+
+            }}
+
+          >
+
+            <AddCommentForm
+
+              postId={id}
+
+            />
+
+            <CommentList
+
+              postId={id}
+
+            />
+
+          </div>
+
+        )
+
+      }
+
+    </div>
+
+  );
+
+}
+
+export default PostCard;

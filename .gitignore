@@ -1,0 +1,19 @@
+# Node modules
+frontend/node_modules
+
+# React build
+frontend/dist
+
+# Logs
+*.log
+
+# IDE
+.idea
+.vscode
+
+# Java
+backend/target
+
+# OS files
+.DS_Store
+Thumbs.db
