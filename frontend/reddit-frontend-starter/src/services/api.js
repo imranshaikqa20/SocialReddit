@@ -1,26 +1,32 @@
 import axios from "axios";
 
-/* Create Axios Instance */
+/* =========================================
+   Create Axios Instance
+========================================= */
 
 const api = axios.create({
 
-  baseURL: "https://socialreddit-backend.onrender.com/api",
+  baseURL:
+    "https://socialreddit-backend.onrender.com/api",
 
   headers: {
     "Content-Type": "application/json"
-  },
-
-  withCredentials: true
+  }
 
 });
 
-/* Request Interceptor */
+/* =========================================
+   Request Interceptor
+========================================= */
 
 api.interceptors.request.use(
 
   (config) => {
 
-    const token = localStorage.getItem("token");
+    const token =
+      localStorage.getItem("token");
+
+    /* Attach JWT Token */
 
     if (token) {
 
@@ -41,7 +47,9 @@ api.interceptors.request.use(
 
 );
 
-/* Response Interceptor */
+/* =========================================
+   Response Interceptor
+========================================= */
 
 api.interceptors.response.use(
 
@@ -53,29 +61,62 @@ api.interceptors.response.use(
 
   (error) => {
 
+    console.log(
+      "API ERROR : ",
+      error.response || error
+    );
+
     /* Unauthorized */
 
-    if (error.response?.status === 401) {
+    if (
+      error.response?.status === 401
+    ) {
 
       localStorage.removeItem("token");
 
-      alert("Session Expired. Please Login Again.");
+      alert(
+        "Session Expired. Please Login Again ❌"
+      );
 
     }
 
-    /* Backend Server Error */
+    /* Bad Request */
 
-    if (error.response?.status === 500) {
+    else if (
+      error.response?.status === 400
+    ) {
 
-      alert("Server Error ❌");
+      alert(
+
+        error.response?.data?.error ||
+
+        "Bad Request ❌"
+
+      );
+
+    }
+
+    /* Internal Server Error */
+
+    else if (
+      error.response?.status === 500
+    ) {
+
+      alert(
+        "Internal Server Error ❌"
+      );
 
     }
 
     /* Network Error */
 
-    if (error.code === "ERR_NETWORK") {
+    else if (
+      error.code === "ERR_NETWORK"
+    ) {
 
-      alert("Backend Connection Failed ❌");
+      alert(
+        "Backend Connection Failed ❌"
+      );
 
     }
 
