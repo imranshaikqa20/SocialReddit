@@ -1,11 +1,9 @@
 package com.socialmedia.backend.config;
 
 import org.springframework.context.annotation.Bean;
-
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
 import org.springframework.security.config.http.SessionCreationPolicy;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,23 +11,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import org.springframework.web.cors.CorsConfiguration;
-
 import org.springframework.web.cors.CorsConfigurationSource;
-
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
 @Configuration
-
 public class SecurityConfig {
 
-    
+    /* Password Encoder */
 
     @Bean
-
-    public BCryptPasswordEncoder
-    passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
 
@@ -38,12 +31,8 @@ public class SecurityConfig {
     /* Security Configuration */
 
     @Bean
-
-    public SecurityFilterChain
-    securityFilterChain(
-
+    public SecurityFilterChain securityFilterChain(
             HttpSecurity http
-
     ) throws Exception {
 
         http
@@ -54,90 +43,74 @@ public class SecurityConfig {
 
                 /* Enable CORS */
 
-                .cors(cors -> cors
-                        .configurationSource(
-                                corsConfigurationSource()
-                        )
-                )
+                .cors(cors -> cors.configurationSource(
+                        corsConfigurationSource()
+                ))
 
                 /* Stateless Session */
 
                 .sessionManagement(session ->
 
-                        session
-                                .sessionCreationPolicy(
-
-                                        SessionCreationPolicy.STATELESS
-
-                                )
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
+                        )
 
                 )
 
-                /* Authorization */
+                /* Authorization Rules */
 
                 .authorizeHttpRequests(auth -> auth
 
-                        /* Allow Upload Images */
+                        /* Public Auth APIs */
 
                         .requestMatchers(
-
-                                "/uploads/**"
-
-                        ).permitAll()
-
-                        /* Auth APIs */
-
-                        .requestMatchers(
-
                                 "/api/auth/**"
-
                         ).permitAll()
 
-                        /* Post APIs */
+                        /* Public Posts APIs */
 
                         .requestMatchers(
-
                                 "/api/posts/**"
-
                         ).permitAll()
 
-                        /* Comment APIs */
+                        /* Public Comments APIs */
 
                         .requestMatchers(
-
                                 "/api/comments/**"
-
                         ).permitAll()
 
-                        /* Community APIs */
+                        /* Public Communities APIs */
 
                         .requestMatchers(
-
                                 "/api/communities/**"
+                        ).permitAll()
 
+                        /* Uploads */
+
+                        .requestMatchers(
+                                "/uploads/**"
                         ).permitAll()
 
                         /* Swagger */
 
                         .requestMatchers(
-
                                 "/swagger-ui/**",
-
                                 "/v3/api-docs/**"
-
                         ).permitAll()
 
-                        /* Everything Else */
+                        /* All Other Requests */
 
-                        .anyRequest()
-
-                        .authenticated()
+                        .anyRequest().permitAll()
 
                 )
 
-                /* Disable Default Login */
+                /* Disable Default Login Form */
 
-                .formLogin(form -> form.disable());
+                .formLogin(form -> form.disable())
+
+                /* Disable HTTP Basic */
+
+                .httpBasic(httpBasic -> httpBasic.disable());
 
         return http.build();
 
@@ -146,46 +119,41 @@ public class SecurityConfig {
     /* CORS Configuration */
 
     @Bean
-
-    public CorsConfigurationSource
-    corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
-        /* Frontend URL */
+        /* Allow Frontend URLs */
 
         configuration.setAllowedOrigins(
 
                 List.of(
 
-                        "http://localhost:5173"
+                        "http://localhost:5173",
+                        "https://socialreddit-frontend.onrender.com"
 
                 )
 
         );
 
-        /* Methods */
+        /* Allow HTTP Methods */
 
         configuration.setAllowedMethods(
 
                 List.of(
 
                         "GET",
-
                         "POST",
-
                         "PUT",
-
                         "DELETE",
-
                         "OPTIONS"
 
                 )
 
         );
 
-        /* Headers */
+        /* Allow Headers */
 
         configuration.setAllowedHeaders(
 
@@ -193,22 +161,18 @@ public class SecurityConfig {
 
         );
 
-        /* Credentials */
+        /* Allow Credentials */
 
         configuration.setAllowCredentials(true);
 
-        /* Register */
+        /* Register CORS */
 
         UrlBasedCorsConfigurationSource source =
-
                 new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration(
-
                 "/**",
-
                 configuration
-
         );
 
         return source;
