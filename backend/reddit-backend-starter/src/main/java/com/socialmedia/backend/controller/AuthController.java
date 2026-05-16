@@ -11,17 +11,21 @@ import com.socialmedia.backend.service.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-
 @RequestMapping("/api/auth")
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://socialreddit-frontend.onrender.com"
+})
 
 public class AuthController {
 
@@ -31,77 +35,130 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    /* Signup API */
+    /* =========================
+       Signup API
+       ========================= */
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(
             @RequestBody SignupRequest request
     ) {
 
-        User user =
-                authService.signup(request);
+        try {
 
-        return ResponseEntity.ok(
+            /* Create User */
 
-                Map.of(
+            User user =
+                    authService.signup(request);
 
-                        "message",
-                        "Signup Success 🚀",
+            /* Response */
 
-                        "user",
-                        user
+            Map<String, Object> response =
+                    new HashMap<>();
 
-                )
+            response.put(
+                    "message",
+                    "Signup Success 🚀"
+            );
 
-        );
+            response.put(
+                    "username",
+                    user.getUsername()
+            );
+
+            response.put(
+                    "email",
+                    user.getEmail()
+            );
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(
+
+                            Map.of(
+                                    "error",
+                                    e.getMessage()
+                            )
+
+                    );
+
+        }
 
     }
 
-    /* Login API */
+    /* =========================
+       Login API
+       ========================= */
 
     @PostMapping("/login")
     public ResponseEntity<?> login(
             @RequestBody LoginRequest request
     ) {
 
-        /* Generate JWT Token */
+        try {
 
-        String token =
-                authService.login(request);
+            /* Generate JWT Token */
 
-        /* Get User */
+            String token =
+                    authService.login(request);
 
-        User user = userRepository
-                .findByEmail(
-                        request.getEmail()
-                )
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "User Not Found"
-                        )
-                );
+            /* Get User */
 
-        /* Response */
+            User user = userRepository
+                    .findByEmail(
+                            request.getEmail()
+                    )
+                    .orElseThrow(() ->
+                            new RuntimeException(
+                                    "User Not Found"
+                            )
+                    );
 
-        return ResponseEntity.ok(
+            /* Response */
 
-                Map.of(
+            Map<String, Object> response =
+                    new HashMap<>();
 
-                        "message",
-                        "Login Success 🚀",
+            response.put(
+                    "message",
+                    "Login Success 🚀"
+            );
 
-                        "token",
-                        token,
+            response.put(
+                    "token",
+                    token
+            );
 
-                        "username",
-                        user.getUsername(),
+            response.put(
+                    "username",
+                    user.getUsername()
+            );
 
-                        "email",
-                        user.getEmail()
+            response.put(
+                    "email",
+                    user.getEmail()
+            );
 
-                )
+            return ResponseEntity.ok(response);
 
-        );
+        } catch (Exception e) {
+
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(
+
+                            Map.of(
+                                    "error",
+                                    e.getMessage()
+                            )
+
+                    );
+
+        }
 
     }
 

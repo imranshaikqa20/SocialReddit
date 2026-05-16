@@ -7,7 +7,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import io.jsonwebtoken.security.Keys;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Service;
+
+import java.nio.charset.StandardCharsets;
 
 import java.security.Key;
 
@@ -16,27 +20,38 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    /* Secret Key */
+    /* =========================================
+       JWT Secret Key From Environment Variable
+       ========================================= */
 
-    private static final String SECRET_KEY =
-            "mysecretkeymysecretkeymysecretkey123456";
+    @Value("${JWT_SECRET}")
+    private String secretKey;
 
-    /* Token Expiration */
+    /* =========================================
+       Token Expiration Time
+       24 Hours
+       ========================================= */
 
     private static final long EXPIRATION_TIME =
             1000 * 60 * 60 * 24;
 
-    /* Generate Secret Key */
+    /* =========================================
+       Generate Signing Key
+       ========================================= */
 
     private Key getSigningKey() {
 
         return Keys.hmacShaKeyFor(
-                SECRET_KEY.getBytes()
+                secretKey.getBytes(
+                        StandardCharsets.UTF_8
+                )
         );
 
     }
 
-    /* Generate JWT Token */
+    /* =========================================
+       Generate JWT Token
+       ========================================= */
 
     public String generateToken(
             String email
@@ -66,7 +81,9 @@ public class JwtService {
 
     }
 
-    /* Extract Email From Token */
+    /* =========================================
+       Extract Email From Token
+       ========================================= */
 
     public String extractEmail(
             String token
@@ -77,7 +94,9 @@ public class JwtService {
 
     }
 
-    /* Validate Token */
+    /* =========================================
+       Validate Token
+       ========================================= */
 
     public boolean isTokenValid(
             String token,
@@ -92,7 +111,9 @@ public class JwtService {
 
     }
 
-    /* Check Token Expired */
+    /* =========================================
+       Check Token Expired
+       ========================================= */
 
     private boolean isTokenExpired(
             String token
@@ -104,7 +125,9 @@ public class JwtService {
 
     }
 
-    /* Extract Claims */
+    /* =========================================
+       Extract Claims
+       ========================================= */
 
     private Claims extractAllClaims(
             String token

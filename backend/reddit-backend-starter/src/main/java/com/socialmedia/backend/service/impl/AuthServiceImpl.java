@@ -29,12 +29,47 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private JwtService jwtService;
 
-    /* Signup Logic */
+    /* =========================
+       Signup Logic
+       ========================= */
 
     @Override
     public User signup(
             SignupRequest request
     ) {
+
+        /* Validate Username */
+
+        if (request.getUsername() == null
+                || request.getUsername().trim().isEmpty()) {
+
+            throw new RuntimeException(
+                    "Username is required"
+            );
+
+        }
+
+        /* Validate Email */
+
+        if (request.getEmail() == null
+                || request.getEmail().trim().isEmpty()) {
+
+            throw new RuntimeException(
+                    "Email is required"
+            );
+
+        }
+
+        /* Validate Password */
+
+        if (request.getPassword() == null
+                || request.getPassword().trim().isEmpty()) {
+
+            throw new RuntimeException(
+                    "Password is required"
+            );
+
+        }
 
         /* Check Email Exists */
 
@@ -43,7 +78,7 @@ public class AuthServiceImpl implements AuthService {
         )) {
 
             throw new RuntimeException(
-                    "Email Already Exists "
+                    "Email already exists"
             );
 
         }
@@ -55,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
         )) {
 
             throw new RuntimeException(
-                    "Username Already Exists "
+                    "Username already exists"
             );
 
         }
@@ -65,11 +100,11 @@ public class AuthServiceImpl implements AuthService {
         User user = new User();
 
         user.setUsername(
-                request.getUsername()
+                request.getUsername().trim()
         );
 
         user.setEmail(
-                request.getEmail()
+                request.getEmail().trim().toLowerCase()
         );
 
         /* Encrypt Password */
@@ -86,20 +121,46 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
-    /* Login Logic */
+    /* =========================
+       Login Logic
+       ========================= */
 
     @Override
     public String login(
             LoginRequest request
     ) {
 
+        /* Validate Email */
+
+        if (request.getEmail() == null
+                || request.getEmail().trim().isEmpty()) {
+
+            throw new RuntimeException(
+                    "Email is required"
+            );
+
+        }
+
+        /* Validate Password */
+
+        if (request.getPassword() == null
+                || request.getPassword().trim().isEmpty()) {
+
+            throw new RuntimeException(
+                    "Password is required"
+            );
+
+        }
+
+        /* Find User */
+
         User user = userRepository
                 .findByEmail(
-                        request.getEmail()
+                        request.getEmail().trim().toLowerCase()
                 )
                 .orElseThrow(() ->
                         new RuntimeException(
-                                "User Not Found "
+                                "User not found"
                         )
                 );
 
@@ -114,7 +175,7 @@ public class AuthServiceImpl implements AuthService {
         if (!isPasswordCorrect) {
 
             throw new RuntimeException(
-                    "Invalid Password "
+                    "Invalid password"
             );
 
         }

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-
 @Table(name = "users")
 
 @Getter
@@ -19,26 +18,26 @@ import lombok.Setter;
 
 public class User {
 
+    /* User ID */
 
     @Id
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
 
-
+    /* Username */
 
     @Column(nullable = false)
 
     private String username;
 
-
+    /* Email */
 
     @Column(nullable = false, unique = true)
 
     private String email;
 
-
+    /* Password */
 
     @Column(nullable = false)
 
