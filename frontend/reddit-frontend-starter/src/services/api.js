@@ -8,7 +8,9 @@ const api = axios.create({
 
   headers: {
     "Content-Type": "application/json"
-  }
+  },
+
+  withCredentials: true
 
 });
 
@@ -51,13 +53,29 @@ api.interceptors.response.use(
 
   (error) => {
 
-    /* Token Expired or Unauthorized */
+    /* Unauthorized */
 
     if (error.response?.status === 401) {
 
       localStorage.removeItem("token");
 
       alert("Session Expired. Please Login Again.");
+
+    }
+
+    /* Backend Server Error */
+
+    if (error.response?.status === 500) {
+
+      alert("Server Error ❌");
+
+    }
+
+    /* Network Error */
+
+    if (error.code === "ERR_NETWORK") {
+
+      alert("Backend Connection Failed ❌");
 
     }
 
