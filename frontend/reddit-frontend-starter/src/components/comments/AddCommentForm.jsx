@@ -2,10 +2,17 @@ import { useState } from "react";
 
 import api from "../../services/api";
 
-function AddCommentForm({ postId }) {
+function AddCommentForm({
 
-  const [author, setAuthor] =
-    useState("");
+  postId,
+
+  onCommentAdded
+
+}) {
+
+  /* =========================================
+     STATES
+  ========================================= */
 
   const [content, setContent] =
     useState("");
@@ -13,17 +20,39 @@ function AddCommentForm({ postId }) {
   const [loading, setLoading] =
     useState(false);
 
-  /* Submit Comment */
+  /* =========================================
+     USERNAME
+  ========================================= */
+
+  const username =
+
+    localStorage.getItem("username")
+
+    ||
+
+    "Anonymous";
+
+  /* =========================================
+     SUBMIT COMMENT
+  ========================================= */
 
   const handleSubmit = async (e) => {
 
     e.preventDefault();
 
-    /* Validation */
+    /* VALIDATION */
 
-    if (!author || !content) {
+    if (
 
-      alert("Please fill all fields ❌");
+      !content ||
+
+      content.trim() === ""
+
+    ) {
+
+      alert(
+        "Please enter comment ❌"
+      );
 
       return;
 
@@ -33,13 +62,17 @@ function AddCommentForm({ postId }) {
 
       setLoading(true);
 
+      /* =========================================
+         API CALL
+      ========================================= */
+
       await api.post(
 
-        "/comments",
+        "/api/comments",
 
         {
 
-          author,
+          author: username,
 
           content,
 
@@ -49,19 +82,41 @@ function AddCommentForm({ postId }) {
 
       );
 
-      alert("Comment Added 🚀");
-
-      setAuthor("");
+      /* SUCCESS */
 
       setContent("");
+
+      alert(
+        "Comment Added 🚀"
+      );
+
+      /* REFRESH COMMENTS */
+
+      if (onCommentAdded) {
+
+        onCommentAdded();
+
+      }
+
+      /* OPTIONAL REFRESH */
 
       window.location.reload();
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
 
-      alert("Failed To Add Comment ❌");
+        "COMMENT ERROR :",
+
+        error.response?.data ||
+
+        error.message
+
+      );
+
+      alert(
+        "Failed To Add Comment ❌"
+      );
 
     } finally {
 
@@ -80,7 +135,7 @@ function AddCommentForm({ postId }) {
         marginTop: "18px",
 
         background:
-          "linear-gradient(135deg, #111827, #0f172a)",
+          "linear-gradient(135deg,#111827,#0f172a)",
 
         border:
           "1px solid rgba(59,130,246,0.12)",
@@ -100,7 +155,7 @@ function AddCommentForm({ postId }) {
 
     >
 
-      {/* Glow */}
+      {/* GLOW */}
 
       <div
 
@@ -127,7 +182,7 @@ function AddCommentForm({ postId }) {
 
       />
 
-      {/* Heading */}
+      {/* HEADER */}
 
       <div
 
@@ -160,7 +215,7 @@ function AddCommentForm({ postId }) {
             borderRadius: "50%",
 
             background:
-              "linear-gradient(to right, #2563eb, #38bdf8)",
+              "linear-gradient(to right,#2563eb,#38bdf8)",
 
             display: "flex",
 
@@ -172,10 +227,7 @@ function AddCommentForm({ postId }) {
 
             fontWeight: "bold",
 
-            fontSize: "15px",
-
-            boxShadow:
-              "0 0 14px rgba(59,130,246,0.35)"
+            fontSize: "15px"
 
           }}
 
@@ -229,59 +281,23 @@ function AddCommentForm({ postId }) {
 
       </div>
 
-      {/* Form */}
+      {/* FORM */}
 
       <form
+
         onSubmit={handleSubmit}
+
         style={{
+
           position: "relative",
+
           zIndex: 2
+
         }}
+
       >
 
-        {/* Author Input */}
-
-        <input
-
-          type="text"
-
-          placeholder="Your Name"
-
-          value={author}
-
-          onChange={(e) =>
-            setAuthor(e.target.value)
-          }
-
-          style={{
-
-            width: "100%",
-
-            background:
-              "rgba(255,255,255,0.04)",
-
-            border:
-              "1px solid rgba(255,255,255,0.08)",
-
-            borderRadius: "12px",
-
-            padding: "12px 14px",
-
-            marginBottom: "14px",
-
-            color: "white",
-
-            fontSize: "14px",
-
-            outline: "none",
-
-            boxSizing: "border-box"
-
-          }}
-
-        />
-
-        {/* Comment Textarea */}
+        {/* COMMENT */}
 
         <textarea
 
@@ -290,7 +306,11 @@ function AddCommentForm({ postId }) {
           value={content}
 
           onChange={(e) =>
-            setContent(e.target.value)
+
+            setContent(
+              e.target.value
+            )
+
           }
 
           rows="4"
@@ -327,7 +347,7 @@ function AddCommentForm({ postId }) {
 
         />
 
-        {/* Button */}
+        {/* BUTTON */}
 
         <button
 
@@ -338,7 +358,7 @@ function AddCommentForm({ postId }) {
           style={{
 
             background:
-              "linear-gradient(to right, #2563eb, #3b82f6)",
+              "linear-gradient(to right,#2563eb,#3b82f6)",
 
             border: "none",
 
@@ -352,12 +372,7 @@ function AddCommentForm({ postId }) {
 
             fontWeight: "600",
 
-            cursor: "pointer",
-
-            boxShadow:
-              "0 4px 14px rgba(37,99,235,0.30)",
-
-            transition: "0.3s"
+            cursor: "pointer"
 
           }}
 

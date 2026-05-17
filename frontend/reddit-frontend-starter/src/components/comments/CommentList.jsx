@@ -4,7 +4,17 @@ import api from "../../services/api";
 
 import CommentCard from "./CommentCard";
 
-function CommentList({ postId }) {
+function CommentList({
+
+  postId,
+
+  refreshTrigger
+
+}) {
+
+  /* =========================================
+     STATES
+  ========================================= */
 
   const [comments, setComments] =
     useState([]);
@@ -12,7 +22,9 @@ function CommentList({ postId }) {
   const [loading, setLoading] =
     useState(true);
 
-  /* Fetch Comments */
+  /* =========================================
+     FETCH COMMENTS
+  ========================================= */
 
   const fetchComments = async () => {
 
@@ -20,17 +32,55 @@ function CommentList({ postId }) {
 
       setLoading(true);
 
+      /* =========================================
+         API CALL
+      ========================================= */
+
       const response = await api.get(
 
-        `/comments/post/${postId}`
+        `/api/comments/post/${postId}`
 
       );
 
-      setComments(response.data);
+      /* =========================================
+         SAFE ARRAY CHECK
+      ========================================= */
+
+      const commentsData =
+
+        Array.isArray(response.data)
+
+          ? response.data
+
+          : [];
+
+      /* =========================================
+         SORT COMMENTS
+      ========================================= */
+
+      const sortedComments =
+
+        [...commentsData].sort(
+
+          (a, b) => b.id - a.id
+
+        );
+
+      setComments(sortedComments);
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+
+        "FETCH COMMENTS ERROR :",
+
+        error.response?.data ||
+
+        error.message
+
+      );
+
+      setComments([]);
 
     } finally {
 
@@ -40,21 +90,35 @@ function CommentList({ postId }) {
 
   };
 
+  /* =========================================
+     LOAD COMMENTS
+  ========================================= */
+
   useEffect(() => {
 
-    fetchComments();
+    if (postId) {
 
-  }, [postId]);
+      fetchComments();
+
+    }
+
+  }, [postId, refreshTrigger]);
 
   return (
 
     <div
+
       style={{
-        marginTop: "18px"
+
+        marginTop: "22px"
+
       }}
+
     >
 
-      {/* Heading */}
+      {/* =========================================
+         HEADER
+      ========================================= */}
 
       <div
 
@@ -66,11 +130,17 @@ function CommentList({ postId }) {
 
           justifyContent: "space-between",
 
-          marginBottom: "18px"
+          marginBottom: "18px",
+
+          gap: "10px",
+
+          flexWrap: "wrap"
 
         }}
 
       >
+
+        {/* TITLE */}
 
         <h3
 
@@ -91,6 +161,8 @@ function CommentList({ postId }) {
           💬 Comments
 
         </h3>
+
+        {/* COUNT */}
 
         <div
 
@@ -122,7 +194,9 @@ function CommentList({ postId }) {
 
       </div>
 
-      {/* Loading */}
+      {/* =========================================
+         LOADING
+      ========================================= */}
 
       {
 
@@ -138,9 +212,9 @@ function CommentList({ postId }) {
               border:
                 "1px solid rgba(255,255,255,0.05)",
 
-              padding: "16px",
+              padding: "18px",
 
-              borderRadius: "14px",
+              borderRadius: "16px",
 
               color: "#94a3b8",
 
@@ -152,13 +226,15 @@ function CommentList({ postId }) {
 
           >
 
-            Loading comments...
+            🚀 Loading comments...
 
           </div>
 
         ) : comments.length === 0 ? (
 
-          /* No Comments */
+          /* =========================================
+             EMPTY STATE
+          ========================================= */
 
           <div
 
@@ -170,9 +246,9 @@ function CommentList({ postId }) {
               border:
                 "1px solid rgba(255,255,255,0.05)",
 
-              padding: "20px",
+              padding: "24px",
 
-              borderRadius: "16px",
+              borderRadius: "18px",
 
               textAlign: "center"
 
@@ -202,7 +278,9 @@ function CommentList({ postId }) {
 
         ) : (
 
-          /* Comment List */
+          /* =========================================
+             COMMENTS LIST
+          ========================================= */
 
           <div
 
@@ -212,7 +290,7 @@ function CommentList({ postId }) {
 
               flexDirection: "column",
 
-              gap: "14px"
+              gap: "16px"
 
             }}
 
@@ -226,11 +304,17 @@ function CommentList({ postId }) {
 
                   key={comment.id}
 
-                  author={comment.author}
+                  author={
+                    comment.author
+                  }
 
-                  content={comment.content}
+                  content={
+                    comment.content
+                  }
 
-                  createdAt={comment.createdAt}
+                  createdAt={
+                    comment.createdAt
+                  }
 
                 />
 

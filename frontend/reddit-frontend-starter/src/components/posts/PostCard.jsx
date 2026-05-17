@@ -20,9 +20,6 @@ function PostCard({
   communityName,
   communityId,
   onPostUpdated,
-
-  /* NEW PROP */
-
   showActions = false
 
 }) {
@@ -48,6 +45,9 @@ function PostCard({
   const [deleted, setDeleted] =
     useState(false);
 
+  const [refreshComments, setRefreshComments] =
+    useState(false);
+
   /* =========================================
      EDIT STATES
   ========================================= */
@@ -62,7 +62,7 @@ function PostCard({
     useState(imageUrl || "");
 
   /* =========================================
-     LOGGED USER
+     USER
   ========================================= */
 
   const loggedInUser =
@@ -74,28 +74,20 @@ function PostCard({
     "";
 
   /* =========================================
-     SAFE AUTHOR
+     AUTHOR
   ========================================= */
 
   const cleanAuthor =
 
     author &&
-
     typeof author === "string" &&
-
     author.trim() !== "" &&
-
     author !== "undefined" &&
-
     author !== "null"
 
       ? author
 
       : "Anonymous";
-
-  /* =========================================
-     DISPLAY AUTHOR
-  ========================================= */
 
   const displayAuthor =
 
@@ -108,9 +100,7 @@ function PostCard({
   const isOwner =
 
     loggedInUser &&
-
     cleanAuthor &&
-
     loggedInUser
       .trim()
       .toLowerCase()
@@ -322,7 +312,7 @@ function PostCard({
     >
 
       {/* =========================================
-         COMMUNITY BADGE
+         COMMUNITY
       ========================================= */}
 
       {
@@ -398,8 +388,6 @@ function PostCard({
         }}
 
       >
-
-        {/* USER */}
 
         <div
 
@@ -567,9 +555,7 @@ function PostCard({
 
                 background: "#1e293b",
 
-                color: "white",
-
-                fontSize: "15px"
+                color: "white"
 
               }}
 
@@ -603,9 +589,7 @@ function PostCard({
 
                 background: "#1e293b",
 
-                color: "white",
-
-                fontSize: "14px"
+                color: "white"
 
               }}
 
@@ -641,9 +625,7 @@ function PostCard({
 
                 background: "#1e293b",
 
-                color: "white",
-
-                fontSize: "14px"
+                color: "white"
 
               }}
 
@@ -684,6 +666,8 @@ function PostCard({
 
           <>
 
+            {/* TITLE */}
+
             <h2
 
               style={{
@@ -703,6 +687,8 @@ function PostCard({
               {editTitle}
 
             </h2>
+
+            {/* CONTENT */}
 
             <p
 
@@ -724,9 +710,17 @@ function PostCard({
 
             </p>
 
+            {/* =========================================
+               IMAGE
+            ========================================= */}
+
             {
 
-              editImageUrl && (
+              editImageUrl &&
+
+              typeof editImageUrl === "string" &&
+
+              editImageUrl.trim() !== "" && (
 
                 <div
 
@@ -734,11 +728,24 @@ function PostCard({
 
                     width: "100%",
 
+                    marginTop: "18px",
+
+                    marginBottom: "18px",
+
+                    borderRadius: "20px",
+
                     overflow: "hidden",
 
-                    borderRadius: "18px",
+                    border:
+                      "1px solid rgba(255,255,255,0.06)",
 
-                    marginBottom: "18px"
+                    background:
+                      "rgba(255,255,255,0.02)",
+
+                    position: "relative",
+
+                    boxShadow:
+                      "0 6px 20px rgba(0,0,0,0.25)"
 
                   }}
 
@@ -746,7 +753,15 @@ function PostCard({
 
                   <img
 
-                    src={editImageUrl}
+                    src={
+
+                      editImageUrl.startsWith("http")
+
+                        ? editImageUrl
+
+                        : `https://socialreddit-backend.onrender.com/${editImageUrl}`
+
+                    }
 
                     alt="Post"
 
@@ -754,11 +769,20 @@ function PostCard({
 
                       width: "100%",
 
-                      objectFit: "cover"
+                      maxHeight: "520px",
+
+                      objectFit: "cover",
+
+                      display: "block"
 
                     }}
 
                     onError={(e) => {
+
+                      console.log(
+                        "IMAGE LOAD FAILED :",
+                        editImageUrl
+                      );
 
                       e.target.style.display =
                         "none";
@@ -780,7 +804,7 @@ function PostCard({
       }
 
       {/* =========================================
-         ACTION BUTTONS
+         ACTIONS
       ========================================= */}
 
       <div
@@ -825,9 +849,7 @@ function PostCard({
 
             fontWeight: "700",
 
-            cursor: "pointer",
-
-            fontSize: "13px"
+            cursor: "pointer"
 
           }}
 
@@ -858,9 +880,7 @@ function PostCard({
 
             fontWeight: "700",
 
-            cursor: "pointer",
-
-            fontSize: "13px"
+            cursor: "pointer"
 
           }}
 
@@ -895,9 +915,7 @@ function PostCard({
 
             fontWeight: "700",
 
-            cursor: "pointer",
-
-            fontSize: "13px"
+            cursor: "pointer"
 
           }}
 
@@ -906,10 +924,6 @@ function PostCard({
           💬 {comments || 0}
 
         </button>
-
-        {/* =========================================
-           SHOW ONLY IN PROFILE PAGE
-        ========================================= */}
 
         {
 
@@ -940,9 +954,7 @@ function PostCard({
 
                 fontWeight: "700",
 
-                cursor: "pointer",
-
-                fontSize: "13px"
+                cursor: "pointer"
 
               }}
 
@@ -981,9 +993,7 @@ function PostCard({
 
                 fontWeight: "700",
 
-                cursor: "pointer",
-
-                fontSize: "13px"
+                cursor: "pointer"
 
               }}
 
@@ -1021,11 +1031,23 @@ function PostCard({
 
               postId={id}
 
+              onCommentAdded={() =>
+
+                setRefreshComments(
+                  !refreshComments
+                )
+
+              }
+
             />
 
             <CommentList
 
               postId={id}
+
+              refreshTrigger={
+                refreshComments
+              }
 
             />
 
