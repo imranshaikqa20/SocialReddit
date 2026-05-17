@@ -20,7 +20,9 @@ function SignupForm() {
   const [loading, setLoading] =
     useState(false);
 
-  /* Handle Signup */
+  /* =========================================
+     Handle Signup
+  ========================================= */
 
   const handleSignup = async (e) => {
 
@@ -44,10 +46,12 @@ function SignupForm() {
 
       setLoading(true);
 
+      /* IMPORTANT FIX */
+
       const response =
         await api.post(
 
-          "/auth/signup",
+          "/api/auth/signup",
 
           {
             username,
@@ -59,7 +63,9 @@ function SignupForm() {
 
       console.log(response.data);
 
-      alert("Signup Successful ");
+      alert(
+        "Signup Successful ✅"
+      );
 
       /* Clear Form */
 
@@ -171,7 +177,7 @@ function SignupForm() {
             }}
           >
 
-             Create Account
+            Create Account
 
           </h1>
 
@@ -368,7 +374,7 @@ function SignupForm() {
 
                 ? "Creating Account..."
 
-                : " Signup"
+                : "Signup"
 
             }
 

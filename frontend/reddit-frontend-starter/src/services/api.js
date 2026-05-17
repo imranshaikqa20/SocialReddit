@@ -140,6 +140,8 @@ api.interceptors.response.use(
 
       alert(
 
+        error.response?.data?.message ||
+
         error.response?.data ||
 
         "Internal Server Error ❌"
