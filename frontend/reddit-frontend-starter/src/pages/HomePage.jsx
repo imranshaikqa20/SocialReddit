@@ -28,7 +28,9 @@ function HomePage() {
 
         color: "white",
 
-        overflowX: "hidden"
+        overflowX: "hidden",
+
+        position: "relative"
 
       }}
 
@@ -75,13 +77,17 @@ function HomePage() {
             border-radius: 20px;
           }
 
-          @media (max-width: 1024px) {
+          @media (max-width: 1100px) {
 
             .home-layout {
               flex-direction: column;
             }
 
-            .feed-container {
+            .sidebar-wrapper {
+              width: 100%;
+            }
+
+            .feed-wrapper {
               width: 100%;
             }
 
@@ -183,15 +189,15 @@ function HomePage() {
 
         style={{
 
-          width: "90%",
+          width: "92%",
 
-          maxWidth: "1450px",
+          maxWidth: "1500px",
 
-          margin: "24px auto",
+          margin: "26px auto",
 
           display: "flex",
 
-          gap: "20px",
+          gap: "24px",
 
           alignItems: "flex-start",
 
@@ -204,10 +210,14 @@ function HomePage() {
       >
 
         {/* =========================================
-           COMMUNITY SIDEBAR
+           SIDEBAR
         ========================================= */}
 
-        <CommunitySidebar />
+        <div className="sidebar-wrapper">
+
+          <CommunitySidebar />
+
+        </div>
 
         {/* =========================================
            FEED SECTION
@@ -215,7 +225,7 @@ function HomePage() {
 
         <div
 
-          className="feed-container"
+          className="feed-wrapper"
 
           style={{
 
@@ -241,17 +251,19 @@ function HomePage() {
 
               alignItems: "center",
 
-              marginBottom: "22px",
+              marginBottom: "26px",
 
               flexWrap: "wrap",
 
-              gap: "14px"
+              gap: "18px"
 
             }}
 
           >
 
-            {/* LEFT CONTENT */}
+            {/* =========================================
+               LEFT CONTENT
+            ========================================= */}
 
             <div>
 
@@ -261,7 +273,7 @@ function HomePage() {
 
                   margin: 0,
 
-                  fontSize: "34px",
+                  fontSize: "42px",
 
                   fontWeight: "800",
 
@@ -269,14 +281,16 @@ function HomePage() {
 
                   letterSpacing: "0.5px",
 
+                  lineHeight: "52px",
+
                   textShadow:
-                    "0px 0px 12px rgba(59,130,246,0.22)"
+                    "0px 0px 14px rgba(59,130,246,0.22)"
 
                 }}
 
               >
 
-                Trending Posts
+                Trending Posts 🚀
 
               </h1>
 
@@ -284,15 +298,15 @@ function HomePage() {
 
                 style={{
 
-                  marginTop: "8px",
+                  marginTop: "10px",
 
                   color: "#94a3b8",
 
-                  fontSize: "14px",
+                  fontSize: "15px",
 
-                  lineHeight: "24px",
+                  lineHeight: "28px",
 
-                  maxWidth: "700px"
+                  maxWidth: "760px"
 
                 }}
 
@@ -300,14 +314,17 @@ function HomePage() {
 
                 Discover trending discussions,
                 memes, technology updates,
-                ISRO news and community
-                posts from different topics.
+                gaming news, ISRO launches
+                and community posts from
+                creators around the world.
 
               </p>
 
             </div>
 
-            {/* RIGHT BADGE */}
+            {/* =========================================
+               RIGHT BADGE
+            ========================================= */}
 
             <div
 
@@ -319,20 +336,20 @@ function HomePage() {
                 border:
                   "1px solid rgba(59,130,246,0.16)",
 
-                backdropFilter: "blur(10px)",
+                backdropFilter: "blur(12px)",
 
-                padding: "12px 18px",
+                padding: "14px 20px",
 
-                borderRadius: "14px",
+                borderRadius: "16px",
 
                 color: "#dbeafe",
 
                 fontSize: "13px",
 
-                fontWeight: "600",
+                fontWeight: "700",
 
                 boxShadow:
-                  "0px 0px 18px rgba(37,99,235,0.12)"
+                  "0px 0px 20px rgba(37,99,235,0.12)"
 
               }}
 
@@ -345,7 +362,7 @@ function HomePage() {
           </div>
 
           {/* =========================================
-             FEED WRAPPER
+             POSTS CONTAINER
           ========================================= */}
 
           <div
@@ -353,21 +370,21 @@ function HomePage() {
             style={{
 
               background:
-                "rgba(15,23,42,0.46)",
+                "rgba(15,23,42,0.50)",
 
-              borderRadius: "24px",
+              borderRadius: "28px",
 
-              padding: "22px",
+              padding: "24px",
 
               border:
-                "1px solid rgba(255,255,255,0.04)",
+                "1px solid rgba(255,255,255,0.05)",
 
               backdropFilter: "blur(14px)",
 
               boxShadow:
-                "0px 8px 30px rgba(0,0,0,0.30)",
+                "0px 10px 35px rgba(0,0,0,0.34)",
 
-              minHeight: "300px"
+              minHeight: "400px"
 
             }}
 

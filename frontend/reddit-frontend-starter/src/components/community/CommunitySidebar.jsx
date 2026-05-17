@@ -3,9 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
-
   getAllCommunities
-
 } from "../../services/communityService";
 
 function CommunitySidebar() {
@@ -13,14 +11,17 @@ function CommunitySidebar() {
   const navigate = useNavigate();
 
   /* =========================================
-     State
+     STATES
   ========================================= */
 
   const [communities, setCommunities] =
     useState([]);
 
+  const [loading, setLoading] =
+    useState(true);
+
   /* =========================================
-     Load Communities
+     LOAD COMMUNITIES
   ========================================= */
 
   useEffect(() => {
@@ -30,23 +31,60 @@ function CommunitySidebar() {
   }, []);
 
   /* =========================================
-     Fetch Communities
+     FETCH COMMUNITIES
   ========================================= */
 
   const fetchCommunities = async () => {
 
     try {
 
+      setLoading(true);
+
       const data =
         await getAllCommunities();
 
-      setCommunities(data);
+      const safeData =
+
+        Array.isArray(data)
+
+          ? data
+
+          : [];
+
+      setCommunities(safeData);
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "COMMUNITY FETCH ERROR :",
+        error.response?.data || error.message
+      );
+
+      setCommunities([]);
+
+    } finally {
+
+      setLoading(false);
 
     }
+
+  };
+
+  /* =========================================
+     OPEN COMMUNITY
+  ========================================= */
+
+  const openCommunity = (communityId) => {
+
+    if (!communityId) {
+
+      return;
+
+    }
+
+    navigate(
+      `/community/${communityId}`
+    );
 
   };
 
@@ -56,7 +94,7 @@ function CommunitySidebar() {
 
       style={{
 
-        width: "260px",
+        width: "280px",
 
         position: "sticky",
 
@@ -67,7 +105,7 @@ function CommunitySidebar() {
     >
 
       {/* =========================================
-         Sidebar Card
+         SIDEBAR CARD
       ========================================= */}
 
       <div
@@ -75,26 +113,26 @@ function CommunitySidebar() {
         style={{
 
           background:
-            "rgba(15,23,42,0.70)",
+            "rgba(15,23,42,0.72)",
 
           border:
             "1px solid rgba(59,130,246,0.12)",
 
-          borderRadius: "22px",
+          borderRadius: "24px",
 
-          padding: "20px",
+          padding: "22px",
 
-          backdropFilter: "blur(12px)",
+          backdropFilter: "blur(14px)",
 
           boxShadow:
-            "0px 6px 24px rgba(0,0,0,0.28)"
+            "0px 8px 28px rgba(0,0,0,0.32)"
 
         }}
 
       >
 
         {/* =========================================
-           Title
+           TITLE
         ========================================= */}
 
         <h2
@@ -107,9 +145,9 @@ function CommunitySidebar() {
 
             color: "#f8fafc",
 
-            fontSize: "18px",
+            fontSize: "22px",
 
-            fontWeight: "700"
+            fontWeight: "800"
 
           }}
 
@@ -120,7 +158,7 @@ function CommunitySidebar() {
         </h2>
 
         {/* =========================================
-           Subtitle
+           SUBTITLE
         ========================================= */}
 
         <p
@@ -131,9 +169,9 @@ function CommunitySidebar() {
 
             fontSize: "13px",
 
-            marginBottom: "10px",
+            marginBottom: "18px",
 
-            lineHeight: "22px"
+            lineHeight: "24px"
 
           }}
 
@@ -144,7 +182,78 @@ function CommunitySidebar() {
         </p>
 
         {/* =========================================
-           Communities List
+           LOADING
+        ========================================= */}
+
+        {
+
+          loading && (
+
+            <div
+
+              style={{
+
+                textAlign: "center",
+
+                padding: "20px",
+
+                color: "#94a3b8",
+
+                fontSize: "14px"
+
+              }}
+
+            >
+
+              🚀 Loading communities...
+
+            </div>
+
+          )
+
+        }
+
+        {/* =========================================
+           EMPTY STATE
+        ========================================= */}
+
+        {
+
+          !loading &&
+
+          communities.length === 0 && (
+
+            <div
+
+              style={{
+
+                background:
+                  "rgba(255,255,255,0.03)",
+
+                borderRadius: "18px",
+
+                padding: "22px",
+
+                textAlign: "center",
+
+                color: "#94a3b8",
+
+                fontSize: "14px"
+
+              }}
+
+            >
+
+              No Communities Found 🚀
+
+            </div>
+
+          )
+
+        }
+
+        {/* =========================================
+           COMMUNITIES LIST
         ========================================= */}
 
         <div
@@ -171,10 +280,8 @@ function CommunitySidebar() {
 
                 onClick={() =>
 
-                  navigate(
-
-                    `/community/${community.id}`
-
+                  openCommunity(
+                    community.id
                   )
 
                 }
@@ -182,25 +289,48 @@ function CommunitySidebar() {
                 style={{
 
                   background:
-                    "rgba(255,255,255,0.03)",
+                    "rgba(255,255,255,0.04)",
 
                   border:
-                    "1px solid rgba(255,255,255,0.05)",
+                    "1px solid rgba(255,255,255,0.06)",
 
-                  borderRadius: "18px",
+                  borderRadius: "20px",
 
-                  padding: "16px",
+                  padding: "18px",
 
                   cursor: "pointer",
 
-                  transition: "0.3s"
+                  transition: "0.3s ease",
+
+                  boxShadow:
+                    "0px 4px 14px rgba(0,0,0,0.18)"
+
+                }}
+
+                onMouseEnter={(e) => {
+
+                  e.currentTarget.style.transform =
+                    "translateY(-3px)";
+
+                  e.currentTarget.style.border =
+                    "1px solid rgba(59,130,246,0.28)";
+
+                }}
+
+                onMouseLeave={(e) => {
+
+                  e.currentTarget.style.transform =
+                    "translateY(0px)";
+
+                  e.currentTarget.style.border =
+                    "1px solid rgba(255,255,255,0.06)";
 
                 }}
 
               >
 
                 {/* =========================================
-                   Community Name
+                   COMMUNITY NAME
                 ========================================= */}
 
                 <h3
@@ -213,7 +343,9 @@ function CommunitySidebar() {
 
                     color: "#f8fafc",
 
-                    fontSize: "18px"
+                    fontSize: "18px",
+
+                    fontWeight: "700"
 
                   }}
 
@@ -224,7 +356,7 @@ function CommunitySidebar() {
                 </h3>
 
                 {/* =========================================
-                   Description
+                   DESCRIPTION
                 ========================================= */}
 
                 <p
