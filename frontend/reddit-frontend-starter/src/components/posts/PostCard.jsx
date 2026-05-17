@@ -1,11 +1,5 @@
 import React, { useState } from "react";
 
-import {
-  FaArrowUp,
-  FaArrowDown,
-  FaComment
-} from "react-icons/fa";
-
 /* =========================================
    BACKEND URL
 ========================================= */
@@ -21,14 +15,12 @@ function PostCard({
 
   id,
   title,
- content,
+  content,
   imageUrl,
   votes,
   author,
   comments,
-  communityName,
-  communityId,
-  onPostUpdated
+  communityName
 
 }) {
 
@@ -36,14 +28,29 @@ function PostCard({
     useState("");
 
   /* =========================================
-     FIX IMAGE URL
+     IMAGE URL FIX
   ========================================= */
 
-  const finalImageUrl =
+  let finalImageUrl = null;
 
-    imageUrl
-      ? `${API_BASE}${imageUrl}`
-      : null;
+  if (imageUrl) {
+
+    /* IF IMAGE ALREADY FULL URL */
+
+    if (imageUrl.startsWith("http")) {
+
+      finalImageUrl = imageUrl;
+
+    } else {
+
+      /* APPEND BACKEND URL */
+
+      finalImageUrl =
+        `${API_BASE}${imageUrl}`;
+
+    }
+
+  }
 
   console.log(
     "FINAL IMAGE URL =>",
@@ -57,22 +64,25 @@ function PostCard({
       style={{
 
         background:
-          "rgba(15,23,42,0.82)",
+          "rgba(15,23,42,0.92)",
 
         border:
           "1px solid rgba(255,255,255,0.06)",
 
-        borderRadius: "26px",
+        borderRadius: "18px",
 
-        padding: "22px",
+        padding: "18px",
 
         color: "white",
 
-        boxShadow:
-          "0px 8px 30px rgba(0,0,0,0.28)",
+        width: "100%",
 
-        backdropFilter:
-          "blur(12px)"
+        maxWidth: "760px",
+
+        margin: "0 auto",
+
+        boxShadow:
+          "0px 4px 18px rgba(0,0,0,0.22)"
 
       }}
 
@@ -88,7 +98,7 @@ function PostCard({
 
           display: "inline-block",
 
-          padding: "7px 16px",
+          padding: "6px 14px",
 
           borderRadius: "999px",
 
@@ -97,11 +107,11 @@ function PostCard({
 
           color: "#60a5fa",
 
-          fontSize: "12px",
+          fontSize: "11px",
 
           fontWeight: "700",
 
-          marginBottom: "20px"
+          marginBottom: "16px"
 
         }}
 
@@ -123,7 +133,7 @@ function PostCard({
 
           alignItems: "center",
 
-          marginBottom: "20px"
+          marginBottom: "18px"
 
         }}
 
@@ -133,9 +143,9 @@ function PostCard({
 
           style={{
 
-            width: "48px",
+            width: "42px",
 
-            height: "48px",
+            height: "42px",
 
             borderRadius: "50%",
 
@@ -150,9 +160,9 @@ function PostCard({
 
             fontWeight: "800",
 
-            fontSize: "18px",
+            fontSize: "16px",
 
-            marginRight: "14px"
+            marginRight: "12px"
 
           }}
 
@@ -170,7 +180,7 @@ function PostCard({
 
               fontWeight: "700",
 
-              fontSize: "17px"
+              fontSize: "16px"
 
             }}
 
@@ -184,7 +194,7 @@ function PostCard({
 
             style={{
 
-              fontSize: "13px",
+              fontSize: "12px",
 
               color: "#94a3b8"
 
@@ -208,9 +218,9 @@ function PostCard({
 
         style={{
 
-          fontSize: "34px",
+          fontSize: "22px",
 
-          marginBottom: "16px",
+          marginBottom: "12px",
 
           fontWeight: "800"
 
@@ -232,9 +242,11 @@ function PostCard({
 
           color: "#cbd5e1",
 
-          lineHeight: "1.8",
+          lineHeight: "1.6",
 
-          marginBottom: "22px"
+          marginBottom: "16px",
+
+          fontSize: "14px"
 
         }}
 
@@ -258,7 +270,7 @@ function PostCard({
 
               width: "100%",
 
-              marginBottom: "24px"
+              marginBottom: "18px"
 
             }}
 
@@ -274,29 +286,31 @@ function PostCard({
 
                 width: "100%",
 
-                maxHeight: "520px",
+                maxHeight: "350px",
 
                 objectFit: "cover",
 
-                borderRadius: "20px",
+                borderRadius: "14px",
 
                 border:
                   "1px solid rgba(255,255,255,0.08)"
 
               }}
 
+              onLoad={() => {
+
+                console.log(
+                  "IMAGE LOADED SUCCESS"
+                );
+
+              }}
+
               onError={(e) => {
 
                 console.log(
-
-                  "IMAGE LOAD FAILED =>",
-
+                  "IMAGE FAILED =>",
                   finalImageUrl
-
                 );
-
-                e.target.style.display =
-                  "none";
 
               }}
 
@@ -321,14 +335,14 @@ function PostCard({
           borderTop:
             "1px solid rgba(255,255,255,0.08)",
 
-          marginBottom: "20px"
+          marginBottom: "16px"
 
         }}
 
       />
 
       {/* =========================================
-         ACTIONS
+         ACTION BUTTONS
       ========================================= */}
 
       <div
@@ -337,9 +351,11 @@ function PostCard({
 
           display: "flex",
 
-          gap: "14px",
+          gap: "10px",
 
-          marginBottom: "20px"
+          marginBottom: "16px",
+
+          flexWrap: "wrap"
 
         }}
 
@@ -355,17 +371,11 @@ function PostCard({
 
             color: "white",
 
-            padding: "12px 22px",
+            padding: "10px 18px",
 
-            borderRadius: "14px",
+            borderRadius: "12px",
 
             fontWeight: "700",
-
-            display: "flex",
-
-            alignItems: "center",
-
-            gap: "8px",
 
             cursor: "pointer"
 
@@ -373,9 +383,7 @@ function PostCard({
 
         >
 
-          <FaArrowUp />
-
-          Upvote
+          👍 Upvote
 
         </button>
 
@@ -389,17 +397,11 @@ function PostCard({
 
             color: "white",
 
-            padding: "12px 22px",
+            padding: "10px 18px",
 
-            borderRadius: "14px",
+            borderRadius: "12px",
 
             fontWeight: "700",
-
-            display: "flex",
-
-            alignItems: "center",
-
-            gap: "8px",
 
             cursor: "pointer"
 
@@ -407,9 +409,7 @@ function PostCard({
 
         >
 
-          <FaArrowDown />
-
-          Downvote
+          👎 Downvote
 
         </button>
 
@@ -419,15 +419,9 @@ function PostCard({
 
             background: "#2563eb",
 
-            padding: "12px 18px",
+            padding: "10px 16px",
 
-            borderRadius: "14px",
-
-            display: "flex",
-
-            alignItems: "center",
-
-            gap: "8px",
+            borderRadius: "12px",
 
             fontWeight: "700"
 
@@ -435,9 +429,7 @@ function PostCard({
 
         >
 
-          <FaComment />
-
-          {votes || 0}
+          💬 {votes || 0}
 
         </div>
 
@@ -453,7 +445,7 @@ function PostCard({
 
           display: "flex",
 
-          gap: "12px"
+          gap: "10px"
 
         }}
 
@@ -475,16 +467,18 @@ function PostCard({
 
             flex: 1,
 
-            padding: "14px",
+            padding: "12px",
 
-            borderRadius: "14px",
+            borderRadius: "12px",
 
             border:
               "1px solid rgba(255,255,255,0.08)",
 
             background: "#111827",
 
-            color: "white"
+            color: "white",
+
+            outline: "none"
 
           }}
 
@@ -500,9 +494,9 @@ function PostCard({
 
             color: "white",
 
-            padding: "14px 22px",
+            padding: "12px 18px",
 
-            borderRadius: "14px",
+            borderRadius: "12px",
 
             cursor: "pointer",
 
