@@ -11,7 +11,9 @@ const api = axios.create({
 
   headers: {
     "Content-Type": "application/json"
-  }
+  },
+
+  timeout: 30000
 
 });
 
@@ -59,7 +61,7 @@ api.interceptors.response.use(
 
   },
 
-  (error) => {
+  async (error) => {
 
     console.log(
       "API ERROR : ",
@@ -78,6 +80,8 @@ api.interceptors.response.use(
         "Session Expired. Please Login Again ❌"
       );
 
+      window.location.href = "/login";
+
     }
 
     /* Bad Request */
@@ -87,6 +91,8 @@ api.interceptors.response.use(
     ) {
 
       alert(
+
+        error.response?.data?.message ||
 
         error.response?.data?.error ||
 
@@ -108,14 +114,20 @@ api.interceptors.response.use(
 
     }
 
-    /* Network Error */
+    /* Backend Sleeping or Network Error */
 
     else if (
-      error.code === "ERR_NETWORK"
+
+      error.code === "ERR_NETWORK" ||
+
+      error.message === "Network Error"
+
     ) {
 
       alert(
-        "Backend Connection Failed ❌"
+
+        "Backend server is starting. Please wait 30 seconds and try again 🚀"
+
       );
 
     }
