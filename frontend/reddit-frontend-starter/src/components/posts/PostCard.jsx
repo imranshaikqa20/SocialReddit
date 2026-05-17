@@ -38,6 +38,10 @@ function PostCard({
 
 }) {
 
+  /* =========================================
+     STATES
+  ========================================= */
+
   const [showEditModal, setShowEditModal] =
     useState(false);
 
@@ -159,12 +163,12 @@ function PostCard({
         style={{
 
           background:
-            "rgba(15,23,42,0.94)",
+            "rgba(15,23,42,0.96)",
 
           border:
             "1px solid rgba(255,255,255,0.04)",
 
-          borderRadius: "14px",
+          borderRadius: "16px",
 
           padding: "12px",
 
@@ -174,7 +178,7 @@ function PostCard({
 
           maxWidth: "500px",
 
-          margin: "0 auto 14px auto",
+          margin: "0 0 14px 0",
 
           boxShadow:
             "0 2px 10px rgba(0,0,0,0.20)"
@@ -183,7 +187,9 @@ function PostCard({
 
       >
 
-        {/* COMMUNITY */}
+        {/* =========================================
+           COMMUNITY TAG
+        ========================================= */}
 
         <div
 
@@ -214,7 +220,9 @@ function PostCard({
 
         </div>
 
-        {/* AUTHOR */}
+        {/* =========================================
+           AUTHOR
+        ========================================= */}
 
         <div
 
@@ -299,7 +307,9 @@ function PostCard({
 
           </div>
 
-          {/* VOTES */}
+          {/* =========================================
+             VOTES
+          ========================================= */}
 
           <div
 
@@ -330,7 +340,9 @@ function PostCard({
 
         </div>
 
-        {/* TITLE */}
+        {/* =========================================
+           TITLE
+        ========================================= */}
 
         <h2
 
@@ -352,7 +364,9 @@ function PostCard({
 
         </h2>
 
-        {/* CONTENT */}
+        {/* =========================================
+           CONTENT
+        ========================================= */}
 
         <p
 
@@ -374,7 +388,9 @@ function PostCard({
 
         </p>
 
-        {/* IMAGE */}
+        {/* =========================================
+           IMAGE
+        ========================================= */}
 
         {
 
@@ -393,7 +409,10 @@ function PostCard({
                 overflow: "hidden",
 
                 background:
-                  "#0f172a"
+                  "#0f172a",
+
+                border:
+                  "1px solid rgba(255,255,255,0.05)"
 
               }}
 
@@ -409,11 +428,18 @@ function PostCard({
 
                   width: "100%",
 
-                  maxHeight: "260px",
+                  height: "240px",
 
                   objectFit: "cover",
 
                   display: "block"
+
+                }}
+
+                onError={(e) => {
+
+                  e.target.style.display =
+                    "none";
 
                 }}
 
@@ -425,7 +451,9 @@ function PostCard({
 
         }
 
-        {/* ACTIONS */}
+        {/* =========================================
+           ACTIONS
+        ========================================= */}
 
         <div
 
@@ -570,7 +598,9 @@ function PostCard({
 
           </button>
 
-          {/* EDIT / DELETE */}
+          {/* =========================================
+             EDIT / DELETE
+          ========================================= */}
 
           {
 
@@ -666,7 +696,9 @@ function PostCard({
 
         </div>
 
-        {/* COMMENTS */}
+        {/* =========================================
+           COMMENTS SECTION
+        ========================================= */}
 
         {
 
@@ -716,7 +748,9 @@ function PostCard({
 
       </div>
 
-      {/* EDIT MODAL */}
+      {/* =========================================
+         EDIT MODAL
+      ========================================= */}
 
       {
 
