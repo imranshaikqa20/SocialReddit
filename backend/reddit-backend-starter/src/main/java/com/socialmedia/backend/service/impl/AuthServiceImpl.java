@@ -86,9 +86,7 @@ public class AuthServiceImpl implements AuthService {
 
         }
 
-        /* =========================================
-           Normalize Email
-        ========================================= */
+        /* Normalize Email */
 
         String email =
 
@@ -96,9 +94,7 @@ public class AuthServiceImpl implements AuthService {
                         .trim()
                         .toLowerCase();
 
-        /* =========================================
-           Check Existing Email
-        ========================================= */
+        /* Check Existing Email */
 
         if (
 
@@ -112,9 +108,7 @@ public class AuthServiceImpl implements AuthService {
 
         }
 
-        /* =========================================
-           Check Existing Username
-        ========================================= */
+        /* Check Existing Username */
 
         if (
 
@@ -132,23 +126,17 @@ public class AuthServiceImpl implements AuthService {
 
         }
 
-        /* =========================================
-           Create User
-        ========================================= */
+        /* Create User */
 
         User user = new User();
 
         user.setUsername(
-
                 request.getUsername().trim()
-
         );
 
         user.setEmail(email);
 
-        /* =========================================
-           Encrypt Password
-        ========================================= */
+        /* Encrypt Password */
 
         String encryptedPassword =
 
@@ -158,11 +146,14 @@ public class AuthServiceImpl implements AuthService {
 
                 );
 
+        System.out.println(
+                "ENCRYPTED PASSWORD : " +
+                        encryptedPassword
+        );
+
         user.setPassword(encryptedPassword);
 
-        /* =========================================
-           Save User
-        ========================================= */
+        /* Save User */
 
         return userRepository.save(user);
 
@@ -209,9 +200,7 @@ public class AuthServiceImpl implements AuthService {
 
         }
 
-        /* =========================================
-           Normalize Email
-        ========================================= */
+        /* Normalize Email */
 
         String email =
 
@@ -219,9 +208,7 @@ public class AuthServiceImpl implements AuthService {
                         .trim()
                         .toLowerCase();
 
-        /* =========================================
-           Find User
-        ========================================= */
+        /* Find User */
 
         User user = userRepository
 
@@ -236,8 +223,18 @@ public class AuthServiceImpl implements AuthService {
                 );
 
         /* =========================================
-           Password Match
+           DEBUG PASSWORD CHECK
         ========================================= */
+
+        System.out.println(
+                "RAW PASSWORD : " +
+                        request.getPassword().trim()
+        );
+
+        System.out.println(
+                "DATABASE PASSWORD : " +
+                        user.getPassword()
+        );
 
         boolean passwordMatched =
 
@@ -249,6 +246,11 @@ public class AuthServiceImpl implements AuthService {
 
                 );
 
+        System.out.println(
+                "PASSWORD MATCHED : " +
+                        passwordMatched
+        );
+
         if (!passwordMatched) {
 
             throw new RuntimeException(
@@ -257,9 +259,7 @@ public class AuthServiceImpl implements AuthService {
 
         }
 
-        /* =========================================
-           Generate JWT
-        ========================================= */
+        /* Generate JWT */
 
         return jwtService.generateToken(
                 user.getEmail()
