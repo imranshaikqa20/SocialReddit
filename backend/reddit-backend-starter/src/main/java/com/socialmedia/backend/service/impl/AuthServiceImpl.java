@@ -24,9 +24,6 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired
     private JwtService jwtService;
 
     /* =========================================
@@ -136,22 +133,28 @@ public class AuthServiceImpl implements AuthService {
 
         user.setEmail(email);
 
-        /* Encrypt Password */
+        /* =========================================
+           Encrypt Password
+        ========================================= */
 
         String encryptedPassword =
 
-                passwordEncoder.encode(
+                new BCryptPasswordEncoder()
 
-                        request.getPassword().trim()
+                        .encode(
 
-                );
+                                request.getPassword().trim()
+
+                        );
 
         System.out.println(
                 "ENCRYPTED PASSWORD : " +
                         encryptedPassword
         );
 
-        user.setPassword(encryptedPassword);
+        user.setPassword(
+                encryptedPassword
+        );
 
         /* Save User */
 
@@ -223,7 +226,7 @@ public class AuthServiceImpl implements AuthService {
                 );
 
         /* =========================================
-           DEBUG PASSWORD CHECK
+           Password Match
         ========================================= */
 
         System.out.println(
@@ -238,13 +241,15 @@ public class AuthServiceImpl implements AuthService {
 
         boolean passwordMatched =
 
-                passwordEncoder.matches(
+                new BCryptPasswordEncoder()
 
-                        request.getPassword().trim(),
+                        .matches(
 
-                        user.getPassword()
+                                request.getPassword().trim(),
 
-                );
+                                user.getPassword()
+
+                        );
 
         System.out.println(
                 "PASSWORD MATCHED : " +
@@ -259,7 +264,9 @@ public class AuthServiceImpl implements AuthService {
 
         }
 
-        /* Generate JWT */
+        /* =========================================
+           Generate JWT
+        ========================================= */
 
         return jwtService.generateToken(
                 user.getEmail()
