@@ -142,7 +142,7 @@ function PostCard({
       setLoading(true);
 
       const response = await api.put(
-        `/posts/${id}/upvote`
+        `/api/posts/${id}/upvote`
       );
 
       setVoteCount(
@@ -172,7 +172,7 @@ function PostCard({
       setLoading(true);
 
       const response = await api.put(
-        `/posts/${id}/downvote`
+        `/api/posts/${id}/downvote`
       );
 
       setVoteCount(
@@ -211,7 +211,7 @@ function PostCard({
     try {
 
       await api.delete(
-        `/posts/${id}`
+        `/api/posts/${id}`
       );
 
       setDeleted(true);
@@ -244,7 +244,7 @@ function PostCard({
 
       await api.put(
 
-        `/posts/${id}`,
+        `/api/posts/${id}`,
 
         {
 
@@ -309,9 +309,7 @@ function PostCard({
 
     >
 
-      {/* =========================================
-         Community Badge
-      ========================================= */}
+      {/* Community Badge */}
 
       {
 
@@ -361,9 +359,7 @@ function PostCard({
 
       }
 
-      {/* =========================================
-         Header
-      ========================================= */}
+      {/* Header */}
 
       <div
 
@@ -511,9 +507,7 @@ function PostCard({
 
       </div>
 
-      {/* =========================================
-         Edit Mode
-      ========================================= */}
+      {/* Edit Mode */}
 
       {
 
@@ -760,9 +754,7 @@ function PostCard({
 
       }
 
-      {/* =========================================
-         Action Buttons
-      ========================================= */}
+      {/* Action Buttons */}
 
       <div
 
@@ -784,8 +776,6 @@ function PostCard({
         }}
 
       >
-
-        {/* Upvote */}
 
         <button
 
@@ -820,8 +810,6 @@ function PostCard({
 
         </button>
 
-        {/* Downvote */}
-
         <button
 
           onClick={handleDownvote}
@@ -854,8 +842,6 @@ function PostCard({
           👎 Downvote
 
         </button>
-
-        {/* Comments */}
 
         <button
 
@@ -895,8 +881,6 @@ function PostCard({
           💬 {comments || 0}
 
         </button>
-
-        {/* Edit */}
 
         {
 
@@ -941,8 +925,6 @@ function PostCard({
 
         }
 
-        {/* Delete */}
-
         {
 
           isOwner && (
@@ -984,9 +966,7 @@ function PostCard({
 
       </div>
 
-      {/* =========================================
-         Comments Section
-      ========================================= */}
+      {/* Comments */}
 
       {
 

@@ -31,13 +31,13 @@ function PostList({
       setLoading(true);
 
       const response =
-        await api.get("/posts");
+        await api.get("/api/posts");
 
       /* Latest First */
 
       const sortedPosts =
 
-        response.data.sort(
+        (response.data || []).sort(
 
           (a, b) => b.id - a.id
 
@@ -52,11 +52,12 @@ function PostList({
 
     } catch (error) {
 
-      console.log(error);
-
-      alert(
-        "Failed to load posts ❌"
+      console.log(
+        "Fetch Posts Error :",
+        error.response?.data || error
       );
+
+      setPosts([]);
 
     } finally {
 
@@ -285,8 +286,6 @@ function PostList({
 
             }
 
-            /* IMPORTANT FIX */
-
             author={
 
               post.author || ""
@@ -301,13 +300,13 @@ function PostList({
 
             communityName={
 
-              post.communityName
+              post.communityName || ""
 
             }
 
             communityId={
 
-              post.communityId
+              post.communityId || null
 
             }
 
@@ -328,6 +327,5 @@ function PostList({
   );
 
 }
-
 
 export default PostList;
