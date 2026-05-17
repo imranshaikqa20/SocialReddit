@@ -46,7 +46,7 @@ function SignupForm() {
 
       setLoading(true);
 
-      /* IMPORTANT FIX */
+      /* Signup API */
 
       const response =
         await api.post(
@@ -54,17 +54,30 @@ function SignupForm() {
           "/api/auth/signup",
 
           {
-            username,
-            email,
+            username: username.trim(),
+
+            email: email
+              .trim()
+              .toLowerCase(),
+
             password
           }
 
         );
 
-      console.log(response.data);
+      /* DEBUG RESPONSE */
+
+      console.log(
+        "SIGNUP RESPONSE :",
+        response.data
+      );
 
       alert(
+
+        response.data.message ||
+
         "Signup Successful ✅"
+
       );
 
       /* Clear Form */
@@ -75,15 +88,24 @@ function SignupForm() {
 
       setPassword("");
 
-      /* Redirect */
+      /* Redirect To Login */
 
       navigate("/login");
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "SIGNUP ERROR :",
+        error.response?.data || error
+      );
 
-      alert("Signup Failed ❌");
+      alert(
+
+        error.response?.data?.error ||
+
+        "Signup Failed ❌"
+
+      );
 
     } finally {
 
