@@ -8,6 +8,10 @@ function LoginForm() {
 
   const navigate = useNavigate();
 
+  /* =========================================
+     State
+  ========================================= */
+
   const [email, setEmail] =
     useState("");
 
@@ -25,14 +29,13 @@ function LoginForm() {
 
     e.preventDefault();
 
-    /* Validation */
+    /* =========================================
+       Validation
+    ========================================= */
 
     if (
-
       !email.trim() ||
-
       !password.trim()
-
     ) {
 
       alert(
@@ -48,11 +51,10 @@ function LoginForm() {
       setLoading(true);
 
       /* =========================================
-         API Call
+         Login API
       ========================================= */
 
       const userData =
-
         await loginUser({
 
           email:
@@ -69,31 +71,22 @@ function LoginForm() {
       );
 
       /* =========================================
-         Save Local Storage
+         Save User Data
       ========================================= */
 
       localStorage.setItem(
-
         "token",
-
         userData.token || ""
-
       );
 
       localStorage.setItem(
-
         "username",
-
         userData.username || ""
-
       );
 
       localStorage.setItem(
-
         "email",
-
         userData.email || ""
-
       );
 
       /* =========================================
@@ -101,11 +94,8 @@ function LoginForm() {
       ========================================= */
 
       alert(
-
         userData.message ||
-
         "Login Success 🚀"
-
       );
 
       /* =========================================
@@ -113,12 +103,6 @@ function LoginForm() {
       ========================================= */
 
       navigate("/home");
-
-      /* =========================================
-         Reload
-      ========================================= */
-
-      window.location.reload();
 
     } catch (error) {
 
@@ -128,7 +112,7 @@ function LoginForm() {
       );
 
       /* =========================================
-         Error Handling
+         Error Message
       ========================================= */
 
       const errorMessage =
@@ -393,13 +377,9 @@ function LoginForm() {
           >
 
             {
-
               loading
-
                 ? "Logging In..."
-
                 : "Login"
-
             }
 
           </button>
