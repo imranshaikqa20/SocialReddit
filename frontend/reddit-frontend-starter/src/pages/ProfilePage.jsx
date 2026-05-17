@@ -9,7 +9,7 @@ import api from "../services/api";
 function ProfilePage() {
 
   /* =========================================
-     Logged User
+     USER INFO
   ========================================= */
 
   const username =
@@ -20,7 +20,7 @@ function ProfilePage() {
     : "User";
 
   /* =========================================
-     States
+     STATES
   ========================================= */
 
   const [posts, setPosts] =
@@ -30,7 +30,7 @@ function ProfilePage() {
     useState(true);
 
   /* =========================================
-     Fetch User Posts
+     FETCH USER POSTS
   ========================================= */
 
   const fetchUserPosts = async () => {
@@ -39,29 +39,35 @@ function ProfilePage() {
 
       setLoading(true);
 
-      /* IMPORTANT FIX */
+      /* =========================================
+         FETCH POSTS
+      ========================================= */
 
       const response =
         await api.get("/api/posts");
 
       const allPosts =
-        response.data || [];
+        Array.isArray(response.data)
+          ? response.data
+          : [];
 
       /* =========================================
-         Filter Current User Posts
+         FILTER CURRENT USER POSTS
       ========================================= */
 
       const userPosts =
         allPosts.filter((post) => {
 
-          if (!post.author) {
+          /* IMPORTANT SAFE CHECKS */
 
+          if (
+            !post ||
+            !post.author
+          ) {
             return false;
-
           }
 
           return (
-
             String(post.author)
               .trim()
               .toLowerCase()
@@ -71,18 +77,17 @@ function ProfilePage() {
             String(username)
               .trim()
               .toLowerCase()
-
           );
 
         });
 
-      /* Latest First */
+      /* =========================================
+         SORT LATEST FIRST
+      ========================================= */
 
       const sortedPosts =
-        userPosts.sort(
-
+        [...userPosts].sort(
           (a, b) => b.id - a.id
-
         );
 
       setPosts(sortedPosts);
@@ -90,8 +95,8 @@ function ProfilePage() {
     } catch (error) {
 
       console.log(
-        "Profile Posts Error :",
-        error.response?.data || error
+        "PROFILE POSTS ERROR :",
+        error.response?.data || error.message
       );
 
       setPosts([]);
@@ -105,7 +110,7 @@ function ProfilePage() {
   };
 
   /* =========================================
-     Load Posts
+     LOAD POSTS
   ========================================= */
 
   useEffect(() => {
@@ -113,6 +118,10 @@ function ProfilePage() {
     fetchUserPosts();
 
   }, []);
+
+  /* =========================================
+     PAGE
+  ========================================= */
 
   return (
 
@@ -134,7 +143,7 @@ function ProfilePage() {
     >
 
       {/* =========================================
-         Background Glow
+         BACKGROUND GLOW
       ========================================= */}
 
       <div
@@ -188,13 +197,13 @@ function ProfilePage() {
       />
 
       {/* =========================================
-         Navbar
+         NAVBAR
       ========================================= */}
 
       <Navbar />
 
       {/* =========================================
-         Main Content
+         MAIN CONTENT
       ========================================= */}
 
       <div
@@ -216,7 +225,7 @@ function ProfilePage() {
       >
 
         {/* =========================================
-           Profile Card
+           PROFILE CARD
         ========================================= */}
 
         <div
@@ -260,7 +269,7 @@ function ProfilePage() {
 
           >
 
-            {/* Avatar */}
+            {/* AVATAR */}
 
             <div
 
@@ -304,7 +313,7 @@ function ProfilePage() {
 
             </div>
 
-            {/* User Info */}
+            {/* USER INFO */}
 
             <div>
 
@@ -377,7 +386,7 @@ function ProfilePage() {
         </div>
 
         {/* =========================================
-           Posts Section
+           POSTS SECTION
         ========================================= */}
 
         <div>
@@ -403,7 +412,7 @@ function ProfilePage() {
           </h2>
 
           {/* =========================================
-             Loading
+             LOADING
           ========================================= */}
 
           {
@@ -435,7 +444,7 @@ function ProfilePage() {
           }
 
           {/* =========================================
-             No Posts
+             NO POSTS
           ========================================= */}
 
           {
@@ -473,7 +482,7 @@ function ProfilePage() {
           }
 
           {/* =========================================
-             Posts
+             POSTS LIST
           ========================================= */}
 
           <div
@@ -506,18 +515,19 @@ function ProfilePage() {
 
                   imageUrl={post.imageUrl}
 
-                  votes={post.votes}
+                  votes={post.votes || 0}
 
-                  comments={post.comments}
+                  comments={post.comments || 0}
 
-                  author={post.author}
+                  author={post.author || "Anonymous"}
 
                   communityName={
-                    post.communityName
+                    post.community?.name ||
+                    "General"
                   }
 
                   communityId={
-                    post.communityId
+                    post.community?.id
                   }
 
                   onPostUpdated={

@@ -1,5 +1,6 @@
 package com.socialmedia.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -14,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-
 @Table(name = "posts")
 
 @Getter
@@ -26,11 +26,10 @@ import java.util.List;
 public class Post {
 
     /* =========================================
-       Primary Key
+       PRIMARY KEY
     ========================================= */
 
     @Id
-
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
@@ -38,7 +37,7 @@ public class Post {
     private Long id;
 
     /* =========================================
-       Title
+       TITLE
     ========================================= */
 
     @Column(nullable = false)
@@ -46,7 +45,7 @@ public class Post {
     private String title;
 
     /* =========================================
-       Content
+       CONTENT
     ========================================= */
 
     @Column(
@@ -57,7 +56,7 @@ public class Post {
     private String content;
 
     /* =========================================
-       Image URL
+       IMAGE URL
     ========================================= */
 
     @Column(
@@ -67,7 +66,7 @@ public class Post {
     private String imageUrl;
 
     /* =========================================
-       Votes
+       VOTES
     ========================================= */
 
     @Column(nullable = false)
@@ -75,7 +74,7 @@ public class Post {
     private Integer votes = 0;
 
     /* =========================================
-       Comments Count
+       COMMENTS COUNT
     ========================================= */
 
     @Column(nullable = false)
@@ -83,7 +82,7 @@ public class Post {
     private Integer comments = 0;
 
     /* =========================================
-       Author
+       AUTHOR
     ========================================= */
 
     @Column(nullable = false)
@@ -91,7 +90,28 @@ public class Post {
     private String author;
 
     /* =========================================
-       Community
+       USER RELATION
+    ========================================= */
+
+    @ManyToOne(
+            fetch = FetchType.LAZY
+    )
+
+    @JoinColumn(
+            name = "user_id"
+    )
+
+    @JsonIgnoreProperties({
+            "posts",
+            "password",
+            "hibernateLazyInitializer",
+            "handler"
+    })
+
+    private User user;
+
+    /* =========================================
+       COMMUNITY RELATION
     ========================================= */
 
     @ManyToOne(
@@ -110,7 +130,7 @@ public class Post {
     private Community community;
 
     /* =========================================
-       Comments Relation
+       COMMENTS RELATION
     ========================================= */
 
     @OneToMany(
@@ -128,13 +148,13 @@ public class Post {
     private List<Comment> commentsList;
 
     /* =========================================
-       Created Time
+       CREATED TIME
     ========================================= */
 
     private LocalDateTime createdAt;
 
     /* =========================================
-       Before Insert
+       BEFORE INSERT
     ========================================= */
 
     @PrePersist
@@ -166,7 +186,7 @@ public class Post {
 
         }
 
-        /* IMPORTANT AUTHOR FIX */
+        /* Default Author */
 
         if (
 

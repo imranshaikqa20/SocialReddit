@@ -1,5 +1,10 @@
 package com.socialmedia.backend.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -18,29 +23,51 @@ import lombok.Setter;
 
 public class User {
 
-    /* User ID */
+    /* =========================================
+       USER ID
+    ========================================= */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
 
-    /* Username */
+    /* =========================================
+       USERNAME
+    ========================================= */
 
     @Column(nullable = false)
 
     private String username;
 
-    /* Email */
+    /* =========================================
+       EMAIL
+    ========================================= */
 
     @Column(nullable = false, unique = true)
 
     private String email;
 
-    /* Password */
+    /* =========================================
+       PASSWORD
+    ========================================= */
 
     @Column(nullable = false)
 
     private String password;
+
+    /* =========================================
+       USER POSTS
+    ========================================= */
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+
+    @JsonIgnoreProperties("user")
+
+    private List<Post> posts = new ArrayList<>();
 
 }
