@@ -27,9 +27,11 @@ function LoginForm() {
 
     /* Validation */
 
-    if (!email || !password) {
+    if (!email.trim() || !password.trim()) {
 
-      alert("Please fill all fields ❌");
+      alert(
+        "Please fill all fields ❌"
+      );
 
       return;
 
@@ -46,8 +48,11 @@ function LoginForm() {
       const response =
         await loginUser({
 
-          email,
-          password
+          email:
+            email.trim().toLowerCase(),
+
+          password:
+            password.trim()
 
         });
 
@@ -57,55 +62,45 @@ function LoginForm() {
       );
 
       /* =========================================
-         IMPORTANT FIX
+         Extract Data
       ========================================= */
 
       const userData =
         response.data;
 
-      /* Save JWT Token */
+      /* =========================================
+         Save Local Storage
+      ========================================= */
 
       localStorage.setItem(
-
         "token",
-
         userData.token
-
       );
 
-      /* Save Username */
-
       localStorage.setItem(
-
         "username",
-
         userData.username
-
       );
-
-      /* Save Email */
 
       localStorage.setItem(
-
         "email",
-
         userData.email
-
       );
+
+      /* =========================================
+         Success
+      ========================================= */
 
       alert(
-
         userData.message ||
-
         "Login Success 🚀"
-
       );
 
       /* Redirect */
 
       navigate("/home");
 
-      /* Refresh */
+      /* Reload */
 
       window.location.reload();
 
@@ -116,13 +111,19 @@ function LoginForm() {
         error.response?.data || error
       );
 
-      alert(
+      /* =========================================
+         Better Error Handling
+      ========================================= */
+
+      const errorMessage =
 
         error.response?.data?.error ||
 
-        "Invalid Email or Password ❌"
+        error.response?.data?.message ||
 
-      );
+        "Invalid Email or Password ❌";
+
+      alert(errorMessage);
 
     } finally {
 
@@ -354,8 +355,8 @@ function LoginForm() {
               fontSize: "15px",
               fontWeight: "700",
               cursor: "pointer",
-              boxShadow:
-                "0px 0px 18px rgba(37,99,235,0.35)"
+              opacity:
+                loading ? 0.7 : 1
             }}
           >
 
