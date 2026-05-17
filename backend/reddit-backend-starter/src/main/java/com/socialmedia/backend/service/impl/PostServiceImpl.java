@@ -38,82 +38,49 @@ public class PostServiceImpl
 
     @Override
     public PostResponse createPost(
-
             CreatePostRequest request
-
     ) {
 
-        /* Validation */
-
         if (
-
                 request.getTitle() == null ||
-
-                        request.getTitle()
-                                .trim()
-                                .isEmpty()
-
+                        request.getTitle().trim().isEmpty()
         ) {
 
             throw new RuntimeException(
-
-                    "Post title is required "
-
+                    "Post title is required"
             );
 
         }
 
         if (
-
                 request.getContent() == null ||
-
-                        request.getContent()
-                                .trim()
-                                .isEmpty()
-
+                        request.getContent().trim().isEmpty()
         ) {
 
             throw new RuntimeException(
-
-                    "Post content is required "
-
+                    "Post content is required"
             );
 
         }
-
-        /* Create Post */
 
         Post post = new Post();
 
         post.setTitle(
-
                 request.getTitle().trim()
-
         );
 
         post.setContent(
-
                 request.getContent().trim()
-
         );
-
-        /* Image */
 
         post.setImageUrl(
-
                 request.getImageUrl()
-
         );
-
-        /* IMPORTANT AUTHOR FIX */
 
         post.setAuthor(
 
                 request.getAuthor() != null &&
-
-                        !request.getAuthor()
-                                .trim()
-                                .isEmpty()
+                        !request.getAuthor().trim().isEmpty()
 
                         ? request.getAuthor()
 
@@ -124,26 +91,20 @@ public class PostServiceImpl
         /* Community */
 
         if (
-
                 request.getCommunityId() != null
-
         ) {
 
             Community community =
 
                     communityRepository
                             .findById(
-
                                     request.getCommunityId()
-
                             )
 
                             .orElseThrow(
 
                                     () -> new RuntimeException(
-
-                                            "Community Not Found "
-
+                                            "Community Not Found"
                                     )
 
                             );
@@ -151,8 +112,6 @@ public class PostServiceImpl
             post.setCommunity(community);
 
         }
-
-        /* Defaults */
 
         post.setVotes(0);
 
@@ -162,10 +121,7 @@ public class PostServiceImpl
                 LocalDateTime.now()
         );
 
-        /* Save */
-
         Post savedPost =
-
                 postRepository.save(post);
 
         return mapToResponse(savedPost);
@@ -177,8 +133,7 @@ public class PostServiceImpl
     ========================================= */
 
     @Override
-    public List<PostResponse>
-    getAllPosts() {
+    public List<PostResponse> getAllPosts() {
 
         return postRepository
                 .findAll()
@@ -193,11 +148,8 @@ public class PostServiceImpl
     ========================================= */
 
     @Override
-    public List<PostResponse>
-    searchPosts(
-
+    public List<PostResponse> searchPosts(
             String keyword
-
     ) {
 
         return postRepository
@@ -208,6 +160,7 @@ public class PostServiceImpl
 
                         post.getTitle()
                                 .toLowerCase()
+
                                 .contains(
                                         keyword.toLowerCase()
                                 )
@@ -226,9 +179,7 @@ public class PostServiceImpl
 
     @Override
     public PostResponse getPostById(
-
             Long id
-
     ) {
 
         Post post =
@@ -239,9 +190,7 @@ public class PostServiceImpl
                         .orElseThrow(
 
                                 () -> new RuntimeException(
-
-                                        "Post Not Found "
-
+                                        "Post Not Found"
                                 )
 
                         );
@@ -255,11 +204,8 @@ public class PostServiceImpl
     ========================================= */
 
     @Override
-    public List<PostResponse>
-    getPostsByCommunity(
-
+    public List<PostResponse> getPostsByCommunity(
             Long communityId
-
     ) {
 
         return postRepository
@@ -267,6 +213,27 @@ public class PostServiceImpl
                 .findByCommunityId(
                         communityId
                 )
+
+                .stream()
+
+                .map(this::mapToResponse)
+
+                .collect(Collectors.toList());
+
+    }
+
+    /* =========================================
+       Get Posts By User
+    ========================================= */
+
+    @Override
+    public List<PostResponse> getPostsByUser(
+            Long userId
+    ) {
+
+        return postRepository
+
+                .findByUserId(userId)
 
                 .stream()
 
@@ -297,67 +264,38 @@ public class PostServiceImpl
                         .orElseThrow(
 
                                 () -> new RuntimeException(
-
-                                        "Post Not Found "
-
+                                        "Post Not Found"
                                 )
 
                         );
 
-        /* Update Title */
-
         if (
-
                 request.getTitle() != null &&
-
-                        !request.getTitle()
-                                .trim()
-                                .isEmpty()
-
+                        !request.getTitle().trim().isEmpty()
         ) {
 
             post.setTitle(
-
-                    request.getTitle()
-                            .trim()
-
+                    request.getTitle().trim()
             );
 
         }
 
-        /* Update Content */
-
         if (
-
                 request.getContent() != null &&
-
-                        !request.getContent()
-                                .trim()
-                                .isEmpty()
-
+                        !request.getContent().trim().isEmpty()
         ) {
 
             post.setContent(
-
-                    request.getContent()
-                            .trim()
-
+                    request.getContent().trim()
             );
 
         }
 
-        /* Update Image */
-
         post.setImageUrl(
-
                 request.getImageUrl()
-
         );
 
-        /* Save */
-
         Post updatedPost =
-
                 postRepository.save(post);
 
         return mapToResponse(updatedPost);
@@ -370,9 +308,7 @@ public class PostServiceImpl
 
     @Override
     public PostResponse upvotePost(
-
             Long id
-
     ) {
 
         Post post =
@@ -383,9 +319,7 @@ public class PostServiceImpl
                         .orElseThrow(
 
                                 () -> new RuntimeException(
-
-                                        "Post Not Found "
-
+                                        "Post Not Found"
                                 )
 
                         );
@@ -397,48 +331,30 @@ public class PostServiceImpl
 
                 voteRepository
                         .findByUsernameAndPost(
-
                                 username,
                                 post
-
                         );
 
-        /* Already Upvoted */
-
         if (
-
                 existingVote.isPresent() &&
-
                         existingVote.get().getType()
-
                                 == VoteType.UPVOTE
-
         ) {
 
             voteRepository.delete(
-
                     existingVote.get()
-
             );
 
             post.setVotes(
-
                     post.getVotes() - 1
-
             );
 
         }
 
-        /* Downvote -> Upvote */
-
         else if (
-
                 existingVote.isPresent() &&
-
                         existingVote.get().getType()
-
                                 == VoteType.DOWNVOTE
-
         ) {
 
             Vote vote =
@@ -451,14 +367,10 @@ public class PostServiceImpl
             voteRepository.save(vote);
 
             post.setVotes(
-
                     post.getVotes() + 2
-
             );
 
         }
-
-        /* Fresh Upvote */
 
         else {
 
@@ -475,15 +387,12 @@ public class PostServiceImpl
             voteRepository.save(vote);
 
             post.setVotes(
-
                     post.getVotes() + 1
-
             );
 
         }
 
         Post updatedPost =
-
                 postRepository.save(post);
 
         return mapToResponse(updatedPost);
@@ -496,9 +405,7 @@ public class PostServiceImpl
 
     @Override
     public PostResponse downvotePost(
-
             Long id
-
     ) {
 
         Post post =
@@ -509,9 +416,7 @@ public class PostServiceImpl
                         .orElseThrow(
 
                                 () -> new RuntimeException(
-
-                                        "Post Not Found ❌"
-
+                                        "Post Not Found"
                                 )
 
                         );
@@ -523,48 +428,30 @@ public class PostServiceImpl
 
                 voteRepository
                         .findByUsernameAndPost(
-
                                 username,
                                 post
-
                         );
 
-        /* Already Downvoted */
-
         if (
-
                 existingVote.isPresent() &&
-
                         existingVote.get().getType()
-
                                 == VoteType.DOWNVOTE
-
         ) {
 
             voteRepository.delete(
-
                     existingVote.get()
-
             );
 
             post.setVotes(
-
                     post.getVotes() + 1
-
             );
 
         }
 
-        /* Upvote -> Downvote */
-
         else if (
-
                 existingVote.isPresent() &&
-
                         existingVote.get().getType()
-
                                 == VoteType.UPVOTE
-
         ) {
 
             Vote vote =
@@ -577,14 +464,10 @@ public class PostServiceImpl
             voteRepository.save(vote);
 
             post.setVotes(
-
                     post.getVotes() - 2
-
             );
 
         }
-
-        /* Fresh Downvote */
 
         else {
 
@@ -601,15 +484,12 @@ public class PostServiceImpl
             voteRepository.save(vote);
 
             post.setVotes(
-
                     post.getVotes() - 1
-
             );
 
         }
 
         Post updatedPost =
-
                 postRepository.save(post);
 
         return mapToResponse(updatedPost);
@@ -622,9 +502,7 @@ public class PostServiceImpl
 
     @Override
     public void deletePost(
-
             Long id
-
     ) {
 
         Post post =
@@ -635,9 +513,7 @@ public class PostServiceImpl
                         .orElseThrow(
 
                                 () -> new RuntimeException(
-
-                                        "Post Not Found ❌"
-
+                                        "Post Not Found"
                                 )
 
                         );
@@ -651,9 +527,7 @@ public class PostServiceImpl
     ========================================= */
 
     private PostResponse mapToResponse(
-
             Post post
-
     ) {
 
         PostResponse response =
@@ -675,8 +549,6 @@ public class PostServiceImpl
                 post.getImageUrl()
         );
 
-        /* IMPORTANT FIX */
-
         response.setAuthor(
                 post.getAuthor()
         );
@@ -689,24 +561,16 @@ public class PostServiceImpl
                 post.getComments()
         );
 
-        /* Community */
-
         if (
-
                 post.getCommunity() != null
-
         ) {
 
             response.setCommunityId(
-
                     post.getCommunity().getId()
-
             );
 
             response.setCommunityName(
-
                     post.getCommunity().getName()
-
             );
 
         }
