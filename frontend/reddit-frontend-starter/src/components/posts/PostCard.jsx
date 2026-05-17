@@ -10,11 +10,13 @@ import {
 
 import EditPostModal from "./EditPostModal";
 
+/* COMMENTS */
+
 import AddCommentForm from "../comments/AddCommentForm";
 import CommentList from "../comments/CommentList";
 
 /* =========================================
-   API BASE
+   BACKEND URL
 ========================================= */
 
 const API_BASE =
@@ -52,7 +54,7 @@ function PostCard({
     useState(false);
 
   /* =========================================
-     IMAGE URL
+     FIX IMAGE URL
   ========================================= */
 
   let finalImageUrl = "";
@@ -65,8 +67,11 @@ function PostCard({
 
     } else {
 
+      const cleanPath =
+        imageUrl.replace(/^\/+/, "");
+
       finalImageUrl =
-        `${API_BASE}/${imageUrl.replace(/^\/+/, "")}`;
+        `${API_BASE}/${cleanPath}`;
 
     }
 
@@ -101,6 +106,8 @@ function PostCard({
 
       console.log(error);
 
+      setCommentsList([]);
+
     }
 
   };
@@ -122,7 +129,11 @@ function PostCard({
         "Delete this post?"
       );
 
-    if (!confirmDelete) return;
+    if (!confirmDelete) {
+
+      return;
+
+    }
 
     try {
 
@@ -136,6 +147,10 @@ function PostCard({
 
       );
 
+      alert(
+        "Post deleted successfully"
+      );
+
       if (onPostUpdated) {
 
         onPostUpdated();
@@ -146,6 +161,8 @@ function PostCard({
 
       console.log(error);
 
+      alert("Delete failed");
+
     }
 
   };
@@ -154,34 +171,32 @@ function PostCard({
 
     <>
 
-      {/* =========================================
-         MAIN CARD
-      ========================================= */}
-
       <div
 
         style={{
 
           background:
-            "linear-gradient(180deg,#081028 0%, #0b132b 100%)",
+            "rgba(15,23,42,0.94)",
 
           border:
-            "1px solid rgba(59,130,246,0.10)",
+            "1px solid rgba(255,255,255,0.05)",
 
-          borderRadius: "20px",
+          borderRadius: "22px",
 
-          padding: "18px",
+          padding: "22px",
+
+          color: "white",
 
           width: "100%",
 
-          maxWidth: "760px",
+          maxWidth: "900px",
 
-          margin: "0 auto 20px auto",
+          margin: "0 auto",
 
           boxShadow:
-            "0 4px 18px rgba(0,0,0,0.25)",
+            "0px 8px 26px rgba(0,0,0,0.24)",
 
-          color: "white"
+          backdropFilter: "blur(12px)"
 
         }}
 
@@ -201,7 +216,7 @@ function PostCard({
 
             justifyContent: "center",
 
-            padding: "5px 12px",
+            padding: "6px 14px",
 
             borderRadius: "999px",
 
@@ -210,11 +225,11 @@ function PostCard({
 
             color: "#60a5fa",
 
-            fontSize: "10px",
+            fontSize: "11px",
 
             fontWeight: "700",
 
-            marginBottom: "14px"
+            marginBottom: "18px"
 
           }}
 
@@ -236,7 +251,7 @@ function PostCard({
 
             alignItems: "center",
 
-            marginBottom: "18px"
+            marginBottom: "20px"
 
           }}
 
@@ -246,9 +261,9 @@ function PostCard({
 
             style={{
 
-              width: "44px",
+              width: "48px",
 
-              height: "44px",
+              height: "48px",
 
               borderRadius: "50%",
 
@@ -263,9 +278,9 @@ function PostCard({
 
               fontWeight: "800",
 
-              fontSize: "16px",
+              fontSize: "18px",
 
-              marginRight: "12px"
+              marginRight: "14px"
 
             }}
 
@@ -281,9 +296,11 @@ function PostCard({
 
               style={{
 
-                fontSize: "15px",
+                fontWeight: "700",
 
-                fontWeight: "700"
+                fontSize: "16px",
+
+                color: "#f8fafc"
 
               }}
 
@@ -297,11 +314,11 @@ function PostCard({
 
               style={{
 
-                fontSize: "11px",
+                fontSize: "12px",
 
                 color: "#94a3b8",
 
-                marginTop: "2px"
+                marginTop: "3px"
 
               }}
 
@@ -310,35 +327,6 @@ function PostCard({
               Posted in community
 
             </div>
-
-          </div>
-
-          {/* VOTES */}
-
-          <div
-
-            style={{
-
-              marginLeft: "auto",
-
-              background:
-                "rgba(37,99,235,0.18)",
-
-              padding: "7px 12px",
-
-              borderRadius: "10px",
-
-              color: "#60a5fa",
-
-              fontWeight: "700",
-
-              fontSize: "11px"
-
-            }}
-
-          >
-
-            {votes || 0} Votes
 
           </div>
 
@@ -354,11 +342,13 @@ function PostCard({
 
             fontSize: "28px",
 
-            lineHeight: "38px",
+            lineHeight: "40px",
+
+            marginBottom: "14px",
 
             fontWeight: "800",
 
-            marginBottom: "12px"
+            color: "#f8fafc"
 
           }}
 
@@ -378,11 +368,11 @@ function PostCard({
 
             color: "#cbd5e1",
 
-            lineHeight: "28px",
+            lineHeight: "30px",
 
-            fontSize: "15px",
+            marginBottom: "20px",
 
-            marginBottom: "20px"
+            fontSize: "16px"
 
           }}
 
@@ -404,19 +394,13 @@ function PostCard({
 
               style={{
 
-                marginBottom: "20px",
+                width: "100%",
 
-                borderRadius: "18px",
+                marginBottom: "20px",
 
                 overflow: "hidden",
 
-                padding: "10px",
-
-                background:
-                  "rgba(15,23,42,0.70)",
-
-                border:
-                  "1px solid rgba(59,130,246,0.08)"
+                borderRadius: "18px"
 
               }}
 
@@ -436,9 +420,17 @@ function PostCard({
 
                   objectFit: "cover",
 
-                  borderRadius: "14px",
+                  borderRadius: "18px",
 
-                  display: "block"
+                  border:
+                    "1px solid rgba(255,255,255,0.06)"
+
+                }}
+
+                onError={(e) => {
+
+                  e.target.style.display =
+                    "none";
 
                 }}
 
@@ -451,7 +443,26 @@ function PostCard({
         }
 
         {/* =========================================
-           ACTIONS
+           DIVIDER
+        ========================================= */}
+
+        <hr
+
+          style={{
+
+            border: "none",
+
+            borderTop:
+              "1px solid rgba(255,255,255,0.06)",
+
+            marginBottom: "20px"
+
+          }}
+
+        />
+
+        {/* =========================================
+           ACTION BUTTONS
         ========================================= */}
 
         <div
@@ -460,11 +471,11 @@ function PostCard({
 
             display: "flex",
 
-            gap: "8px",
+            gap: "10px",
 
-            flexWrap: "wrap",
+            marginBottom: "18px",
 
-            marginTop: "8px"
+            flexWrap: "wrap"
 
           }}
 
@@ -487,15 +498,15 @@ function PostCard({
 
               borderRadius: "12px",
 
+              fontWeight: "700",
+
+              cursor: "pointer",
+
               display: "flex",
 
               alignItems: "center",
 
-              gap: "6px",
-
-              fontWeight: "700",
-
-              cursor: "pointer",
+              gap: "8px",
 
               fontSize: "13px"
 
@@ -526,15 +537,15 @@ function PostCard({
 
               borderRadius: "12px",
 
+              fontWeight: "700",
+
+              cursor: "pointer",
+
               display: "flex",
 
               alignItems: "center",
 
-              gap: "6px",
-
-              fontWeight: "700",
-
-              cursor: "pointer",
+              gap: "8px",
 
               fontSize: "13px"
 
@@ -548,7 +559,7 @@ function PostCard({
 
           </button>
 
-          {/* COMMENTS */}
+          {/* COMMENTS BUTTON */}
 
           <button
 
@@ -571,15 +582,15 @@ function PostCard({
 
               borderRadius: "12px",
 
+              fontWeight: "700",
+
+              cursor: "pointer",
+
               display: "flex",
 
               alignItems: "center",
 
-              gap: "6px",
-
-              fontWeight: "700",
-
-              cursor: "pointer",
+              gap: "8px",
 
               fontSize: "13px"
 
@@ -593,21 +604,25 @@ function PostCard({
 
               showComments
 
-                ? "Hide"
+                ? "Hide Comments"
 
-                : commentsList.length
+                : `${commentsList.length} Comments`
 
             }
 
           </button>
 
-          {/* EDIT */}
+          {/* =========================================
+             EDIT & DELETE
+          ========================================= */}
 
           {
 
             showActions && (
 
               <>
+
+                {/* EDIT */}
 
                 <button
 
@@ -628,15 +643,15 @@ function PostCard({
 
                     borderRadius: "12px",
 
+                    fontWeight: "700",
+
+                    cursor: "pointer",
+
                     display: "flex",
 
                     alignItems: "center",
 
-                    gap: "6px",
-
-                    fontWeight: "700",
-
-                    cursor: "pointer",
+                    gap: "8px",
 
                     fontSize: "13px"
 
@@ -649,6 +664,8 @@ function PostCard({
                   Edit
 
                 </button>
+
+                {/* DELETE */}
 
                 <button
 
@@ -667,15 +684,15 @@ function PostCard({
 
                     borderRadius: "12px",
 
+                    fontWeight: "700",
+
+                    cursor: "pointer",
+
                     display: "flex",
 
                     alignItems: "center",
 
-                    gap: "6px",
-
-                    fontWeight: "700",
-
-                    cursor: "pointer",
+                    gap: "8px",
 
                     fontSize: "13px"
 
@@ -698,35 +715,59 @@ function PostCard({
         </div>
 
         {/* =========================================
-           COMMENTS
+           COMMENTS SECTION
         ========================================= */}
 
         {
 
           showComments && (
 
-            <div
-              style={{
-                marginTop: "18px"
-              }}
-            >
+            <>
 
-              <AddCommentForm
-
-                postId={id}
-
-                onCommentAdded={() => {
-
-                  fetchComments();
-
-                }}
-
-              />
+              {/* ADD COMMENT */}
 
               <div
                 style={{
-                  marginTop: "16px"
+                  marginTop: "18px"
                 }}
+              >
+
+                <AddCommentForm
+
+                  postId={id}
+
+                  onCommentAdded={() => {
+
+                    fetchComments();
+
+                    setShowComments(true);
+
+                  }}
+
+                />
+
+              </div>
+
+              {/* COMMENTS LIST */}
+
+              <div
+
+                style={{
+
+                  marginTop: "24px",
+
+                  background:
+                    "rgba(15,23,42,0.45)",
+
+                  border:
+                    "1px solid rgba(255,255,255,0.05)",
+
+                  borderRadius: "18px",
+
+                  padding: "18px"
+
+                }}
+
               >
 
                 <CommentList
@@ -741,7 +782,7 @@ function PostCard({
 
               </div>
 
-            </div>
+            </>
 
           )
 
@@ -760,10 +801,12 @@ function PostCard({
           <EditPostModal
 
             post={{
+
               id,
               title,
               content,
               imageUrl
+
             }}
 
             onClose={() =>
