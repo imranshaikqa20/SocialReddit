@@ -55,6 +55,8 @@ function Navbar({
 
     localStorage.removeItem("username");
 
+    localStorage.removeItem("email");
+
     alert(
       "Logout Successful ✅"
     );
@@ -437,7 +439,7 @@ function Navbar({
 
         {/* Community */}
 
-        <Link to="/community">
+        <Link to="/create-community">
 
           <button
 
