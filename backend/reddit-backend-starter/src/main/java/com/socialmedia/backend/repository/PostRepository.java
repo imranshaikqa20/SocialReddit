@@ -27,12 +27,4 @@ public interface PostRepository
             Long communityId
     );
 
-    /* =========================================
-       Get Posts By User
-    ========================================= */
-
-    List<Post> findByUserId(
-            Long userId
-    );
-
 }

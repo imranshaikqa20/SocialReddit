@@ -223,27 +223,6 @@ public class PostServiceImpl
     }
 
     /* =========================================
-       Get Posts By User
-    ========================================= */
-
-    @Override
-    public List<PostResponse> getPostsByUser(
-            Long userId
-    ) {
-
-        return postRepository
-
-                .findByUserId(userId)
-
-                .stream()
-
-                .map(this::mapToResponse)
-
-                .collect(Collectors.toList());
-
-    }
-
-    /* =========================================
        Update / Edit Post
     ========================================= */
 

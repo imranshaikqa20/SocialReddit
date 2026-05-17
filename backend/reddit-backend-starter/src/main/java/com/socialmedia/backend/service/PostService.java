@@ -46,14 +46,6 @@ public interface PostService {
     );
 
     /* =========================================
-       Get Posts By User
-    ========================================= */
-
-    List<PostResponse> getPostsByUser(
-            Long userId
-    );
-
-    /* =========================================
        Update Post
     ========================================= */
 
