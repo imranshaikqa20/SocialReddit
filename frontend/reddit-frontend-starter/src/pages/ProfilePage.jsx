@@ -8,12 +8,20 @@ import api from "../services/api";
 
 function ProfilePage() {
 
+  /* =========================================
+     Logged User
+  ========================================= */
+
   const username =
     localStorage.getItem("username") || "";
 
   const displayName = username
     ? username.split("@")[0]
     : "User";
+
+  /* =========================================
+     States
+  ========================================= */
 
   const [posts, setPosts] =
     useState([]);
@@ -31,11 +39,17 @@ function ProfilePage() {
 
       setLoading(true);
 
+      /* IMPORTANT FIX */
+
       const response =
-        await api.get("/posts");
+        await api.get("/api/posts");
 
       const allPosts =
         response.data || [];
+
+      /* =========================================
+         Filter Current User Posts
+      ========================================= */
 
       const userPosts =
         allPosts.filter((post) => {
@@ -46,51 +60,41 @@ function ProfilePage() {
 
           }
 
-          const postAuthor =
-
-            String(post.author)
-
-              .replace("@gmail.com", "")
-
-              .replace("@yahoo.com", "")
-
-              .replace("@outlook.com", "")
-
-              .trim()
-
-              .toLowerCase();
-
-          const currentUser =
-
-            String(username)
-
-              .replace("@gmail.com", "")
-
-              .replace("@yahoo.com", "")
-
-              .replace("@outlook.com", "")
-
-              .trim()
-
-              .toLowerCase();
-
           return (
 
-            postAuthor.includes(currentUser)
+            String(post.author)
+              .trim()
+              .toLowerCase()
 
-            ||
+            ===
 
-            currentUser.includes(postAuthor)
+            String(username)
+              .trim()
+              .toLowerCase()
 
           );
 
         });
 
-      setPosts(userPosts);
+      /* Latest First */
+
+      const sortedPosts =
+        userPosts.sort(
+
+          (a, b) => b.id - a.id
+
+        );
+
+      setPosts(sortedPosts);
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "Profile Posts Error :",
+        error.response?.data || error
+      );
+
+      setPosts([]);
 
     } finally {
 
@@ -99,6 +103,10 @@ function ProfilePage() {
     }
 
   };
+
+  /* =========================================
+     Load Posts
+  ========================================= */
 
   useEffect(() => {
 
@@ -125,7 +133,9 @@ function ProfilePage() {
 
     >
 
-      {/* Background Glow */}
+      {/* =========================================
+         Background Glow
+      ========================================= */}
 
       <div
 
@@ -177,11 +187,15 @@ function ProfilePage() {
 
       />
 
-      {/* Navbar */}
+      {/* =========================================
+         Navbar
+      ========================================= */}
 
       <Navbar />
 
-      {/* Main */}
+      {/* =========================================
+         Main Content
+      ========================================= */}
 
       <div
 
@@ -201,7 +215,9 @@ function ProfilePage() {
 
       >
 
-        {/* Profile Card */}
+        {/* =========================================
+           Profile Card
+        ========================================= */}
 
         <div
 
@@ -288,7 +304,7 @@ function ProfilePage() {
 
             </div>
 
-            {/* Info */}
+            {/* User Info */}
 
             <div>
 
@@ -360,7 +376,9 @@ function ProfilePage() {
 
         </div>
 
-        {/* Posts Section */}
+        {/* =========================================
+           Posts Section
+        ========================================= */}
 
         <div>
 
@@ -384,7 +402,9 @@ function ProfilePage() {
 
           </h2>
 
-          {/* Loading */}
+          {/* =========================================
+             Loading
+          ========================================= */}
 
           {
 
@@ -414,7 +434,9 @@ function ProfilePage() {
 
           }
 
-          {/* No Posts */}
+          {/* =========================================
+             No Posts
+          ========================================= */}
 
           {
 
@@ -450,7 +472,9 @@ function ProfilePage() {
 
           }
 
-          {/* Posts */}
+          {/* =========================================
+             Posts
+          ========================================= */}
 
           <div
 
