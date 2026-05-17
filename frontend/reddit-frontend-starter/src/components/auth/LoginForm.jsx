@@ -8,6 +8,10 @@ function LoginForm() {
 
   const navigate = useNavigate();
 
+  /* =========================================
+     States
+  ========================================= */
+
   const [email, setEmail] =
     useState("");
 
@@ -25,14 +29,13 @@ function LoginForm() {
 
     e.preventDefault();
 
-    /* Validation */
+    /* =========================================
+       Validation
+    ========================================= */
 
     if (
-
       !email.trim() ||
-
       !password.trim()
-
     ) {
 
       alert(
@@ -48,11 +51,10 @@ function LoginForm() {
       setLoading(true);
 
       /* =========================================
-         API Call
+         Login API Call
       ========================================= */
 
-      const userData =
-
+      const response =
         await loginUser({
 
           email:
@@ -65,79 +67,92 @@ function LoginForm() {
 
       console.log(
         "LOGIN RESPONSE :",
-        userData
+        response
       );
+
+      /* =========================================
+         Token Extraction
+      ========================================= */
+
+      const token =
+        response?.token ||
+        response?.data?.token;
+
+      const username =
+        response?.username ||
+        response?.data?.username;
+
+      const userEmail =
+        response?.email ||
+        response?.data?.email;
+
+      /* =========================================
+         Token Check
+      ========================================= */
+
+      if (!token) {
+
+        alert(
+          "Token not received ❌"
+        );
+
+        return;
+
+      }
 
       /* =========================================
          Save Local Storage
       ========================================= */
 
       localStorage.setItem(
-
         "token",
-
-        userData.token || ""
-
+        token
       );
 
       localStorage.setItem(
-
         "username",
-
-        userData.username || ""
-
+        username || ""
       );
 
       localStorage.setItem(
-
         "email",
-
-        userData.email || ""
-
+        userEmail || ""
       );
 
       /* =========================================
-         Success Message
+         Success Alert
       ========================================= */
 
       alert(
-
-        userData.message ||
-
         "Login Success 🚀"
-
       );
 
       /* =========================================
          Redirect Home
       ========================================= */
 
-      navigate("/home");
-
-      /* =========================================
-         Reload
-      ========================================= */
-
-      window.location.reload();
+      navigate("/home", {
+        replace: true
+      });
 
     } catch (error) {
 
       console.log(
         "LOGIN ERROR :",
-        error.response?.data || error
+        error
       );
 
       /* =========================================
-         Error Handling
+         Error Message
       ========================================= */
 
       const errorMessage =
 
-        error.response?.data?.error ||
+        error?.response?.data?.message ||
 
-        error.response?.data?.message ||
+        error?.response?.data?.error ||
 
-        error.message ||
+        error?.message ||
 
         "Invalid Email or Password ❌";
 
@@ -161,41 +176,9 @@ function LoginForm() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: "20px",
-        overflow: "hidden",
-        position: "relative"
+        padding: "20px"
       }}
     >
-
-      {/* =========================================
-         Background Glow
-      ========================================= */}
-
-      <div
-        style={{
-          position: "absolute",
-          top: "80px",
-          left: "80px",
-          width: "180px",
-          height: "180px",
-          background:
-            "rgba(37,99,235,0.16)",
-          filter: "blur(100px)"
-        }}
-      />
-
-      <div
-        style={{
-          position: "absolute",
-          bottom: "80px",
-          right: "80px",
-          width: "180px",
-          height: "180px",
-          background:
-            "rgba(59,130,246,0.14)",
-          filter: "blur(100px)"
-        }}
-      />
 
       {/* =========================================
          Login Card
@@ -206,16 +189,13 @@ function LoginForm() {
           width: "100%",
           maxWidth: "430px",
           background:
-            "rgba(15,23,42,0.78)",
-          backdropFilter: "blur(14px)",
+            "rgba(15,23,42,0.85)",
           border:
-            "1px solid rgba(59,130,246,0.15)",
+            "1px solid rgba(59,130,246,0.2)",
           borderRadius: "24px",
           padding: "32px",
           boxShadow:
-            "0px 8px 30px rgba(0,0,0,0.35)",
-          position: "relative",
-          zIndex: 2
+            "0px 8px 30px rgba(0,0,0,0.35)"
         }}
       >
 
@@ -235,9 +215,7 @@ function LoginForm() {
               margin: 0,
               color: "#f8fafc",
               fontSize: "30px",
-              fontWeight: "700",
-              textShadow:
-                "0px 0px 12px rgba(59,130,246,0.25)"
+              fontWeight: "700"
             }}
           >
 
@@ -249,20 +227,18 @@ function LoginForm() {
             style={{
               marginTop: "10px",
               color: "#94a3b8",
-              fontSize: "14px",
-              lineHeight: "24px"
+              fontSize: "14px"
             }}
           >
 
-            Login to continue to
-            Social Reddit
+            Login to continue
 
           </p>
 
         </div>
 
         {/* =========================================
-           Login Form
+           Form
         ========================================= */}
 
         <form
@@ -289,13 +265,13 @@ function LoginForm() {
               }}
             >
 
-              Email Address
+              Email
 
             </label>
 
             <input
               type="email"
-              placeholder="Enter your email"
+              placeholder="Enter email"
               value={email}
               onChange={(e) =>
                 setEmail(
@@ -304,15 +280,14 @@ function LoginForm() {
               }
               style={{
                 width: "100%",
-                padding: "13px 15px",
+                padding: "13px",
                 borderRadius: "14px",
                 border:
-                  "1px solid rgba(59,130,246,0.18)",
-                outline: "none",
+                  "1px solid rgba(59,130,246,0.2)",
                 background:
                   "rgba(30,41,59,0.9)",
-                color: "#f8fafc",
-                fontSize: "14px",
+                color: "#fff",
+                outline: "none",
                 boxSizing: "border-box"
               }}
             />
@@ -345,7 +320,7 @@ function LoginForm() {
 
             <input
               type="password"
-              placeholder="Enter your password"
+              placeholder="Enter password"
               value={password}
               onChange={(e) =>
                 setPassword(
@@ -354,15 +329,14 @@ function LoginForm() {
               }
               style={{
                 width: "100%",
-                padding: "13px 15px",
+                padding: "13px",
                 borderRadius: "14px",
                 border:
-                  "1px solid rgba(59,130,246,0.18)",
-                outline: "none",
+                  "1px solid rgba(59,130,246,0.2)",
                 background:
                   "rgba(30,41,59,0.9)",
-                color: "#f8fafc",
-                fontSize: "14px",
+                color: "#fff",
+                outline: "none",
                 boxSizing: "border-box"
               }}
             />
@@ -393,13 +367,9 @@ function LoginForm() {
           >
 
             {
-
               loading
-
                 ? "Logging In..."
-
                 : "Login"
-
             }
 
           </button>
