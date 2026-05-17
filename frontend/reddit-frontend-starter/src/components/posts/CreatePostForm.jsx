@@ -17,7 +17,7 @@ function CreatePostForm() {
   const navigate = useNavigate();
 
   /* =========================================
-     FORM STATES
+     STATES
   ========================================= */
 
   const [title, setTitle] =
@@ -32,29 +32,21 @@ function CreatePostForm() {
   const [communityId, setCommunityId] =
     useState("");
 
-  /* =========================================
-     COMMUNITIES
-  ========================================= */
-
   const [communities, setCommunities] =
     useState([]);
-
-  /* =========================================
-     LOADING
-  ========================================= */
 
   const [loading, setLoading] =
     useState(false);
 
   /* =========================================
-     LOGGED USER
+     USERNAME
   ========================================= */
 
   const username =
 
     localStorage.getItem("username")
 
-      ||
+    ||
 
     "Anonymous";
 
@@ -75,20 +67,20 @@ function CreatePostForm() {
       const data =
         await getAllCommunities();
 
-      const safeData =
+      setCommunities(
 
         Array.isArray(data)
 
           ? data
 
-          : [];
+          : []
 
-      setCommunities(safeData);
+      );
 
     } catch (error) {
 
       console.log(
-        "COMMUNITY FETCH ERROR :",
+        "COMMUNITY ERROR :",
         error.response?.data || error.message
       );
 
@@ -106,8 +98,6 @@ function CreatePostForm() {
 
     e.preventDefault();
 
-    /* VALIDATION */
-
     if (
 
       !title.trim() ||
@@ -119,7 +109,7 @@ function CreatePostForm() {
     ) {
 
       alert(
-        "Please fill all fields ❌"
+        "Please fill all required fields ❌"
       );
 
       return;
@@ -129,10 +119,6 @@ function CreatePostForm() {
     try {
 
       setLoading(true);
-
-      /* =========================================
-         CREATE POST
-      ========================================= */
 
       const payload = {
 
@@ -146,17 +132,12 @@ function CreatePostForm() {
           imageUrl.trim(),
 
         author:
-          username || "Anonymous",
+          username,
 
         communityId:
           Number(communityId)
 
       };
-
-      console.log(
-        "POST PAYLOAD =>",
-        payload
-      );
 
       await createPost(payload);
 
@@ -164,7 +145,7 @@ function CreatePostForm() {
         "Post Created Successfully 🚀"
       );
 
-      /* RESET FORM */
+      /* RESET */
 
       setTitle("");
 
@@ -173,8 +154,6 @@ function CreatePostForm() {
       setImageUrl("");
 
       setCommunityId("");
-
-      /* REDIRECT */
 
       navigate("/home");
 
@@ -188,8 +167,6 @@ function CreatePostForm() {
       alert(
 
         error?.response?.data?.message ||
-
-        error?.response?.data?.error ||
 
         "Failed to create post ❌"
 
@@ -205,459 +182,477 @@ function CreatePostForm() {
 
   return (
 
-    <div
-
-      style={{
-
-        width: "100%"
-
-      }}
-
-    >
+    <form onSubmit={handleSubmit}>
 
       {/* =========================================
-         HEADING
+         COMMUNITY
       ========================================= */}
 
       <div
         style={{
-          marginBottom: "22px"
+          marginBottom: "24px"
         }}
       >
 
-        <h1
+        <label
 
           style={{
 
-            margin: 0,
+            display: "block",
 
-            color: "#f8fafc",
+            marginBottom: "10px",
 
-            fontSize: "28px",
+            color: "#dbeafe",
 
-            fontWeight: "800"
+            fontWeight: "700",
+
+            fontSize: "14px"
 
           }}
 
         >
 
-          Create New Post 🚀
+          Select Community
 
-        </h1>
+        </label>
 
-        <p
+        <select
 
-          style={{
+          value={communityId}
 
-            marginTop: "8px",
+          onChange={(e) =>
 
-            color: "#94a3b8",
+            setCommunityId(
+              e.target.value
+            )
 
-            fontSize: "13px",
-
-            lineHeight: "22px"
-
-          }}
-
-        >
-
-          Share discussions and
-          updates with your
-          community.
-
-        </p>
-
-      </div>
-
-      {/* =========================================
-         FORM
-      ========================================= */}
-
-      <form onSubmit={handleSubmit}>
-
-        {/* =========================================
-           COMMUNITY
-        ========================================= */}
-
-        <div
-          style={{
-            marginBottom: "18px"
-          }}
-        >
-
-          <label
-
-            style={{
-
-              display: "block",
-
-              marginBottom: "8px",
-
-              color: "#dbeafe",
-
-              fontWeight: "600",
-
-              fontSize: "14px"
-
-            }}
-
-          >
-
-            Select Community
-
-          </label>
-
-          <select
-
-            value={communityId}
-
-            onChange={(e) =>
-
-              setCommunityId(
-                e.target.value
-              )
-
-            }
-
-            style={{
-
-              width: "100%",
-
-              padding: "13px",
-
-              borderRadius: "14px",
-
-              border:
-                "1px solid rgba(59,130,246,0.14)",
-
-              background:
-                "rgba(30,41,59,0.85)",
-
-              color: "#f8fafc",
-
-              outline: "none",
-
-              fontSize: "14px"
-
-            }}
-
-          >
-
-            <option value="">
-              Choose Community
-            </option>
-
-            {
-
-              communities.map(
-                (community) => (
-
-                  <option
-
-                    key={community.id}
-
-                    value={community.id}
-
-                  >
-
-                    {community.name}
-
-                  </option>
-
-                )
-              )
-
-            }
-
-          </select>
-
-        </div>
-
-        {/* =========================================
-           TITLE
-        ========================================= */}
-
-        <div
-          style={{
-            marginBottom: "18px"
-          }}
-        >
-
-          <label
-
-            style={{
-
-              display: "block",
-
-              marginBottom: "8px",
-
-              color: "#dbeafe",
-
-              fontWeight: "600",
-
-              fontSize: "14px"
-
-            }}
-
-          >
-
-            Post Title
-
-          </label>
-
-          <input
-
-            type="text"
-
-            placeholder="Enter your post title..."
-
-            value={title}
-
-            onChange={(e) =>
-
-              setTitle(
-                e.target.value
-              )
-
-            }
-
-            style={{
-
-              width: "100%",
-
-              padding: "14px",
-
-              borderRadius: "14px",
-
-              border:
-                "1px solid rgba(59,130,246,0.14)",
-
-              background:
-                "rgba(30,41,59,0.85)",
-
-              color: "#f8fafc",
-
-              outline: "none",
-
-              fontSize: "14px",
-
-              boxSizing: "border-box"
-
-            }}
-
-          />
-
-        </div>
-
-        {/* =========================================
-           CONTENT
-        ========================================= */}
-
-        <div
-          style={{
-            marginBottom: "18px"
-          }}
-        >
-
-          <label
-
-            style={{
-
-              display: "block",
-
-              marginBottom: "8px",
-
-              color: "#dbeafe",
-
-              fontWeight: "600",
-
-              fontSize: "14px"
-
-            }}
-
-          >
-
-            Content
-
-          </label>
-
-          <textarea
-
-            rows="6"
-
-            placeholder="Write your post content..."
-
-            value={content}
-
-            onChange={(e) =>
-
-              setContent(
-                e.target.value
-              )
-
-            }
-
-            style={{
-
-              width: "100%",
-
-              padding: "15px",
-
-              borderRadius: "14px",
-
-              border:
-                "1px solid rgba(59,130,246,0.14)",
-
-              background:
-                "rgba(30,41,59,0.85)",
-
-              color: "#f8fafc",
-
-              outline: "none",
-
-              resize: "none",
-
-              fontSize: "14px",
-
-              lineHeight: "24px",
-
-              boxSizing: "border-box"
-
-            }}
-
-          />
-
-        </div>
-
-        {/* =========================================
-           IMAGE URL
-        ========================================= */}
-
-        <div
-          style={{
-            marginBottom: "24px"
-          }}
-        >
-
-          <label
-
-            style={{
-
-              display: "block",
-
-              marginBottom: "8px",
-
-              color: "#dbeafe",
-
-              fontWeight: "600",
-
-              fontSize: "14px"
-
-            }}
-
-          >
-
-            Image URL (Optional)
-
-          </label>
-
-          <input
-
-            type="text"
-
-            placeholder="Paste image URL..."
-
-            value={imageUrl}
-
-            onChange={(e) =>
-
-              setImageUrl(
-                e.target.value
-              )
-
-            }
-
-            style={{
-
-              width: "100%",
-
-              padding: "14px",
-
-              borderRadius: "14px",
-
-              border:
-                "1px solid rgba(59,130,246,0.14)",
-
-              background:
-                "rgba(30,41,59,0.85)",
-
-              color: "#f8fafc",
-
-              outline: "none",
-
-              fontSize: "14px",
-
-              boxSizing: "border-box"
-
-            }}
-
-          />
-
-        </div>
-
-        {/* =========================================
-           SUBMIT
-        ========================================= */}
-
-        <button
-
-          type="submit"
-
-          disabled={loading}
+          }
 
           style={{
 
             width: "100%",
 
-            padding: "14px",
+            padding: "16px",
 
-            border: "none",
+            borderRadius: "16px",
 
-            borderRadius: "15px",
+            border:
+              "1px solid rgba(59,130,246,0.18)",
 
             background:
-              "linear-gradient(to right,#2563eb,#3b82f6)",
+              "rgba(30,41,59,0.92)",
 
-            color: "white",
+            color: "#f8fafc",
 
-            fontSize: "15px",
+            outline: "none",
 
-            fontWeight: "700",
-
-            cursor: "pointer",
-
-            opacity:
-              loading ? 0.7 : 1
+            fontSize: "15px"
 
           }}
 
         >
 
+          <option value="">
+            Choose Community
+          </option>
+
           {
 
-            loading
+            communities.map(
+              (community) => (
 
-              ? "Publishing Post..."
+                <option
 
-              : "Publish Post"
+                  key={community.id}
+
+                  value={community.id}
+
+                >
+
+                  {community.name}
+
+                </option>
+
+              )
+            )
 
           }
 
-        </button>
+        </select>
 
-      </form>
+      </div>
 
-    </div>
+      {/* =========================================
+         TITLE
+      ========================================= */}
+
+      <div
+        style={{
+          marginBottom: "24px"
+        }}
+      >
+
+        <label
+
+          style={{
+
+            display: "block",
+
+            marginBottom: "10px",
+
+            color: "#dbeafe",
+
+            fontWeight: "700",
+
+            fontSize: "14px"
+
+          }}
+
+        >
+
+          Post Title
+
+        </label>
+
+        <input
+
+          type="text"
+
+          placeholder="Enter your post title..."
+
+          value={title}
+
+          onChange={(e) =>
+
+            setTitle(
+              e.target.value
+            )
+
+          }
+
+          style={{
+
+            width: "100%",
+
+            padding: "16px",
+
+            borderRadius: "16px",
+
+            border:
+              "1px solid rgba(59,130,246,0.18)",
+
+            background:
+              "rgba(30,41,59,0.92)",
+
+            color: "#f8fafc",
+
+            outline: "none",
+
+            fontSize: "15px",
+
+            boxSizing: "border-box"
+
+          }}
+
+        />
+
+      </div>
+
+      {/* =========================================
+         CONTENT
+      ========================================= */}
+
+      <div
+        style={{
+          marginBottom: "24px"
+        }}
+      >
+
+        <label
+
+          style={{
+
+            display: "block",
+
+            marginBottom: "10px",
+
+            color: "#dbeafe",
+
+            fontWeight: "700",
+
+            fontSize: "14px"
+
+          }}
+
+        >
+
+          Content
+
+        </label>
+
+        <textarea
+
+          rows="7"
+
+          placeholder="Write your post content..."
+
+          value={content}
+
+          onChange={(e) =>
+
+            setContent(
+              e.target.value
+            )
+
+          }
+
+          style={{
+
+            width: "100%",
+
+            padding: "18px",
+
+            borderRadius: "16px",
+
+            border:
+              "1px solid rgba(59,130,246,0.18)",
+
+            background:
+              "rgba(30,41,59,0.92)",
+
+            color: "#f8fafc",
+
+            outline: "none",
+
+            resize: "vertical",
+
+            fontSize: "15px",
+
+            lineHeight: "28px",
+
+            boxSizing: "border-box"
+
+          }}
+
+        />
+
+      </div>
+
+      {/* =========================================
+         IMAGE URL
+      ========================================= */}
+
+      <div
+        style={{
+          marginBottom: "18px"
+        }}
+      >
+
+        <label
+
+          style={{
+
+            display: "block",
+
+            marginBottom: "10px",
+
+            color: "#dbeafe",
+
+            fontWeight: "700",
+
+            fontSize: "14px"
+
+          }}
+
+        >
+
+          Add Image URL 🖼️
+
+        </label>
+
+        <input
+
+          type="text"
+
+          placeholder="Paste image URL..."
+
+          value={imageUrl}
+
+          onChange={(e) =>
+
+            setImageUrl(
+              e.target.value
+            )
+
+          }
+
+          style={{
+
+            width: "100%",
+
+            padding: "16px",
+
+            borderRadius: "16px",
+
+            border:
+              "1px solid rgba(59,130,246,0.18)",
+
+            background:
+              "rgba(30,41,59,0.92)",
+
+            color: "#f8fafc",
+
+            outline: "none",
+
+            fontSize: "15px",
+
+            boxSizing: "border-box"
+
+          }}
+
+        />
+
+      </div>
+
+      {/* =========================================
+         IMAGE PREVIEW
+      ========================================= */}
+
+      {
+
+        imageUrl && (
+
+          <div
+
+            style={{
+
+              marginBottom: "28px",
+
+              background:
+                "rgba(15,23,42,0.70)",
+
+              border:
+                "1px solid rgba(59,130,246,0.12)",
+
+              borderRadius: "20px",
+
+              padding: "14px",
+
+              overflow: "hidden"
+
+            }}
+
+          >
+
+            <div
+
+              style={{
+
+                marginBottom: "12px",
+
+                color: "#cbd5e1",
+
+                fontSize: "13px",
+
+                fontWeight: "600"
+
+              }}
+
+            >
+
+              Image Preview
+
+            </div>
+
+            <img
+
+              src={imageUrl}
+
+              alt="Preview"
+
+              style={{
+
+                width: "100%",
+
+                maxHeight: "420px",
+
+                objectFit: "cover",
+
+                borderRadius: "16px"
+
+              }}
+
+              onError={(e) => {
+
+                e.target.style.display =
+                  "none";
+
+              }}
+
+            />
+
+          </div>
+
+        )
+
+      }
+
+      {/* =========================================
+         SUBMIT BUTTON
+      ========================================= */}
+
+      <button
+
+        type="submit"
+
+        disabled={loading}
+
+        style={{
+
+          width: "100%",
+
+          padding: "18px",
+
+          border: "none",
+
+          borderRadius: "18px",
+
+          background:
+            "linear-gradient(to right,#2563eb,#3b82f6)",
+
+          color: "white",
+
+          fontSize: "16px",
+
+          fontWeight: "800",
+
+          cursor: "pointer",
+
+          boxShadow:
+            "0px 8px 24px rgba(37,99,235,0.30)",
+
+          transition: "0.3s ease",
+
+          opacity:
+            loading ? 0.7 : 1
+
+        }}
+
+      >
+
+        {
+
+          loading
+
+            ? "Publishing Post..."
+
+            : "🚀 Publish Post"
+
+        }
+
+      </button>
+
+    </form>
 
   );
 

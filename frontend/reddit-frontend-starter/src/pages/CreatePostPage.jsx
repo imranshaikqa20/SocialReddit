@@ -13,7 +13,7 @@ function CreatePostPage() {
         minHeight: "100vh",
 
         background:
-          "linear-gradient(180deg, #020617 0%, #071028 45%, #020617 100%)",
+          "linear-gradient(180deg,#020617 0%,#071028 45%,#020617 100%)",
 
         color: "white",
 
@@ -79,9 +79,9 @@ function CreatePostPage() {
 
           left: "-100px",
 
-          width: "220px",
+          width: "240px",
 
-          height: "220px",
+          height: "240px",
 
           background:
             "rgba(37,99,235,0.10)",
@@ -104,9 +104,9 @@ function CreatePostPage() {
 
           right: "-100px",
 
-          width: "220px",
+          width: "240px",
 
-          height: "220px",
+          height: "240px",
 
           background:
             "rgba(59,130,246,0.08)",
@@ -157,7 +157,7 @@ function CreatePostPage() {
 
           alignItems: "flex-start",
 
-          padding: "40px 20px",
+          padding: "50px 20px",
 
           position: "relative",
 
@@ -168,7 +168,7 @@ function CreatePostPage() {
       >
 
         {/* =========================================
-           FORM CONTAINER
+           CREATE POST CARD
         ========================================= */}
 
         <div
@@ -177,36 +177,36 @@ function CreatePostPage() {
 
             width: "100%",
 
-            maxWidth: "700px",
+            maxWidth: "760px",
 
             background:
-              "rgba(15,23,42,0.60)",
+              "rgba(15,23,42,0.72)",
 
             border:
               "1px solid rgba(255,255,255,0.05)",
 
-            borderRadius: "22px",
+            borderRadius: "28px",
 
-            padding: "24px",
+            padding: "34px",
 
-            backdropFilter: "blur(12px)",
+            backdropFilter: "blur(14px)",
 
             boxShadow:
-              "0px 6px 24px rgba(0,0,0,0.30)"
+              "0px 10px 35px rgba(0,0,0,0.35)"
 
           }}
 
         >
 
           {/* =========================================
-             PAGE HEADER
+             HEADER
           ========================================= */}
 
           <div
 
             style={{
 
-              marginBottom: "24px"
+              marginBottom: "32px"
 
             }}
 
@@ -218,13 +218,15 @@ function CreatePostPage() {
 
                 margin: 0,
 
-                marginBottom: "10px",
+                marginBottom: "14px",
 
-                fontSize: "32px",
+                fontSize: "42px",
 
                 fontWeight: "800",
 
-                color: "#f8fafc"
+                color: "#f8fafc",
+
+                letterSpacing: "0.5px"
 
               }}
 
@@ -242,24 +244,28 @@ function CreatePostPage() {
 
                 color: "#94a3b8",
 
-                fontSize: "14px",
+                fontSize: "15px",
 
-                lineHeight: "24px"
+                lineHeight: "28px",
+
+                maxWidth: "620px"
 
               }}
 
             >
 
-              Share your thoughts, images,
-              memes, technology updates,
-              or community discussions.
+              Share your thoughts,
+              memes, images,
+              technology updates and
+              community discussions
+              with the world.
 
             </p>
 
           </div>
 
           {/* =========================================
-             CREATE POST FORM
+             FORM
           ========================================= */}
 
           <CreatePostForm />
