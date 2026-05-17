@@ -23,7 +23,7 @@ export const getAllCommunities =
         error
       );
 
-      throw error;
+      return [];
 
     }
 
@@ -54,7 +54,7 @@ export const getCommunityById =
         error
       );
 
-      throw error;
+      return null;
 
     }
 
@@ -108,14 +108,20 @@ export const getPostsByCommunity =
 
     try {
 
+      /* IMPORTANT FIX */
+
       const response =
         await api.get(
 
-          `/posts/community/${communityId}`
+          `/api/posts/community/${communityId}`
 
         );
 
-      return response.data || [];
+      return Array.isArray(response.data)
+
+        ? response.data
+
+        : [];
 
     } catch (error) {
 

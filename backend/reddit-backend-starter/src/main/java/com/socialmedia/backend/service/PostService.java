@@ -12,9 +12,7 @@ public interface PostService {
     ========================================= */
 
     PostResponse createPost(
-
             CreatePostRequest request
-
     );
 
     /* =========================================
@@ -28,9 +26,7 @@ public interface PostService {
     ========================================= */
 
     List<PostResponse> searchPosts(
-
             String keyword
-
     );
 
     /* =========================================
@@ -38,9 +34,7 @@ public interface PostService {
     ========================================= */
 
     PostResponse getPostById(
-
             Long id
-
     );
 
     /* =========================================
@@ -48,9 +42,15 @@ public interface PostService {
     ========================================= */
 
     List<PostResponse> getPostsByCommunity(
-
             Long communityId
+    );
 
+    /* =========================================
+       Get Posts By User
+    ========================================= */
+
+    List<PostResponse> getPostsByUser(
+            Long userId
     );
 
     /* =========================================
@@ -58,11 +58,8 @@ public interface PostService {
     ========================================= */
 
     PostResponse updatePost(
-
             Long id,
-
             CreatePostRequest request
-
     );
 
     /* =========================================
@@ -70,9 +67,7 @@ public interface PostService {
     ========================================= */
 
     PostResponse upvotePost(
-
             Long id
-
     );
 
     /* =========================================
@@ -80,9 +75,7 @@ public interface PostService {
     ========================================= */
 
     PostResponse downvotePost(
-
             Long id
-
     );
 
     /* =========================================
@@ -90,9 +83,7 @@ public interface PostService {
     ========================================= */
 
     void deletePost(
-
             Long id
-
     );
 
 }

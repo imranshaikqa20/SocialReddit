@@ -142,7 +142,7 @@ function App() {
           path="/community"
           element={
             token
-              ? <Navigate to="/community/1" />
+              ? <Navigate to="/home" />
               : <Navigate to="/login" />
           }
         />

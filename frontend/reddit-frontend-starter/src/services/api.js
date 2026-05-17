@@ -5,7 +5,7 @@ import axios from "axios";
 ========================================= */
 
 export const API_BASE_URL =
-  "https://socialreddit-backend.onrender.com/api";
+  "https://socialreddit-backend.onrender.com";
 
 /* =========================================
    Create Axios Instance
