@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import api from "../../services/api";
-
 import { createPost } from "../../services/postService";
 
 import {
@@ -32,19 +30,6 @@ function CreatePostForm() {
     useState("");
 
   /* =========================================
-     Image States
-  ========================================= */
-
-  const [image, setImage] =
-    useState(null);
-
-  const [imagePreview, setImagePreview] =
-    useState("");
-
-  const [imageUploading, setImageUploading] =
-    useState(false);
-
-  /* =========================================
      Communities
   ========================================= */
 
@@ -65,10 +50,6 @@ function CreatePostForm() {
   const username =
 
     localStorage.getItem("username")
-
-      ||
-
-    localStorage.getItem("user")
 
       ||
 
@@ -104,95 +85,6 @@ function CreatePostForm() {
   };
 
   /* =========================================
-     Handle Image
-  ========================================= */
-
-  const handleImageChange = (e) => {
-
-    const file =
-      e.target.files[0];
-
-    if (!file) return;
-
-    /* Validate Size */
-
-    if (file.size > 5 * 1024 * 1024) {
-
-      alert(
-        "Image size must be below 5MB ❌"
-      );
-
-      return;
-
-    }
-
-    setImage(file);
-
-    setImagePreview(
-
-      URL.createObjectURL(file)
-
-    );
-
-  };
-
-  /* =========================================
-     Upload Image
-  ========================================= */
-
-  const uploadImage = async () => {
-
-    if (!image) return "";
-
-    try {
-
-      setImageUploading(true);
-
-      const formData =
-        new FormData();
-
-      formData.append(
-        "file",
-        image
-      );
-
-      const response =
-        await api.post(
-
-          "/posts/upload",
-
-          formData,
-
-          {
-            headers: {
-              "Content-Type":
-                "multipart/form-data"
-            }
-          }
-
-        );
-
-      return response.data.imageUrl || "";
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert(
-        "Image upload failed ❌"
-      );
-
-      return "";
-
-    } finally {
-
-      setImageUploading(false);
-
-    }
-
-  };
-
-  /* =========================================
      Submit
   ========================================= */
 
@@ -222,17 +114,6 @@ function CreatePostForm() {
 
       setLoading(true);
 
-      let imageUrl = "";
-
-      /* Upload Image */
-
-      if (image) {
-
-        imageUrl =
-          await uploadImage();
-
-      }
-
       /* =========================================
          Create Post
       ========================================= */
@@ -244,8 +125,6 @@ function CreatePostForm() {
 
         content:
           content.trim(),
-
-        imageUrl,
 
         author: username,
 
@@ -266,10 +145,6 @@ function CreatePostForm() {
 
       setCommunityId("");
 
-      setImage(null);
-
-      setImagePreview("");
-
       /* Redirect */
 
       navigate("/home");
@@ -280,7 +155,7 @@ function CreatePostForm() {
 
       alert(
 
-        error?.response?.data ||
+        error?.response?.data?.error ||
 
         "Failed to create post ❌"
 
@@ -317,9 +192,7 @@ function CreatePostForm() {
 
     >
 
-      {/* =========================================
-         Main Card
-      ========================================= */}
+      {/* Main Card */}
 
       <div
 
@@ -392,9 +265,9 @@ function CreatePostForm() {
 
           >
 
-            Share discussions, news,
-            images and updates with
-            your community.
+            Share discussions and
+            updates with your
+            community.
 
           </p>
 
@@ -578,7 +451,7 @@ function CreatePostForm() {
 
           <div
             style={{
-              marginBottom: "18px"
+              marginBottom: "24px"
             }}
           >
 
@@ -606,7 +479,7 @@ function CreatePostForm() {
 
             <textarea
 
-              rows="5"
+              rows="6"
 
               placeholder="Write your post content..."
 
@@ -652,125 +525,13 @@ function CreatePostForm() {
 
           </div>
 
-          {/* Upload */}
-
-          <div
-            style={{
-              marginBottom: "20px"
-            }}
-          >
-
-            <label
-
-              style={{
-
-                display: "block",
-
-                marginBottom: "8px",
-
-                color: "#dbeafe",
-
-                fontWeight: "600",
-
-                fontSize: "14px"
-
-              }}
-
-            >
-
-              Upload Image
-
-            </label>
-
-            <div
-
-              style={{
-
-                border:
-                  "2px dashed rgba(59,130,246,0.18)",
-
-                borderRadius: "16px",
-
-                padding: "22px",
-
-                textAlign: "center",
-
-                background:
-                  "rgba(15,23,42,0.55)"
-
-              }}
-
-            >
-
-              <input
-
-                type="file"
-
-                accept="image/*"
-
-                onChange={handleImageChange}
-
-                style={{
-                  color: "#cbd5e1"
-                }}
-
-              />
-
-            </div>
-
-          </div>
-
-          {/* Preview */}
-
-          {
-
-            imagePreview && (
-
-              <div
-                style={{
-                  marginBottom: "20px"
-                }}
-              >
-
-                <img
-
-                  src={imagePreview}
-
-                  alt="Preview"
-
-                  style={{
-
-                    width: "100%",
-
-                    maxHeight: "360px",
-
-                    objectFit: "cover",
-
-                    borderRadius: "18px",
-
-                    border:
-                      "1px solid rgba(59,130,246,0.12)"
-
-                  }}
-
-                />
-
-              </div>
-
-            )
-
-          }
-
           {/* Submit */}
 
           <button
 
             type="submit"
 
-            disabled={
-              loading ||
-              imageUploading
-            }
+            disabled={loading}
 
             style={{
 
@@ -794,12 +555,7 @@ function CreatePostForm() {
               cursor: "pointer",
 
               opacity:
-                loading || imageUploading
-                  ? 0.7
-                  : 1,
-
-              boxShadow:
-                "0 6px 18px rgba(37,99,235,0.30)"
+                loading ? 0.7 : 1
 
             }}
 
@@ -807,9 +563,7 @@ function CreatePostForm() {
 
             {
 
-              loading ||
-
-              imageUploading
+              loading
 
                 ? "Publishing Post..."
 
