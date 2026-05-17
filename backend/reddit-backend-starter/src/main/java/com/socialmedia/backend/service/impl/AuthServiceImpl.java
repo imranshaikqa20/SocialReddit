@@ -239,17 +239,59 @@ public class AuthServiceImpl implements AuthService {
                         user.getPassword()
         );
 
-        boolean passwordMatched =
+        boolean passwordMatched = false;
 
-                new BCryptPasswordEncoder()
+        /* =========================================
+           BCrypt Password Check
+        ========================================= */
 
-                        .matches(
+        if (
 
-                                request.getPassword().trim(),
+                user.getPassword() != null &&
 
-                                user.getPassword()
+                        (
 
-                        );
+                                user.getPassword().startsWith("$2a$") ||
+
+                                        user.getPassword().startsWith("$2b$") ||
+
+                                        user.getPassword().startsWith("$2y$")
+
+                        )
+
+        ) {
+
+            passwordMatched =
+
+                    new BCryptPasswordEncoder()
+
+                            .matches(
+
+                                    request.getPassword().trim(),
+
+                                    user.getPassword()
+
+                            );
+
+        }
+
+        /* =========================================
+           Plain Password Fallback
+        ========================================= */
+
+        else {
+
+            passwordMatched =
+
+                    request.getPassword()
+                            .trim()
+                            .equals(
+
+                                    user.getPassword()
+
+                            );
+
+        }
 
         System.out.println(
                 "PASSWORD MATCHED : " +

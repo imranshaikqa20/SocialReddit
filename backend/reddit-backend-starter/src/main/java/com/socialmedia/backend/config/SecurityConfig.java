@@ -5,20 +5,28 @@ import org.springframework.context.annotation.Configuration;
 
 import org.springframework.http.HttpMethod;
 
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+
 import org.springframework.security.config.http.SessionCreationPolicy;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
 
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     /* =========================================
@@ -26,14 +34,14 @@ public class SecurityConfig {
     ========================================= */
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
 
     }
 
     /* =========================================
-       Security Configuration
+       Security Filter Chain
     ========================================= */
 
     @Bean
@@ -43,87 +51,113 @@ public class SecurityConfig {
 
         http
 
-                /* Disable CSRF */
+                /* =====================================
+                   Disable CSRF
+                ===================================== */
 
                 .csrf(csrf -> csrf.disable())
 
-                /* Enable CORS */
+                /* =====================================
+                   Enable CORS
+                ===================================== */
 
-                .cors(cors -> cors.configurationSource(
-                        corsConfigurationSource()
-                ))
+                .cors(Customizer.withDefaults())
 
-                /* Stateless Session */
+                /* =====================================
+                   Stateless Session
+                ===================================== */
 
                 .sessionManagement(session ->
 
                         session.sessionCreationPolicy(
+
                                 SessionCreationPolicy.STATELESS
+
                         )
 
                 )
 
-                /* Authorization Rules */
+                /* =====================================
+                   Disable Default Spring Login
+                ===================================== */
+
+                .formLogin(form -> form.disable())
+
+                .httpBasic(httpBasic -> httpBasic.disable())
+
+                .logout(logout -> logout.disable())
+
+                /* =====================================
+                   Authorization Rules
+                ===================================== */
 
                 .authorizeHttpRequests(auth -> auth
 
-                        /* Allow OPTIONS Requests */
+                        /* OPTIONS */
 
                         .requestMatchers(
+
                                 HttpMethod.OPTIONS,
+
                                 "/**"
+
                         ).permitAll()
 
-                        /* Auth APIs */
+                        /* Auth */
 
                         .requestMatchers(
+
                                 "/api/auth/**"
+
                         ).permitAll()
 
-                        /* Posts APIs */
+                        /* Posts */
 
                         .requestMatchers(
+
                                 "/api/posts/**"
+
                         ).permitAll()
 
-                        /* Comments APIs */
+                        /* Communities */
 
                         .requestMatchers(
-                                "/api/comments/**"
-                        ).permitAll()
 
-                        /* Community APIs */
-
-                        .requestMatchers(
                                 "/api/communities/**"
+
+                        ).permitAll()
+
+                        /* Comments */
+
+                        .requestMatchers(
+
+                                "/api/comments/**"
+
                         ).permitAll()
 
                         /* Uploads */
 
                         .requestMatchers(
+
                                 "/uploads/**"
+
                         ).permitAll()
 
                         /* Swagger */
 
                         .requestMatchers(
+
                                 "/swagger-ui/**",
+
                                 "/v3/api-docs/**"
+
                         ).permitAll()
 
                         /* Everything Else */
 
                         .anyRequest().permitAll()
 
-                )
-
-                /* Disable Default Login */
-
-                .formLogin(form -> form.disable())
-
-                /* Disable Basic Auth */
-
-                .httpBasic(httpBasic -> httpBasic.disable());
+                );
 
         return http.build();
 
@@ -139,10 +173,6 @@ public class SecurityConfig {
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
-        /* =====================================
-           Allow Frontend Origins
-        ===================================== */
-
         configuration.setAllowedOriginPatterns(
 
                 List.of(
@@ -155,27 +185,23 @@ public class SecurityConfig {
 
         );
 
-        /* =====================================
-           Allow HTTP Methods
-        ===================================== */
-
         configuration.setAllowedMethods(
 
                 List.of(
 
                         "GET",
+
                         "POST",
+
                         "PUT",
+
                         "DELETE",
+
                         "OPTIONS"
 
                 )
 
         );
-
-        /* =====================================
-           Allow Headers
-        ===================================== */
 
         configuration.setAllowedHeaders(
 
@@ -183,40 +209,30 @@ public class SecurityConfig {
 
         );
 
-        /* =====================================
-           Expose Headers
-        ===================================== */
-
         configuration.setExposedHeaders(
 
                 List.of(
+
                         "Authorization"
+
                 )
 
         );
 
-        /* =====================================
-           Allow Credentials
-        ===================================== */
-
         configuration.setAllowCredentials(true);
-
-        /* =====================================
-           Cache Duration
-        ===================================== */
 
         configuration.setMaxAge(3600L);
 
-        /* =====================================
-           Register Configuration
-        ===================================== */
-
         UrlBasedCorsConfigurationSource source =
+
                 new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration(
+
                 "/**",
+
                 configuration
+
         );
 
         return source;
