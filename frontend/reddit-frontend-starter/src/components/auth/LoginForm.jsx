@@ -39,7 +39,9 @@ function LoginForm() {
 
       setLoading(true);
 
-      /* API Call */
+      /* =========================================
+         API Call
+      ========================================= */
 
       const response =
         await loginUser({
@@ -51,8 +53,15 @@ function LoginForm() {
 
       console.log(
         "LOGIN RESPONSE :",
-        response
+        response.data
       );
+
+      /* =========================================
+         IMPORTANT FIX
+      ========================================= */
+
+      const userData =
+        response.data;
 
       /* Save JWT Token */
 
@@ -60,7 +69,7 @@ function LoginForm() {
 
         "token",
 
-        response.token
+        userData.token
 
       );
 
@@ -70,7 +79,7 @@ function LoginForm() {
 
         "username",
 
-        response.username
+        userData.username
 
       );
 
@@ -80,23 +89,23 @@ function LoginForm() {
 
         "email",
 
-        response.email
+        userData.email
 
       );
 
       alert(
 
-        response.message ||
+        userData.message ||
 
         "Login Success 🚀"
 
       );
 
-      /* Redirect To Home */
+      /* Redirect */
 
       navigate("/home");
 
-      /* Refresh Application */
+      /* Refresh */
 
       window.location.reload();
 

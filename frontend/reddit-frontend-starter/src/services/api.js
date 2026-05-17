@@ -102,17 +102,15 @@ api.interceptors.response.use(
       error.response?.status === 400
     ) {
 
-      alert(
+      const errorMessage =
 
         error.response?.data?.message ||
 
         error.response?.data?.error ||
 
-        error.response?.data ||
+        "Bad Request ❌";
 
-        "Bad Request ❌"
-
-      );
+      alert(errorMessage);
 
     }
 
@@ -138,15 +136,15 @@ api.interceptors.response.use(
       error.response?.status === 500
     ) {
 
-      alert(
+      const errorMessage =
 
         error.response?.data?.message ||
 
-        error.response?.data ||
+        error.response?.data?.error ||
 
-        "Internal Server Error ❌"
+        "Internal Server Error ❌";
 
-      );
+      alert(errorMessage);
 
     }
 
