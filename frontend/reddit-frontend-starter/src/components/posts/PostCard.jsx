@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import {
   FaArrowUp,
   FaArrowDown,
-  FaComment
+  FaComment,
+  FaEdit,
+  FaTrash
 } from "react-icons/fa";
 
 /* =========================================
@@ -26,7 +28,9 @@ function PostCard({
   votes,
   author,
   comments,
-  communityName
+  communityName,
+  onPostUpdated,
+  showActions = false
 
 }) {
 
@@ -34,14 +38,12 @@ function PostCard({
     useState("");
 
   /* =========================================
-     FIX IMAGE URL
+     IMAGE URL FIX
   ========================================= */
 
   let finalImageUrl = "";
 
   if (imageUrl) {
-
-    /* IF IMAGE IS ALREADY FULL URL */
 
     if (imageUrl.startsWith("http")) {
 
@@ -49,13 +51,8 @@ function PostCard({
 
     } else {
 
-      /* REMOVE EXTRA SLASHES */
-
       const cleanPath =
-
         imageUrl.replace(/^\/+/, "");
-
-      /* FINAL IMAGE URL */
 
       finalImageUrl =
         `${API_BASE}/${cleanPath}`;
@@ -65,14 +62,52 @@ function PostCard({
   }
 
   console.log(
-    "ORIGINAL IMAGE URL =>",
-    imageUrl
-  );
-
-  console.log(
     "FINAL IMAGE URL =>",
     finalImageUrl
   );
+
+  /* =========================================
+     DELETE POST
+  ========================================= */
+
+  const handleDelete = async () => {
+
+    const confirmDelete =
+      window.confirm(
+        "Delete this post?"
+      );
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    try {
+
+      await fetch(
+
+        `${API_BASE}/api/posts/${id}`,
+
+        {
+          method: "DELETE"
+        }
+
+      );
+
+      if (onPostUpdated) {
+
+        onPostUpdated();
+
+      }
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Delete failed");
+
+    }
+
+  };
 
   return (
 
@@ -105,9 +140,7 @@ function PostCard({
 
     >
 
-      {/* =========================================
-         COMMUNITY
-      ========================================= */}
+      {/* COMMUNITY */}
 
       <div
 
@@ -138,9 +171,7 @@ function PostCard({
 
       </div>
 
-      {/* =========================================
-         AUTHOR
-      ========================================= */}
+      {/* AUTHOR */}
 
       <div
 
@@ -227,9 +258,7 @@ function PostCard({
 
       </div>
 
-      {/* =========================================
-         TITLE
-      ========================================= */}
+      {/* TITLE */}
 
       <h2
 
@@ -249,9 +278,7 @@ function PostCard({
 
       </h2>
 
-      {/* =========================================
-         CONTENT
-      ========================================= */}
+      {/* CONTENT */}
 
       <p
 
@@ -273,9 +300,7 @@ function PostCard({
 
       </p>
 
-      {/* =========================================
-         IMAGE
-      ========================================= */}
+      {/* IMAGE */}
 
       {
 
@@ -314,23 +339,11 @@ function PostCard({
 
               }}
 
-              onLoad={() => {
-
-                console.log(
-                  "IMAGE LOADED SUCCESS"
-                );
-
-              }}
-
               onError={(e) => {
 
                 console.log(
                   "IMAGE FAILED =>",
                   finalImageUrl
-                );
-
-                console.log(
-                  "BACKEND IMAGE URL INVALID"
                 );
 
                 e.target.style.display =
@@ -346,9 +359,7 @@ function PostCard({
 
       }
 
-      {/* =========================================
-         DIVIDER
-      ========================================= */}
+      {/* DIVIDER */}
 
       <hr
 
@@ -365,9 +376,7 @@ function PostCard({
 
       />
 
-      {/* =========================================
-         ACTION BUTTONS
-      ========================================= */}
+      {/* ACTION BUTTONS */}
 
       <div
 
@@ -481,11 +490,95 @@ function PostCard({
 
         </div>
 
+        {/* =========================================
+           EDIT & DELETE
+        ========================================= */}
+
+        {
+
+          showActions && (
+
+            <>
+
+              <button
+
+                style={{
+
+                  background: "#f59e0b",
+
+                  border: "none",
+
+                  color: "white",
+
+                  padding: "10px 14px",
+
+                  borderRadius: "12px",
+
+                  fontWeight: "700",
+
+                  cursor: "pointer",
+
+                  display: "flex",
+
+                  alignItems: "center",
+
+                  gap: "6px"
+
+                }}
+
+              >
+
+                <FaEdit />
+
+                Edit
+
+              </button>
+
+              <button
+
+                onClick={handleDelete}
+
+                style={{
+
+                  background: "#dc2626",
+
+                  border: "none",
+
+                  color: "white",
+
+                  padding: "10px 14px",
+
+                  borderRadius: "12px",
+
+                  fontWeight: "700",
+
+                  cursor: "pointer",
+
+                  display: "flex",
+
+                  alignItems: "center",
+
+                  gap: "6px"
+
+                }}
+
+              >
+
+                <FaTrash />
+
+                Delete
+
+              </button>
+
+            </>
+
+          )
+
+        }
+
       </div>
 
-      {/* =========================================
-         COMMENT BOX
-      ========================================= */}
+      {/* COMMENT BOX */}
 
       <div
 
