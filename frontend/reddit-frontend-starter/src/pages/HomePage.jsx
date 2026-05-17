@@ -1,754 +1,443 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 
-import {
-  FaArrowUp,
-  FaArrowDown,
-  FaComment,
-  FaEdit,
-  FaTrash
-} from "react-icons/fa";
+import Navbar from "../components/layout/Navbar";
 
-import EditPostModal from "./EditPostModal";
+import PostList from "../components/posts/PostList";
 
-import AddCommentForm from "../comments/AddCommentForm";
-import CommentList from "../comments/CommentList";
+import CommunitySidebar from "../components/community/CommunitySidebar";
 
-/* =========================================
-   BACKEND URL
-========================================= */
-
-const API_BASE =
-  "https://socialreddit-backend.onrender.com";
-
-/* =========================================
-   COMPONENT
-========================================= */
-
-function PostCard({
-
-  id,
-  title,
-  content,
-  imageUrl,
-  votes,
-  author,
-  communityName,
-  onPostUpdated,
-  showActions = false
-
-}) {
-
-  const [showEditModal, setShowEditModal] =
-    useState(false);
-
-  const [commentsList, setCommentsList] =
-    useState([]);
-
-  const [showComments, setShowComments] =
-    useState(false);
+function HomePage() {
 
   /* =========================================
-     IMAGE URL
+     SEARCH STATE
   ========================================= */
 
-  let finalImageUrl = "";
-
-  if (imageUrl) {
-
-    if (imageUrl.startsWith("http")) {
-
-      finalImageUrl = imageUrl;
-
-    } else {
-
-      finalImageUrl =
-        `${API_BASE}/${imageUrl.replace(/^\/+/, "")}`;
-
-    }
-
-  }
-
-  /* =========================================
-     FETCH COMMENTS
-  ========================================= */
-
-  const fetchComments = async () => {
-
-    try {
-
-      const response = await fetch(
-
-        `${API_BASE}/api/comments/post/${id}`
-
-      );
-
-      const data =
-        await response.json();
-
-      setCommentsList(
-
-        Array.isArray(data)
-          ? data
-          : []
-
-      );
-
-    } catch (error) {
-
-      console.log(error);
-
-    }
-
-  };
-
-  useEffect(() => {
-
-    fetchComments();
-
-  }, [id]);
-
-  /* =========================================
-     DELETE POST
-  ========================================= */
-
-  const handleDelete = async () => {
-
-    const confirmDelete =
-      window.confirm(
-        "Delete this post?"
-      );
-
-    if (!confirmDelete) return;
-
-    try {
-
-      await fetch(
-
-        `${API_BASE}/api/posts/${id}`,
-
-        {
-          method: "DELETE"
-        }
-
-      );
-
-      if (onPostUpdated) {
-
-        onPostUpdated();
-
-      }
-
-    } catch (error) {
-
-      console.log(error);
-
-    }
-
-  };
+  const [searchTerm, setSearchTerm] =
+    useState("");
 
   return (
 
-    <>
+    <div
+
+      style={{
+
+        minHeight: "100vh",
+
+        background:
+          "linear-gradient(180deg,#020617 0%,#071028 45%,#020617 100%)",
+
+        color: "white",
+
+        overflowX: "hidden",
+
+        position: "relative"
+
+      }}
+
+    >
 
       {/* =========================================
-         POST CARD
+         GLOBAL STYLES
+      ========================================= */}
+
+      <style>
+
+        {`
+
+          * {
+            box-sizing: border-box;
+          }
+
+          body {
+            margin: 0;
+            padding: 0;
+            background: #020617;
+            font-family: Arial, sans-serif;
+          }
+
+          img {
+            max-width: 100%;
+            display: block;
+          }
+
+          ::-webkit-scrollbar {
+            width: 8px;
+          }
+
+          ::-webkit-scrollbar-track {
+            background: #020617;
+          }
+
+          ::-webkit-scrollbar-thumb {
+            background: linear-gradient(
+              to bottom,
+              #2563eb,
+              #3b82f6
+            );
+            border-radius: 20px;
+          }
+
+          @media (max-width: 1100px) {
+
+            .home-layout {
+              flex-direction: column;
+            }
+
+            .sidebar-wrapper {
+              width: 100%;
+            }
+
+            .feed-wrapper {
+              width: 100%;
+            }
+
+          }
+
+          @media (max-width: 768px) {
+
+            .main-heading {
+              font-size: 36px !important;
+              line-height: 46px !important;
+            }
+
+            .main-subtext {
+              font-size: 15px !important;
+              line-height: 28px !important;
+            }
+
+          }
+
+        `}
+
+      </style>
+
+      {/* =========================================
+         BLUE GLOW EFFECTS
       ========================================= */}
 
       <div
 
         style={{
 
+          position: "fixed",
+
+          top: "-140px",
+
+          left: "-140px",
+
+          width: "320px",
+
+          height: "320px",
+
           background:
-            "rgba(15,23,42,0.94)",
+            "rgba(37,99,235,0.18)",
 
-          border:
-            "1px solid rgba(255,255,255,0.04)",
+          filter: "blur(140px)",
 
-          borderRadius: "14px",
+          zIndex: 0
 
-          padding: "12px",
+        }}
 
-          color: "white",
+      />
 
-          width: "100%",
+      <div
 
-          maxWidth: "500px",
+        style={{
 
-          margin: "0 auto 14px auto",
+          position: "fixed",
 
-          boxShadow:
-            "0 2px 10px rgba(0,0,0,0.20)"
+          bottom: "-140px",
+
+          right: "-140px",
+
+          width: "320px",
+
+          height: "320px",
+
+          background:
+            "rgba(59,130,246,0.14)",
+
+          filter: "blur(140px)",
+
+          zIndex: 0
+
+        }}
+
+      />
+
+      {/* =========================================
+         NAVBAR
+      ========================================= */}
+
+      <div
+
+        style={{
+
+          position: "sticky",
+
+          top: 0,
+
+          zIndex: 100
 
         }}
 
       >
 
-        {/* COMMUNITY */}
+        <Navbar
 
-        <div
+          searchTerm={searchTerm}
 
-          style={{
+          setSearchTerm={setSearchTerm}
 
-            display: "inline-flex",
-
-            padding: "4px 10px",
-
-            borderRadius: "999px",
-
-            background:
-              "rgba(59,130,246,0.12)",
-
-            color: "#60a5fa",
-
-            fontSize: "8px",
-
-            fontWeight: "700",
-
-            marginBottom: "10px"
-
-          }}
-
-        >
-
-          {communityName || "General"}
-
-        </div>
-
-        {/* AUTHOR */}
-
-        <div
-
-          style={{
-
-            display: "flex",
-
-            alignItems: "center",
-
-            marginBottom: "12px"
-
-          }}
-
-        >
-
-          <div
-
-            style={{
-
-              width: "34px",
-
-              height: "34px",
-
-              borderRadius: "50%",
-
-              background:
-                "linear-gradient(135deg,#3b82f6,#2563eb)",
-
-              display: "flex",
-
-              alignItems: "center",
-
-              justifyContent: "center",
-
-              fontWeight: "800",
-
-              fontSize: "12px",
-
-              marginRight: "8px"
-
-            }}
-
-          >
-
-            {author?.charAt(0)?.toUpperCase() || "A"}
-
-          </div>
-
-          <div>
-
-            <div
-
-              style={{
-
-                fontSize: "12px",
-
-                fontWeight: "700"
-
-              }}
-
-            >
-
-              {author || "Anonymous"}
-
-            </div>
-
-            <div
-
-              style={{
-
-                fontSize: "9px",
-
-                color: "#94a3b8"
-
-              }}
-
-            >
-
-              Posted in community
-
-            </div>
-
-          </div>
-
-          {/* VOTES */}
-
-          <div
-
-            style={{
-
-              marginLeft: "auto",
-
-              background:
-                "rgba(37,99,235,0.18)",
-
-              padding: "4px 8px",
-
-              borderRadius: "8px",
-
-              color: "#60a5fa",
-
-              fontWeight: "700",
-
-              fontSize: "8px"
-
-            }}
-
-          >
-
-            {votes || 0} Votes
-
-          </div>
-
-        </div>
-
-        {/* TITLE */}
-
-        <h2
-
-          style={{
-
-            fontSize: "17px",
-
-            lineHeight: "24px",
-
-            fontWeight: "800",
-
-            marginBottom: "8px"
-
-          }}
-
-        >
-
-          {title}
-
-        </h2>
-
-        {/* CONTENT */}
-
-        <p
-
-          style={{
-
-            color: "#cbd5e1",
-
-            lineHeight: "20px",
-
-            fontSize: "12px",
-
-            marginBottom: "12px"
-
-          }}
-
-        >
-
-          {content}
-
-        </p>
-
-        {/* IMAGE */}
-
-        {
-
-          finalImageUrl && (
-
-            <div
-
-              style={{
-
-                width: "100%",
-
-                marginBottom: "12px",
-
-                borderRadius: "12px",
-
-                overflow: "hidden",
-
-                background:
-                  "#0f172a"
-
-              }}
-
-            >
-
-              <img
-
-                src={finalImageUrl}
-
-                alt="post"
-
-                style={{
-
-                  width: "100%",
-
-                  maxHeight: "260px",
-
-                  objectFit: "cover",
-
-                  display: "block"
-
-                }}
-
-              />
-
-            </div>
-
-          )
-
-        }
-
-        {/* ACTIONS */}
-
-        <div
-
-          style={{
-
-            display: "flex",
-
-            gap: "5px",
-
-            flexWrap: "wrap"
-
-          }}
-
-        >
-
-          {/* UPVOTE */}
-
-          <button
-
-            style={{
-
-              background:
-                "linear-gradient(to right,#22c55e,#16a34a)",
-
-              border: "none",
-
-              color: "white",
-
-              padding: "6px 10px",
-
-              borderRadius: "8px",
-
-              display: "flex",
-
-              alignItems: "center",
-
-              gap: "4px",
-
-              fontWeight: "700",
-
-              cursor: "pointer",
-
-              fontSize: "10px"
-
-            }}
-
-          >
-
-            <FaArrowUp />
-
-            Upvote
-
-          </button>
-
-          {/* DOWNVOTE */}
-
-          <button
-
-            style={{
-
-              background:
-                "linear-gradient(to right,#ef4444,#dc2626)",
-
-              border: "none",
-
-              color: "white",
-
-              padding: "6px 10px",
-
-              borderRadius: "8px",
-
-              display: "flex",
-
-              alignItems: "center",
-
-              gap: "4px",
-
-              fontWeight: "700",
-
-              cursor: "pointer",
-
-              fontSize: "10px"
-
-            }}
-
-          >
-
-            <FaArrowDown />
-
-            Downvote
-
-          </button>
-
-          {/* COMMENTS */}
-
-          <button
-
-            onClick={() =>
-              setShowComments(
-                !showComments
-              )
-            }
-
-            style={{
-
-              background:
-                "linear-gradient(to right,#2563eb,#3b82f6)",
-
-              border: "none",
-
-              color: "white",
-
-              padding: "6px 10px",
-
-              borderRadius: "8px",
-
-              display: "flex",
-
-              alignItems: "center",
-
-              gap: "4px",
-
-              fontWeight: "700",
-
-              cursor: "pointer",
-
-              fontSize: "10px"
-
-            }}
-
-          >
-
-            <FaComment />
-
-            {
-
-              showComments
-                ? "Hide"
-                : commentsList.length
-
-            }
-
-          </button>
-
-          {/* EDIT / DELETE */}
-
-          {
-
-            showActions && (
-
-              <>
-
-                <button
-
-                  onClick={() =>
-                    setShowEditModal(true)
-                  }
-
-                  style={{
-
-                    background:
-                      "linear-gradient(to right,#f59e0b,#d97706)",
-
-                    border: "none",
-
-                    color: "white",
-
-                    padding: "6px 10px",
-
-                    borderRadius: "8px",
-
-                    display: "flex",
-
-                    alignItems: "center",
-
-                    gap: "4px",
-
-                    fontWeight: "700",
-
-                    cursor: "pointer",
-
-                    fontSize: "10px"
-
-                  }}
-
-                >
-
-                  <FaEdit />
-
-                  Edit
-
-                </button>
-
-                <button
-
-                  onClick={handleDelete}
-
-                  style={{
-
-                    background:
-                      "linear-gradient(to right,#dc2626,#b91c1c)",
-
-                    border: "none",
-
-                    color: "white",
-
-                    padding: "6px 10px",
-
-                    borderRadius: "8px",
-
-                    display: "flex",
-
-                    alignItems: "center",
-
-                    gap: "4px",
-
-                    fontWeight: "700",
-
-                    cursor: "pointer",
-
-                    fontSize: "10px"
-
-                  }}
-
-                >
-
-                  <FaTrash />
-
-                  Delete
-
-                </button>
-
-              </>
-
-            )
-
-          }
-
-        </div>
-
-        {/* COMMENTS */}
-
-        {
-
-          showComments && (
-
-            <div
-              style={{
-                marginTop: "12px"
-              }}
-            >
-
-              <AddCommentForm
-
-                postId={id}
-
-                onCommentAdded={() => {
-
-                  fetchComments();
-
-                }}
-
-              />
-
-              <div
-                style={{
-                  marginTop: "12px"
-                }}
-              >
-
-                <CommentList
-
-                  postId={id}
-
-                  refreshTrigger={
-                    commentsList.length
-                  }
-
-                />
-
-              </div>
-
-            </div>
-
-          )
-
-        }
+        />
 
       </div>
 
-      {/* EDIT MODAL */}
+      {/* =========================================
+         MAIN LAYOUT
+      ========================================= */}
 
-      {
+      <div
 
-        showEditModal && (
+        className="home-layout"
 
-          <EditPostModal
+        style={{
 
-            post={{
-              id,
-              title,
-              content,
-              imageUrl
+          width: "94%",
+
+          maxWidth: "1600px",
+
+          margin: "20px auto",
+
+          display: "flex",
+
+          gap: "26px",
+
+          alignItems: "flex-start",
+
+          position: "relative",
+
+          zIndex: 2
+
+        }}
+
+      >
+
+        {/* =========================================
+           SIDEBAR
+        ========================================= */}
+
+        <div
+
+          className="sidebar-wrapper"
+
+          style={{
+
+            width: "280px",
+
+            flexShrink: 0
+
+          }}
+
+        >
+
+          <CommunitySidebar />
+
+        </div>
+
+        {/* =========================================
+           FEED SECTION
+        ========================================= */}
+
+        <div
+
+          className="feed-wrapper"
+
+          style={{
+
+            flex: 1,
+
+            minWidth: 0
+
+          }}
+
+        >
+
+          {/* =========================================
+             TOP HEADER
+          ========================================= */}
+
+          <div
+
+            style={{
+
+              display: "flex",
+
+              justifyContent: "space-between",
+
+              alignItems: "center",
+
+              flexWrap: "wrap",
+
+              gap: "18px",
+
+              marginBottom: "28px"
+
             }}
 
-            onClose={() =>
-              setShowEditModal(false)
-            }
+          >
 
-            onPostUpdated={
-              onPostUpdated
-            }
+            {/* LEFT */}
 
-          />
+            <div>
 
-        )
+              <h1
 
-      }
+                className="main-heading"
 
-    </>
+                style={{
+
+                  margin: 0,
+
+                  fontSize: "42px",
+
+                  fontWeight: "800",
+
+                  lineHeight: "54px",
+
+                  color: "#f8fafc",
+
+                  letterSpacing: "-1px",
+
+                  textShadow:
+                    "0px 0px 18px rgba(59,130,246,0.18)"
+
+                }}
+
+              >
+
+                Trending Posts
+
+              </h1>
+
+              <p
+
+                className="main-subtext"
+
+                style={{
+
+                  marginTop: "12px",
+
+                  color: "#94a3b8",
+
+                  fontSize: "16px",
+
+                  lineHeight: "30px",
+
+                  maxWidth: "760px",
+
+                  fontWeight: "400"
+
+                }}
+
+              >
+
+                Discover trending discussions,
+                memes, gaming updates,
+                technology news, ISRO launches
+                and community posts from creators
+                around the world.
+
+              </p>
+
+            </div>
+
+            {/* LIVE FEED */}
+
+            <div
+
+              style={{
+
+                background:
+                  "rgba(15,23,42,0.82)",
+
+                border:
+                  "1px solid rgba(59,130,246,0.18)",
+
+                padding: "14px 22px",
+
+                borderRadius: "16px",
+
+                color: "#dbeafe",
+
+                fontSize: "14px",
+
+                fontWeight: "700",
+
+                backdropFilter: "blur(16px)",
+
+                boxShadow:
+                  "0px 0px 20px rgba(37,99,235,0.10)"
+
+              }}
+
+            >
+
+              🔴 Live Community Feed
+
+            </div>
+
+          </div>
+
+          {/* =========================================
+             POSTS CONTAINER
+          ========================================= */}
+
+          <div
+
+            style={{
+
+              background:
+                "rgba(15,23,42,0.62)",
+
+              border:
+                "1px solid rgba(255,255,255,0.05)",
+
+              borderRadius: "30px",
+
+              padding: "30px",
+
+              backdropFilter: "blur(18px)",
+
+              boxShadow:
+                "0px 14px 50px rgba(0,0,0,0.38)",
+
+              minHeight: "600px"
+
+            }}
+
+          >
+
+            {/* =========================================
+               POSTS LIST
+            ========================================= */}
+
+            <PostList
+
+              searchTerm={searchTerm || ""}
+
+            />
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
 
   );
 
 }
 
-export default PostCard;
+export default HomePage;
