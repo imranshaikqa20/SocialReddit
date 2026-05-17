@@ -14,7 +14,9 @@ import {
 
 } from "react-router-dom";
 
-/* Auth Pages */
+/* =========================================
+   Auth Pages
+========================================= */
 
 import SignupForm
   from "./components/auth/SignupForm";
@@ -22,13 +24,15 @@ import SignupForm
 import LoginForm
   from "./components/auth/LoginForm";
 
-/* Main Pages */
+/* =========================================
+   Main Pages
+========================================= */
 
 import HomePage
   from "./pages/HomePage";
 
 import CreatePostPage
-  from "./pages/create-post";
+  from "./pages/CreatePostPage";
 
 import CommunityPage
   from "./pages/CommunityPage";
@@ -36,18 +40,24 @@ import CommunityPage
 import ProfilePage
   from "./pages/ProfilePage";
 
-/* Community Components */
+/* =========================================
+   Community Components
+========================================= */
 
 import CreateCommunityForm
   from "./components/community/CreateCommunityForm";
 
-/* Global CSS */
+/* =========================================
+   Global CSS
+========================================= */
 
 import "./styles/globals.css";
 
 function AppRoutes() {
 
-  /* Check Login */
+  /* =========================================
+     Check Login
+  ========================================= */
 
   const token =
     localStorage.getItem("token");
@@ -58,7 +68,9 @@ function AppRoutes() {
 
       <Routes>
 
-        {/* Default Route */}
+        {/* =========================================
+            DEFAULT ROUTE
+        ========================================= */}
 
         <Route
 
@@ -76,7 +88,9 @@ function AppRoutes() {
 
         />
 
-        {/* Home */}
+        {/* =========================================
+            HOME
+        ========================================= */}
 
         <Route
 
@@ -94,7 +108,9 @@ function AppRoutes() {
 
         />
 
-        {/* PROFILE PAGE */}
+        {/* =========================================
+            PROFILE
+        ========================================= */}
 
         <Route
 
@@ -112,7 +128,9 @@ function AppRoutes() {
 
         />
 
-        {/* Signup */}
+        {/* =========================================
+            SIGNUP
+        ========================================= */}
 
         <Route
 
@@ -130,7 +148,9 @@ function AppRoutes() {
 
         />
 
-        {/* Login */}
+        {/* =========================================
+            LOGIN
+        ========================================= */}
 
         <Route
 
@@ -148,11 +168,13 @@ function AppRoutes() {
 
         />
 
-        {/* Create Post */}
+        {/* =========================================
+            CREATE POST
+        ========================================= */}
 
         <Route
 
-          path="/create-post"
+          path="/post"
 
           element={
 
@@ -166,7 +188,9 @@ function AppRoutes() {
 
         />
 
-        {/* Create Community */}
+        {/* =========================================
+            CREATE COMMUNITY
+        ========================================= */}
 
         <Route
 
@@ -184,7 +208,25 @@ function AppRoutes() {
 
         />
 
-        {/* Community Page */}
+        {/* =========================================
+            COMMUNITY PAGE
+        ========================================= */}
+
+        <Route
+
+          path="/community"
+
+          element={
+
+            token
+
+              ? <CommunityPage />
+
+              : <Navigate to="/login" />
+
+          }
+
+        />
 
         <Route
 
@@ -202,7 +244,9 @@ function AppRoutes() {
 
         />
 
-        {/* Invalid Routes */}
+        {/* =========================================
+            INVALID ROUTES
+        ========================================= */}
 
         <Route
 
