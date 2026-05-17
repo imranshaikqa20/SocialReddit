@@ -65,9 +65,17 @@ public class PostServiceImpl
 
         Post post = new Post();
 
+        /* =========================================
+           TITLE
+        ========================================= */
+
         post.setTitle(
                 request.getTitle().trim()
         );
+
+        /* =========================================
+           CONTENT
+        ========================================= */
 
         post.setContent(
                 request.getContent().trim()
@@ -85,7 +93,7 @@ public class PostServiceImpl
                         !imageUrl.trim().isEmpty()
         ) {
 
-            /* REMOVE EXTRA SLASHES */
+            /* WINDOWS SLASH FIX */
 
             imageUrl =
                     imageUrl.replace(
@@ -93,34 +101,71 @@ public class PostServiceImpl
                             "/"
                     );
 
-            /* ADD /uploads/ */
+            /* REMOVE DOMAIN */
+
+            imageUrl =
+                    imageUrl.replace(
+                            "https://socialreddit-backend.onrender.com/",
+                            ""
+                    );
+
+            /* REMOVE EXTRA SLASHES */
+
+            imageUrl =
+                    imageUrl.replaceAll(
+                            "^/+",
+                            ""
+                    );
+
+            /* ENSURE uploads/ */
 
             if (
-                    !imageUrl.startsWith("/uploads/")
+                    !imageUrl.startsWith(
+                            "uploads/"
+                    )
             ) {
 
                 imageUrl =
-                        "/uploads/" +
-
-                                imageUrl.replace(
-                                        "uploads/",
-                                        ""
-                                );
+                        "uploads/" +
+                                imageUrl;
 
             }
 
-            post.setImageUrl(imageUrl);
+            /* FINAL FORMAT */
+
+            imageUrl =
+                    "/" + imageUrl;
+
+            System.out.println(
+                    "FINAL IMAGE URL => "
+                            + imageUrl
+            );
+
+            post.setImageUrl(
+                    imageUrl
+            );
 
         }
+
+        /* =========================================
+           AUTHOR
+        ========================================= */
 
         post.setAuthor(
 
                 request.getAuthor() != null &&
-                        !request.getAuthor().trim().isEmpty()
 
-                        ? request.getAuthor()
+                        !request.getAuthor()
+                                .trim()
+                                .isEmpty()
 
-                        : "Anonymous"
+                        ?
+
+                        request.getAuthor()
+
+                        :
+
+                        "Anonymous"
 
         );
 
@@ -147,9 +192,15 @@ public class PostServiceImpl
 
                             );
 
-            post.setCommunity(community);
+            post.setCommunity(
+                    community
+            );
 
         }
+
+        /* =========================================
+           DEFAULT VALUES
+        ========================================= */
 
         post.setVotes(0);
 
@@ -158,6 +209,10 @@ public class PostServiceImpl
         post.setCreatedAt(
                 LocalDateTime.now()
         );
+
+        /* =========================================
+           SAVE
+        ========================================= */
 
         Post savedPost =
                 postRepository.save(post);
@@ -286,6 +341,8 @@ public class PostServiceImpl
 
                         );
 
+        /* TITLE */
+
         if (
                 request.getTitle() != null &&
                         !request.getTitle().trim().isEmpty()
@@ -296,6 +353,8 @@ public class PostServiceImpl
             );
 
         }
+
+        /* CONTENT */
 
         if (
                 request.getContent() != null &&
@@ -326,21 +385,36 @@ public class PostServiceImpl
                             "/"
                     );
 
+            imageUrl =
+                    imageUrl.replace(
+                            "https://socialreddit-backend.onrender.com/",
+                            ""
+                    );
+
+            imageUrl =
+                    imageUrl.replaceAll(
+                            "^/+",
+                            ""
+                    );
+
             if (
-                    !imageUrl.startsWith("/uploads/")
+                    !imageUrl.startsWith(
+                            "uploads/"
+                    )
             ) {
 
                 imageUrl =
-                        "/uploads/" +
-
-                                imageUrl.replace(
-                                        "uploads/",
-                                        ""
-                                );
+                        "uploads/" +
+                                imageUrl;
 
             }
 
-            post.setImageUrl(imageUrl);
+            imageUrl =
+                    "/" + imageUrl;
+
+            post.setImageUrl(
+                    imageUrl
+            );
 
         }
 
