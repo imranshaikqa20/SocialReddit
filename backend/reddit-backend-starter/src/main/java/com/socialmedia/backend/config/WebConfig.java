@@ -6,8 +6,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
-
 import java.nio.file.Paths;
 
 @Configuration
@@ -23,38 +23,57 @@ public class WebConfig
 
     ) {
 
-        /* Absolute Upload Path */
+        try {
 
-        Path uploadDir =
+            /* =========================================
+               UPLOAD DIRECTORY
+            ========================================= */
 
-                Paths.get("uploads");
+            Path uploadDir =
 
-        String uploadPath =
+                    Paths.get("uploads");
 
-                uploadDir.toFile()
+            /* CREATE FOLDER IF NOT EXISTS */
 
-                        .getAbsolutePath();
+            if (!Files.exists(uploadDir)) {
 
-        System.out.println(
-                "UPLOAD PATH => "
-                        + uploadPath
-        );
+                Files.createDirectories(uploadDir);
 
-        registry.addResourceHandler(
+            }
 
-                        "/uploads/**"
+            /* ABSOLUTE PATH */
 
-                )
+            String uploadPath =
 
-                .addResourceLocations(
+                    uploadDir.toFile()
+                            .getAbsolutePath();
 
-                        "file:" +
+            System.out.println(
+                    "UPLOAD PATH => "
+                            + uploadPath
+            );
 
-                                uploadPath +
+            /* =========================================
+               STATIC RESOURCE MAPPING
+            ========================================= */
 
-                                "/"
+            registry.addResourceHandler(
+                            "/uploads/**"
+                    )
+                    .addResourceLocations(
+                            "file:" +
+                                    uploadPath +
+                                    "/"
+                    );
 
-                );
+        } catch (Exception e) {
+
+            System.out.println(
+                    "UPLOAD CONFIG ERROR => "
+                            + e.getMessage()
+            );
+
+        }
 
     }
 

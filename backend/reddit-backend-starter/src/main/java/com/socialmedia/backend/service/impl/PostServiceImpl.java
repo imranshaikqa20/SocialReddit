@@ -33,7 +33,7 @@ public class PostServiceImpl
     private VoteRepository voteRepository;
 
     /* =========================================
-       Create Post
+       CREATE POST
     ========================================= */
 
     @Override
@@ -73,9 +73,45 @@ public class PostServiceImpl
                 request.getContent().trim()
         );
 
-        post.setImageUrl(
-                request.getImageUrl()
-        );
+        /* =========================================
+           FIX IMAGE URL
+        ========================================= */
+
+        String imageUrl =
+                request.getImageUrl();
+
+        if (
+                imageUrl != null &&
+                        !imageUrl.trim().isEmpty()
+        ) {
+
+            /* REMOVE EXTRA SLASHES */
+
+            imageUrl =
+                    imageUrl.replace(
+                            "\\",
+                            "/"
+                    );
+
+            /* ADD /uploads/ */
+
+            if (
+                    !imageUrl.startsWith("/uploads/")
+            ) {
+
+                imageUrl =
+                        "/uploads/" +
+
+                                imageUrl.replace(
+                                        "uploads/",
+                                        ""
+                                );
+
+            }
+
+            post.setImageUrl(imageUrl);
+
+        }
 
         post.setAuthor(
 
@@ -88,7 +124,9 @@ public class PostServiceImpl
 
         );
 
-        /* Community */
+        /* =========================================
+           COMMUNITY
+        ========================================= */
 
         if (
                 request.getCommunityId() != null
@@ -129,7 +167,7 @@ public class PostServiceImpl
     }
 
     /* =========================================
-       Get All Posts
+       GET ALL POSTS
     ========================================= */
 
     @Override
@@ -144,7 +182,7 @@ public class PostServiceImpl
     }
 
     /* =========================================
-       Search Posts
+       SEARCH POSTS
     ========================================= */
 
     @Override
@@ -174,7 +212,7 @@ public class PostServiceImpl
     }
 
     /* =========================================
-       Get Post By Id
+       GET POST BY ID
     ========================================= */
 
     @Override
@@ -200,7 +238,7 @@ public class PostServiceImpl
     }
 
     /* =========================================
-       Get Posts By Community
+       GET POSTS BY COMMUNITY
     ========================================= */
 
     @Override
@@ -223,7 +261,7 @@ public class PostServiceImpl
     }
 
     /* =========================================
-       Update / Edit Post
+       UPDATE POST
     ========================================= */
 
     @Override
@@ -270,9 +308,41 @@ public class PostServiceImpl
 
         }
 
-        post.setImageUrl(
-                request.getImageUrl()
-        );
+        /* =========================================
+           FIX IMAGE URL
+        ========================================= */
+
+        String imageUrl =
+                request.getImageUrl();
+
+        if (
+                imageUrl != null &&
+                        !imageUrl.trim().isEmpty()
+        ) {
+
+            imageUrl =
+                    imageUrl.replace(
+                            "\\",
+                            "/"
+                    );
+
+            if (
+                    !imageUrl.startsWith("/uploads/")
+            ) {
+
+                imageUrl =
+                        "/uploads/" +
+
+                                imageUrl.replace(
+                                        "uploads/",
+                                        ""
+                                );
+
+            }
+
+            post.setImageUrl(imageUrl);
+
+        }
 
         Post updatedPost =
                 postRepository.save(post);
@@ -282,7 +352,7 @@ public class PostServiceImpl
     }
 
     /* =========================================
-       Upvote
+       UPVOTE
     ========================================= */
 
     @Override
@@ -379,7 +449,7 @@ public class PostServiceImpl
     }
 
     /* =========================================
-       Downvote
+       DOWNVOTE
     ========================================= */
 
     @Override
@@ -476,7 +546,7 @@ public class PostServiceImpl
     }
 
     /* =========================================
-       Delete Post
+       DELETE POST
     ========================================= */
 
     @Override
@@ -502,7 +572,7 @@ public class PostServiceImpl
     }
 
     /* =========================================
-       Entity -> DTO
+       ENTITY -> DTO
     ========================================= */
 
     private PostResponse mapToResponse(
