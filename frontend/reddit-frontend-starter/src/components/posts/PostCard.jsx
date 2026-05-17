@@ -15,6 +15,10 @@ import AddCommentForm from "../comments/AddCommentForm";
 const API_BASE =
   "https://socialreddit-backend.onrender.com";
 
+/* =========================================
+   COMPONENT
+========================================= */
+
 function PostCard({
 
   id,
@@ -83,9 +87,7 @@ function PostCard({
   const cleanAuthor =
 
     author &&
-
     typeof author === "string" &&
-
     author.trim() !== ""
 
       ? author
@@ -119,22 +121,34 @@ function PostCard({
   }
 
   /* =========================================
-     FIX IMAGE URL
+     IMAGE FIX
   ========================================= */
 
   let finalImageUrl = "";
 
   if (editImageUrl) {
 
-    if (editImageUrl.startsWith("http")) {
+    /* FULL URL */
 
-      finalImageUrl = editImageUrl;
+    if (
+      editImageUrl.startsWith("http")
+    ) {
+
+      finalImageUrl =
+        editImageUrl;
 
     } else {
 
+      /* REMOVE EXTRA SLASHES */
+
       const cleanPath =
 
-        editImageUrl.replace(/^\/+/, "");
+        editImageUrl.replace(
+          /^\/+/,
+          ""
+        );
+
+      /* FINAL IMAGE URL */
 
       finalImageUrl =
         `${API_BASE}/${cleanPath}`;
@@ -313,24 +327,28 @@ function PostCard({
         border:
           "1px solid rgba(59,130,246,0.08)",
 
-        borderRadius: "18px",
+        borderRadius: "16px",
 
         padding: "16px",
 
         boxShadow:
-          "0 6px 20px rgba(0,0,0,0.24)",
+          "0 6px 18px rgba(0,0,0,0.24)",
 
         overflow: "hidden",
 
-        maxWidth: "760px",
+        maxWidth: "720px",
 
-        margin: "0 auto"
+        margin: "0 auto",
+
+        color: "white"
 
       }}
 
     >
 
-      {/* COMMUNITY */}
+      {/* =========================================
+         COMMUNITY
+      ========================================= */}
 
       {
 
@@ -380,7 +398,9 @@ function PostCard({
 
       }
 
-      {/* HEADER */}
+      {/* =========================================
+         HEADER
+      ========================================= */}
 
       <div
 
@@ -398,6 +418,8 @@ function PostCard({
 
       >
 
+        {/* USER */}
+
         <div
 
           style={{
@@ -412,13 +434,15 @@ function PostCard({
 
         >
 
+          {/* AVATAR */}
+
           <div
 
             style={{
 
-              width: "40px",
+              width: "38px",
 
-              height: "40px",
+              height: "38px",
 
               borderRadius: "50%",
 
@@ -451,6 +475,8 @@ function PostCard({
 
           </div>
 
+          {/* INFO */}
+
           <div>
 
             <h4
@@ -461,7 +487,7 @@ function PostCard({
 
                 color: "#f8fafc",
 
-                fontSize: "15px"
+                fontSize: "14px"
 
               }}
 
@@ -493,6 +519,8 @@ function PostCard({
 
         </div>
 
+        {/* VOTES */}
+
         <div
 
           style={{
@@ -520,7 +548,9 @@ function PostCard({
 
       </div>
 
-      {/* EDIT MODE */}
+      {/* =========================================
+         EDIT MODE
+      ========================================= */}
 
       {
 
@@ -675,7 +705,7 @@ function PostCard({
 
                 color: "#f8fafc",
 
-                fontSize: "20px",
+                fontSize: "18px",
 
                 fontWeight: "700",
 
@@ -697,9 +727,9 @@ function PostCard({
 
                 color: "#cbd5e1",
 
-                fontSize: "14px",
+                fontSize: "13px",
 
-                lineHeight: "24px",
+                lineHeight: "22px",
 
                 marginBottom: "14px"
 
@@ -727,13 +757,24 @@ function PostCard({
 
                     width: "100%",
 
-                    maxHeight: "320px",
+                    maxHeight: "280px",
 
                     objectFit: "cover",
 
-                    borderRadius: "14px",
+                    borderRadius: "12px",
 
-                    marginBottom: "16px"
+                    marginBottom: "14px",
+
+                    border:
+                      "1px solid rgba(255,255,255,0.08)"
+
+                  }}
+
+                  onLoad={() => {
+
+                    console.log(
+                      "IMAGE LOADED SUCCESS"
+                    );
 
                   }}
 
@@ -761,7 +802,9 @@ function PostCard({
 
       }
 
-      {/* ACTIONS */}
+      {/* =========================================
+         ACTIONS
+      ========================================= */}
 
       <div
 
@@ -783,6 +826,8 @@ function PostCard({
         }}
 
       >
+
+        {/* UPVOTE */}
 
         <button
 
@@ -816,6 +861,8 @@ function PostCard({
 
         </button>
 
+        {/* DOWNVOTE */}
+
         <button
 
           onClick={handleDownvote}
@@ -847,6 +894,8 @@ function PostCard({
           👎
 
         </button>
+
+        {/* COMMENTS */}
 
         <button
 
@@ -883,6 +932,8 @@ function PostCard({
           💬 {comments || 0}
 
         </button>
+
+        {/* EDIT */}
 
         {
 
@@ -926,6 +977,8 @@ function PostCard({
 
         }
 
+        {/* DELETE */}
+
         {
 
           isOwner && (
@@ -966,7 +1019,9 @@ function PostCard({
 
       </div>
 
-      {/* COMMENTS */}
+      {/* =========================================
+         COMMENTS
+      ========================================= */}
 
       {
 
