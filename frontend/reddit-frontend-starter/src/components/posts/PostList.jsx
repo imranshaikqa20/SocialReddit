@@ -98,7 +98,7 @@ function PostList({
         }));
 
       /* =========================================
-         SORT LATEST FIRST
+         SORT POSTS
       ========================================= */
 
       const sortedPosts =
@@ -119,8 +119,13 @@ function PostList({
     } catch (error) {
 
       console.log(
+
         "FETCH POSTS ERROR :",
-        error.response?.data || error.message
+
+        error.response?.data ||
+
+        error.message
+
       );
 
       setPosts([]);
@@ -172,7 +177,7 @@ function PostList({
 
         flexDirection: "column",
 
-        gap: "18px",
+        gap: "20px",
 
         width: "100%"
 
@@ -194,7 +199,7 @@ function PostList({
 
               textAlign: "center",
 
-              padding: "40px 20px",
+              padding: "50px 20px",
 
               color: "#94a3b8"
 
@@ -206,9 +211,9 @@ function PostList({
 
               style={{
 
-                fontSize: "18px",
+                fontSize: "24px",
 
-                marginBottom: "8px"
+                marginBottom: "10px"
 
               }}
 
@@ -224,13 +229,13 @@ function PostList({
 
                 fontSize: "15px",
 
-                fontWeight: "500"
+                fontWeight: "600"
 
               }}
 
             >
 
-              Loading posts...
+              Loading trending posts...
 
             </div>
 
@@ -260,14 +265,17 @@ function PostList({
               border:
                 "1px solid rgba(255,255,255,0.05)",
 
-              borderRadius: "20px",
+              borderRadius: "22px",
 
-              padding: "38px",
+              padding: "45px",
 
               textAlign: "center",
 
               backdropFilter:
-                "blur(10px)"
+                "blur(10px)",
+
+              boxShadow:
+                "0px 8px 24px rgba(0,0,0,0.25)"
 
             }}
 
@@ -279,11 +287,13 @@ function PostList({
 
                 margin: 0,
 
-                marginBottom: "10px",
+                marginBottom: "12px",
 
                 color: "#f8fafc",
 
-                fontSize: "24px"
+                fontSize: "26px",
+
+                fontWeight: "800"
 
               }}
 
@@ -303,7 +313,7 @@ function PostList({
 
                 fontSize: "14px",
 
-                lineHeight: "24px"
+                lineHeight: "26px"
 
               }}
 
@@ -363,6 +373,10 @@ function PostList({
             communityId={
               post.communityId
             }
+
+            /* IMPORTANT */
+
+            showActions={false}
 
             /* REFRESH FEED */
 

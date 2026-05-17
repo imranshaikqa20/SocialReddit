@@ -19,7 +19,11 @@ function PostCard({
   comments,
   communityName,
   communityId,
-  onPostUpdated
+  onPostUpdated,
+
+  /* NEW PROP */
+
+  showActions = false
 
 }) {
 
@@ -680,8 +684,6 @@ function PostCard({
 
           <>
 
-            {/* TITLE */}
-
             <h2
 
               style={{
@@ -702,8 +704,6 @@ function PostCard({
 
             </h2>
 
-            {/* CONTENT */}
-
             <p
 
               style={{
@@ -723,8 +723,6 @@ function PostCard({
               {editContent}
 
             </p>
-
-            {/* IMAGE */}
 
             {
 
@@ -909,7 +907,13 @@ function PostCard({
 
         </button>
 
+        {/* =========================================
+           SHOW ONLY IN PROFILE PAGE
+        ========================================= */}
+
         {
+
+          showActions &&
 
           isOwner && (
 
@@ -953,6 +957,8 @@ function PostCard({
         }
 
         {
+
+          showActions &&
 
           isOwner && (
 

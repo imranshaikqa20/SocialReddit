@@ -18,39 +18,59 @@ import java.util.List;
 
 @RequestMapping("/api/comments")
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 
 public class CommentController {
 
     @Autowired
     private CommentService commentService;
 
-    /* Create Comment */
+    /* =========================================
+       CREATE COMMENT
+    ========================================= */
 
     @PostMapping
-    public ResponseEntity<Comment> createComment(
-            @RequestBody CreateCommentRequest request
+
+    public ResponseEntity<Comment>
+    createComment(
+
+            @RequestBody
+            CreateCommentRequest request
+
     ) {
 
         Comment comment =
-                commentService.createComment(request);
 
-        return ResponseEntity.ok(comment);
+                commentService
+                        .createComment(request);
+
+        return ResponseEntity.ok(
+                comment
+        );
 
     }
 
-    /* Get Comments By Post */
+    /* =========================================
+       GET COMMENTS BY POST
+    ========================================= */
 
     @GetMapping("/post/{postId}")
+
     public ResponseEntity<List<Comment>>
     getCommentsByPost(
+
             @PathVariable Long postId
+
     ) {
 
         List<Comment> comments =
-                commentService.getCommentsByPost(postId);
 
-        return ResponseEntity.ok(comments);
+                commentService
+                        .getCommentsByPost(postId);
+
+        return ResponseEntity.ok(
+                comments
+        );
 
     }
 

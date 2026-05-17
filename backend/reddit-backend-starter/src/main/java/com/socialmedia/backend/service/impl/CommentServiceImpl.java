@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 import java.util.List;
 
 @Service
@@ -23,66 +25,131 @@ public class CommentServiceImpl
         implements CommentService {
 
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentRepository
+            commentRepository;
 
     @Autowired
-    private PostRepository postRepository;
+    private PostRepository
+            postRepository;
 
-    /* Create Comment */
+    /* =========================================
+       CREATE COMMENT
+    ========================================= */
 
     @Override
     public Comment createComment(
             CreateCommentRequest request
     ) {
 
-        Post post = postRepository
-                .findById(request.getPostId())
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Post Not Found"
-                        )
-                );
+        /* FIND POST */
 
-        Comment comment = new Comment();
+        Post post =
+
+                postRepository
+                        .findById(
+                                request.getPostId()
+                        )
+
+                        .orElseThrow(() ->
+
+                                new RuntimeException(
+                                        "Post Not Found"
+                                )
+
+                        );
+
+        /* CREATE COMMENT */
+
+        Comment comment =
+                new Comment();
+
+        /* CONTENT */
 
         comment.setContent(
                 request.getContent()
         );
 
-        comment.setAuthor(
-                request.getAuthor()
-        );
+        /* AUTHOR */
+
+        if (
+
+                request.getAuthor() == null ||
+
+                        request.getAuthor()
+                                .trim()
+                                .isEmpty()
+
+        ) {
+
+            comment.setAuthor(
+                    "Anonymous"
+            );
+
+        } else {
+
+            comment.setAuthor(
+                    request.getAuthor()
+            );
+
+        }
+
+        /* POST */
 
         comment.setPost(post);
 
-        /* Increase Comment Count */
+        /* CREATED TIME */
+
+        comment.setCreatedAt(
+                LocalDateTime.now()
+        );
+
+        /* UPDATE COMMENT COUNT */
 
         post.setComments(
+
                 post.getComments() + 1
+
         );
 
         postRepository.save(post);
 
-        return commentRepository.save(comment);
+        /* SAVE COMMENT */
+
+        return commentRepository.save(
+                comment
+        );
 
     }
 
-    /* Get Comments By Post */
+    /* =========================================
+       GET COMMENTS BY POST
+    ========================================= */
 
     @Override
-    public List<Comment> getCommentsByPost(
+    public List<Comment>
+    getCommentsByPost(
             Long postId
     ) {
 
-        Post post = postRepository
+        /* VERIFY POST EXISTS */
+
+        postRepository
                 .findById(postId)
+
                 .orElseThrow(() ->
+
                         new RuntimeException(
                                 "Post Not Found"
                         )
+
                 );
 
-        return commentRepository.findByPost(post);
+        /* RETURN COMMENTS */
+
+        return commentRepository
+                .findByPostIdOrderByIdDesc(
+                        postId
+                );
 
     }
 

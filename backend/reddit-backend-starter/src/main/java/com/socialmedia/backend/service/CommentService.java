@@ -8,13 +8,17 @@ import java.util.List;
 
 public interface CommentService {
 
-    /* Create Comment */
+    /* =========================================
+       CREATE COMMENT
+    ========================================= */
 
     Comment createComment(
             CreateCommentRequest request
     );
 
-    /* Get Comments By Post */
+    /* =========================================
+       GET COMMENTS BY POST
+    ========================================= */
 
     List<Comment> getCommentsByPost(
             Long postId

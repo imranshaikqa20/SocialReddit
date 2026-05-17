@@ -39,10 +39,6 @@ function ProfilePage() {
 
       setLoading(true);
 
-      /* =========================================
-         FETCH POSTS
-      ========================================= */
-
       const response =
         await api.get("/api/posts");
 
@@ -52,13 +48,11 @@ function ProfilePage() {
           : [];
 
       /* =========================================
-         FILTER CURRENT USER POSTS
+         FILTER USER POSTS
       ========================================= */
 
       const userPosts =
         allPosts.filter((post) => {
-
-          /* IMPORTANT SAFE CHECKS */
 
           if (
             !post ||
@@ -68,6 +62,7 @@ function ProfilePage() {
           }
 
           return (
+
             String(post.author)
               .trim()
               .toLowerCase()
@@ -77,12 +72,13 @@ function ProfilePage() {
             String(username)
               .trim()
               .toLowerCase()
+
           );
 
         });
 
       /* =========================================
-         SORT LATEST FIRST
+         SORT POSTS
       ========================================= */
 
       const sortedPosts =
@@ -119,10 +115,6 @@ function ProfilePage() {
 
   }, []);
 
-  /* =========================================
-     PAGE
-  ========================================= */
-
   return (
 
     <div
@@ -156,14 +148,14 @@ function ProfilePage() {
 
           left: "-120px",
 
-          width: "220px",
+          width: "240px",
 
-          height: "220px",
+          height: "240px",
 
           background:
             "rgba(37,99,235,0.12)",
 
-          filter: "blur(110px)",
+          filter: "blur(120px)",
 
           zIndex: 0
 
@@ -181,14 +173,14 @@ function ProfilePage() {
 
           right: "-120px",
 
-          width: "220px",
+          width: "240px",
 
-          height: "220px",
+          height: "240px",
 
           background:
             "rgba(59,130,246,0.10)",
 
-          filter: "blur(110px)",
+          filter: "blur(120px)",
 
           zIndex: 0
 
@@ -210,11 +202,11 @@ function ProfilePage() {
 
         style={{
 
-          width: "88%",
+          width: "90%",
 
-          maxWidth: "1000px",
+          maxWidth: "1050px",
 
-          margin: "28px auto",
+          margin: "30px auto",
 
           position: "relative",
 
@@ -238,16 +230,16 @@ function ProfilePage() {
             border:
               "1px solid rgba(59,130,246,0.10)",
 
-            borderRadius: "24px",
+            borderRadius: "26px",
 
-            padding: "28px",
+            padding: "30px",
 
             boxShadow:
-              "0px 6px 22px rgba(0,0,0,0.30)",
+              "0px 6px 24px rgba(0,0,0,0.30)",
 
             backdropFilter: "blur(10px)",
 
-            marginBottom: "28px"
+            marginBottom: "30px"
 
           }}
 
@@ -261,7 +253,7 @@ function ProfilePage() {
 
               alignItems: "center",
 
-              gap: "22px",
+              gap: "24px",
 
               flexWrap: "wrap"
 
@@ -275,9 +267,9 @@ function ProfilePage() {
 
               style={{
 
-                width: "95px",
+                width: "100px",
 
-                height: "95px",
+                height: "100px",
 
                 borderRadius: "50%",
 
@@ -292,12 +284,12 @@ function ProfilePage() {
 
                 color: "white",
 
-                fontSize: "38px",
+                fontSize: "40px",
 
                 fontWeight: "800",
 
                 boxShadow:
-                  "0px 0px 22px rgba(37,99,235,0.35)"
+                  "0px 0px 24px rgba(37,99,235,0.35)"
 
               }}
 
@@ -323,7 +315,7 @@ function ProfilePage() {
 
                   margin: 0,
 
-                  fontSize: "34px",
+                  fontSize: "36px",
 
                   fontWeight: "800",
 
@@ -365,17 +357,18 @@ function ProfilePage() {
 
                   fontSize: "14px",
 
-                  lineHeight: "24px",
+                  lineHeight: "26px",
 
-                  maxWidth: "620px"
+                  maxWidth: "650px"
 
                 }}
 
               >
 
-                Welcome to your profile.
-                Here you can view all
-                posts created by you.
+                Welcome to your profile dashboard.
+                Here you can manage all your
+                posts, edit content, and delete
+                posts anytime.
 
               </p>
 
@@ -395,9 +388,9 @@ function ProfilePage() {
 
             style={{
 
-              fontSize: "24px",
+              fontSize: "26px",
 
-              marginBottom: "18px",
+              marginBottom: "20px",
 
               color: "#f8fafc",
 
@@ -407,7 +400,7 @@ function ProfilePage() {
 
           >
 
-            My Posts
+            My Posts 🚀
 
           </h2>
 
@@ -425,7 +418,7 @@ function ProfilePage() {
 
                   textAlign: "center",
 
-                  padding: "28px",
+                  padding: "30px",
 
                   color: "#94a3b8",
 
@@ -444,7 +437,7 @@ function ProfilePage() {
           }
 
           {/* =========================================
-             NO POSTS
+             EMPTY STATE
           ========================================= */}
 
           {
@@ -459,9 +452,9 @@ function ProfilePage() {
                   background:
                     "rgba(15,23,42,0.82)",
 
-                  padding: "28px",
+                  padding: "30px",
 
-                  borderRadius: "18px",
+                  borderRadius: "20px",
 
                   textAlign: "center",
 
@@ -473,7 +466,7 @@ function ProfilePage() {
 
               >
 
-                No posts created yet
+                No posts created yet 🚀
 
               </div>
 
@@ -493,7 +486,7 @@ function ProfilePage() {
 
               flexDirection: "column",
 
-              gap: "18px"
+              gap: "20px"
 
             }}
 
@@ -533,6 +526,10 @@ function ProfilePage() {
                   onPostUpdated={
                     fetchUserPosts
                   }
+
+                  /* IMPORTANT */
+
+                  showActions={true}
 
                 />
 
