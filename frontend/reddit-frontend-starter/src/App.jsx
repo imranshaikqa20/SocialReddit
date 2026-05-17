@@ -19,7 +19,7 @@ import SignupForm from "./components/auth/SignupForm";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import CommunityPage from "./pages/CommunityPage";
-import CreatePostPage from "./pages/create-post";
+import CreatePostPage from "./pages/CreatePostPage";
 
 /* =========================================
    Community Components
@@ -50,11 +50,9 @@ function App() {
         <Route
           path="/"
           element={
-
             token
               ? <HomePage />
               : <Navigate to="/login" />
-
           }
         />
 
@@ -65,11 +63,9 @@ function App() {
         <Route
           path="/login"
           element={
-
             token
               ? <Navigate to="/" />
               : <LoginForm />
-
           }
         />
 
@@ -80,56 +76,48 @@ function App() {
         <Route
           path="/signup"
           element={
-
             token
               ? <Navigate to="/" />
               : <SignupForm />
-
           }
         />
 
         {/* =========================================
-            HOME PAGE
+            HOME
         ========================================= */}
 
         <Route
           path="/home"
           element={
-
             token
               ? <HomePage />
               : <Navigate to="/login" />
-
           }
         />
 
         {/* =========================================
-            PROFILE PAGE
+            PROFILE
         ========================================= */}
 
         <Route
           path="/profile"
           element={
-
             token
               ? <ProfilePage />
               : <Navigate to="/login" />
-
           }
         />
 
         {/* =========================================
-            CREATE POST PAGE
+            CREATE POST
         ========================================= */}
 
         <Route
           path="/post"
           element={
-
             token
               ? <CreatePostPage />
               : <Navigate to="/login" />
-
           }
         />
 
@@ -140,42 +128,36 @@ function App() {
         <Route
           path="/create-community"
           element={
-
             token
               ? <CreateCommunityForm />
               : <Navigate to="/login" />
-
           }
         />
 
         {/* =========================================
-            COMMUNITY PAGE
+            COMMUNITY
         ========================================= */}
 
         <Route
           path="/community"
           element={
-
             token
               ? <CommunityPage />
               : <Navigate to="/login" />
-
           }
         />
 
         <Route
           path="/community/:id"
           element={
-
             token
               ? <CommunityPage />
               : <Navigate to="/login" />
-
           }
         />
 
         {/* =========================================
-            FALLBACK ROUTE
+            FALLBACK
         ========================================= */}
 
         <Route
