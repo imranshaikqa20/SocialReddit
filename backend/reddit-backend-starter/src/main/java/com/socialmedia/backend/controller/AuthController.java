@@ -35,9 +35,9 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    /* =========================
+    /* =========================================
        Signup API
-       ========================= */
+    ========================================= */
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(
@@ -45,6 +45,16 @@ public class AuthController {
     ) {
 
         try {
+
+            System.out.println(
+                    "SIGNUP EMAIL : " +
+                            request.getEmail()
+            );
+
+            System.out.println(
+                    "SIGNUP USERNAME : " +
+                            request.getUsername()
+            );
 
             /* Create User */
 
@@ -75,6 +85,8 @@ public class AuthController {
 
         } catch (Exception e) {
 
+            e.printStackTrace();
+
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(
@@ -90,9 +102,9 @@ public class AuthController {
 
     }
 
-    /* =========================
+    /* =========================================
        Login API
-       ========================= */
+    ========================================= */
 
     @PostMapping("/login")
     public ResponseEntity<?> login(
@@ -101,24 +113,48 @@ public class AuthController {
 
         try {
 
-            /* Generate JWT Token */
+            System.out.println(
+                    "LOGIN EMAIL : " +
+                            request.getEmail()
+            );
+
+            System.out.println(
+                    "LOGIN PASSWORD : " +
+                            request.getPassword()
+            );
+
+            /* =========================================
+               Generate JWT Token
+            ========================================= */
 
             String token =
                     authService.login(request);
 
-            /* Get User */
+            /* =========================================
+               Get User
+            ========================================= */
 
             User user = userRepository
+
                     .findByEmail(
+
                             request.getEmail()
+                                    .trim()
+                                    .toLowerCase()
+
                     )
+
                     .orElseThrow(() ->
+
                             new RuntimeException(
                                     "User Not Found"
                             )
+
                     );
 
-            /* Response */
+            /* =========================================
+               Response
+            ========================================= */
 
             Map<String, Object> response =
                     new HashMap<>();
@@ -146,6 +182,8 @@ public class AuthController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
+
+            e.printStackTrace();
 
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
