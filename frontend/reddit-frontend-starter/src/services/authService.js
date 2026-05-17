@@ -12,7 +12,13 @@ export const loginUser = async (data) => {
 
       "/api/auth/login",
 
-      data
+      {
+        email: data.email
+          .trim()
+          .toLowerCase(),
+
+        password: data.password
+      }
 
     );
 
@@ -21,8 +27,8 @@ export const loginUser = async (data) => {
   } catch (error) {
 
     console.log(
-      "Login Error :",
-      error
+      "LOGIN ERROR :",
+      error.response?.data || error
     );
 
     throw error;
@@ -43,7 +49,15 @@ export const signupUser = async (data) => {
 
       "/api/auth/signup",
 
-      data
+      {
+        username: data.username.trim(),
+
+        email: data.email
+          .trim()
+          .toLowerCase(),
+
+        password: data.password
+      }
 
     );
 
@@ -52,8 +66,8 @@ export const signupUser = async (data) => {
   } catch (error) {
 
     console.log(
-      "Signup Error :",
-      error
+      "SIGNUP ERROR :",
+      error.response?.data || error
     );
 
     throw error;

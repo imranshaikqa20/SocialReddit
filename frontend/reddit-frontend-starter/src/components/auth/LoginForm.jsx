@@ -17,7 +17,9 @@ function LoginForm() {
   const [loading, setLoading] =
     useState(false);
 
-  /* Handle Login */
+  /* =========================================
+     Handle Login
+  ========================================= */
 
   const handleLogin = async (e) => {
 
@@ -47,7 +49,10 @@ function LoginForm() {
 
         });
 
-      console.log(response.data);
+      console.log(
+        "LOGIN RESPONSE :",
+        response
+      );
 
       /* Save JWT Token */
 
@@ -55,7 +60,7 @@ function LoginForm() {
 
         "token",
 
-        response.data.token
+        response.token
 
       );
 
@@ -65,11 +70,27 @@ function LoginForm() {
 
         "username",
 
-        email
+        response.username
 
       );
 
-      alert("Login Success ");
+      /* Save Email */
+
+      localStorage.setItem(
+
+        "email",
+
+        response.email
+
+      );
+
+      alert(
+
+        response.message ||
+
+        "Login Success 🚀"
+
+      );
 
       /* Redirect To Home */
 
@@ -81,10 +102,17 @@ function LoginForm() {
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "LOGIN ERROR :",
+        error.response?.data || error
+      );
 
       alert(
+
+        error.response?.data?.error ||
+
         "Invalid Email or Password ❌"
+
       );
 
     } finally {
