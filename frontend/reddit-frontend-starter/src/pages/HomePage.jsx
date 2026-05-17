@@ -96,13 +96,13 @@ function HomePage() {
           @media (max-width: 768px) {
 
             .main-heading {
-              font-size: 36px !important;
-              line-height: 46px !important;
+              font-size: 32px !important;
+              line-height: 42px !important;
             }
 
             .main-subtext {
-              font-size: 15px !important;
-              line-height: 28px !important;
+              font-size: 14px !important;
+              line-height: 26px !important;
             }
 
           }
@@ -125,14 +125,14 @@ function HomePage() {
 
           left: "-140px",
 
-          width: "320px",
+          width: "280px",
 
-          height: "320px",
+          height: "280px",
 
           background:
-            "rgba(37,99,235,0.18)",
+            "rgba(37,99,235,0.14)",
 
-          filter: "blur(140px)",
+          filter: "blur(120px)",
 
           zIndex: 0
 
@@ -150,14 +150,14 @@ function HomePage() {
 
           right: "-140px",
 
-          width: "320px",
+          width: "280px",
 
-          height: "320px",
+          height: "280px",
 
           background:
-            "rgba(59,130,246,0.14)",
+            "rgba(59,130,246,0.10)",
 
-          filter: "blur(140px)",
+          filter: "blur(120px)",
 
           zIndex: 0
 
@@ -203,15 +203,15 @@ function HomePage() {
 
         style={{
 
-          width: "94%",
+          width: "93%",
 
-          maxWidth: "1600px",
+          maxWidth: "1450px",
 
-          margin: "20px auto",
+          margin: "14px auto",
 
           display: "flex",
 
-          gap: "26px",
+          gap: "22px",
 
           alignItems: "flex-start",
 
@@ -233,7 +233,7 @@ function HomePage() {
 
           style={{
 
-            width: "280px",
+            width: "260px",
 
             flexShrink: 0
 
@@ -279,15 +279,17 @@ function HomePage() {
 
               flexWrap: "wrap",
 
-              gap: "18px",
+              gap: "14px",
 
-              marginBottom: "28px"
+              marginBottom: "20px"
 
             }}
 
           >
 
-            {/* LEFT */}
+            {/* =========================================
+               LEFT TEXT
+            ========================================= */}
 
             <div>
 
@@ -299,18 +301,18 @@ function HomePage() {
 
                   margin: 0,
 
-                  fontSize: "42px",
+                  fontSize: "36px",
 
                   fontWeight: "800",
 
-                  lineHeight: "54px",
+                  lineHeight: "46px",
 
                   color: "#f8fafc",
 
                   letterSpacing: "-1px",
 
                   textShadow:
-                    "0px 0px 18px rgba(59,130,246,0.18)"
+                    "0px 0px 16px rgba(59,130,246,0.16)"
 
                 }}
 
@@ -326,15 +328,15 @@ function HomePage() {
 
                 style={{
 
-                  marginTop: "12px",
+                  marginTop: "10px",
 
                   color: "#94a3b8",
 
-                  fontSize: "16px",
+                  fontSize: "15px",
 
-                  lineHeight: "30px",
+                  lineHeight: "28px",
 
-                  maxWidth: "760px",
+                  maxWidth: "680px",
 
                   fontWeight: "400"
 
@@ -352,7 +354,9 @@ function HomePage() {
 
             </div>
 
-            {/* LIVE FEED */}
+            {/* =========================================
+               LIVE FEED
+            ========================================= */}
 
             <div
 
@@ -362,22 +366,22 @@ function HomePage() {
                   "rgba(15,23,42,0.82)",
 
                 border:
-                  "1px solid rgba(59,130,246,0.18)",
+                  "1px solid rgba(59,130,246,0.16)",
 
-                padding: "14px 22px",
+                padding: "12px 20px",
 
-                borderRadius: "16px",
+                borderRadius: "14px",
 
                 color: "#dbeafe",
 
-                fontSize: "14px",
+                fontSize: "13px",
 
                 fontWeight: "700",
 
-                backdropFilter: "blur(16px)",
+                backdropFilter: "blur(14px)",
 
                 boxShadow:
-                  "0px 0px 20px rgba(37,99,235,0.10)"
+                  "0px 0px 18px rgba(37,99,235,0.08)"
 
               }}
 
@@ -398,21 +402,27 @@ function HomePage() {
             style={{
 
               background:
-                "rgba(15,23,42,0.62)",
+                "rgba(15,23,42,0.56)",
 
               border:
-                "1px solid rgba(255,255,255,0.05)",
+                "1px solid rgba(255,255,255,0.04)",
 
-              borderRadius: "30px",
+              borderRadius: "26px",
 
-              padding: "30px",
+              padding: "22px",
 
-              backdropFilter: "blur(18px)",
+              backdropFilter: "blur(16px)",
 
               boxShadow:
-                "0px 14px 50px rgba(0,0,0,0.38)",
+                "0px 10px 36px rgba(0,0,0,0.30)",
 
-              minHeight: "600px"
+              minHeight: "500px",
+
+              display: "flex",
+
+              flexDirection: "column",
+
+              alignItems: "flex-start"
 
             }}
 
