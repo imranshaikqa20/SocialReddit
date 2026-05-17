@@ -168,18 +168,18 @@ function PostCard({
           border:
             "1px solid rgba(59,130,246,0.08)",
 
-          borderRadius: "18px",
+          borderRadius: "16px",
 
-          padding: "14px",
+          padding: "12px",
 
           width: "100%",
 
-          maxWidth: "620px",
+          maxWidth: "540px",
 
-          margin: "0 auto 18px auto",
+          margin: "0 auto 16px auto",
 
           boxShadow:
-            "0 2px 10px rgba(0,0,0,0.18)",
+            "0 2px 8px rgba(0,0,0,0.18)",
 
           color: "white"
 
@@ -197,10 +197,6 @@ function PostCard({
 
             display: "inline-flex",
 
-            alignItems: "center",
-
-            justifyContent: "center",
-
             padding: "4px 10px",
 
             borderRadius: "999px",
@@ -210,11 +206,11 @@ function PostCard({
 
             color: "#60a5fa",
 
-            fontSize: "9px",
+            fontSize: "8px",
 
             fontWeight: "700",
 
-            marginBottom: "12px"
+            marginBottom: "10px"
 
           }}
 
@@ -236,7 +232,7 @@ function PostCard({
 
             alignItems: "center",
 
-            marginBottom: "14px"
+            marginBottom: "12px"
 
           }}
 
@@ -246,9 +242,9 @@ function PostCard({
 
             style={{
 
-              width: "38px",
+              width: "34px",
 
-              height: "38px",
+              height: "34px",
 
               borderRadius: "50%",
 
@@ -263,9 +259,9 @@ function PostCard({
 
               fontWeight: "800",
 
-              fontSize: "14px",
+              fontSize: "12px",
 
-              marginRight: "10px"
+              marginRight: "8px"
 
             }}
 
@@ -281,7 +277,7 @@ function PostCard({
 
               style={{
 
-                fontSize: "14px",
+                fontSize: "12px",
 
                 fontWeight: "700"
 
@@ -297,11 +293,9 @@ function PostCard({
 
               style={{
 
-                fontSize: "10px",
+                fontSize: "9px",
 
-                color: "#94a3b8",
-
-                marginTop: "2px"
+                color: "#94a3b8"
 
               }}
 
@@ -313,7 +307,9 @@ function PostCard({
 
           </div>
 
-          {/* VOTES */}
+          {/* =========================================
+             VOTES
+          ========================================= */}
 
           <div
 
@@ -326,13 +322,13 @@ function PostCard({
 
               padding: "5px 10px",
 
-              borderRadius: "10px",
+              borderRadius: "8px",
 
               color: "#60a5fa",
 
               fontWeight: "700",
 
-              fontSize: "10px"
+              fontSize: "9px"
 
             }}
 
@@ -352,13 +348,13 @@ function PostCard({
 
           style={{
 
-            fontSize: "20px",
+            fontSize: "18px",
 
-            lineHeight: "30px",
+            lineHeight: "26px",
 
             fontWeight: "800",
 
-            marginBottom: "10px"
+            marginBottom: "8px"
 
           }}
 
@@ -378,11 +374,11 @@ function PostCard({
 
             color: "#cbd5e1",
 
-            lineHeight: "24px",
+            lineHeight: "22px",
 
-            fontSize: "13px",
+            fontSize: "12px",
 
-            marginBottom: "14px"
+            marginBottom: "12px"
 
           }}
 
@@ -404,19 +400,16 @@ function PostCard({
 
               style={{
 
-                marginBottom: "14px",
+                marginBottom: "12px",
 
-                borderRadius: "14px",
+                borderRadius: "12px",
 
                 overflow: "hidden",
-
-                padding: "6px",
 
                 background:
                   "rgba(15,23,42,0.70)",
 
-                border:
-                  "1px solid rgba(59,130,246,0.08)"
+                padding: "4px"
 
               }}
 
@@ -432,7 +425,7 @@ function PostCard({
 
                   width: "100%",
 
-                  maxHeight: "260px",
+                  maxHeight: "220px",
 
                   objectFit: "cover",
 
@@ -451,7 +444,7 @@ function PostCard({
         }
 
         {/* =========================================
-           ACTIONS
+           ACTION BUTTONS
         ========================================= */}
 
         <div
@@ -460,17 +453,17 @@ function PostCard({
 
             display: "flex",
 
-            gap: "6px",
+            gap: "5px",
 
-            flexWrap: "wrap",
-
-            marginTop: "8px"
+            flexWrap: "wrap"
 
           }}
 
         >
 
-          {/* UPVOTE */}
+          {/* =========================================
+             UPVOTE
+          ========================================= */}
 
           <button
 
@@ -483,9 +476,9 @@ function PostCard({
 
               color: "white",
 
-              padding: "8px 12px",
+              padding: "6px 10px",
 
-              borderRadius: "10px",
+              borderRadius: "8px",
 
               display: "flex",
 
@@ -497,7 +490,7 @@ function PostCard({
 
               cursor: "pointer",
 
-              fontSize: "11px"
+              fontSize: "10px"
 
             }}
 
@@ -509,7 +502,9 @@ function PostCard({
 
           </button>
 
-          {/* DOWNVOTE */}
+          {/* =========================================
+             DOWNVOTE
+          ========================================= */}
 
           <button
 
@@ -522,9 +517,9 @@ function PostCard({
 
               color: "white",
 
-              padding: "8px 12px",
+              padding: "6px 10px",
 
-              borderRadius: "10px",
+              borderRadius: "8px",
 
               display: "flex",
 
@@ -536,7 +531,7 @@ function PostCard({
 
               cursor: "pointer",
 
-              fontSize: "11px"
+              fontSize: "10px"
 
             }}
 
@@ -548,7 +543,9 @@ function PostCard({
 
           </button>
 
-          {/* COMMENTS */}
+          {/* =========================================
+             COMMENTS
+          ========================================= */}
 
           <button
 
@@ -567,9 +564,9 @@ function PostCard({
 
               color: "white",
 
-              padding: "8px 12px",
+              padding: "6px 10px",
 
-              borderRadius: "10px",
+              borderRadius: "8px",
 
               display: "flex",
 
@@ -581,7 +578,7 @@ function PostCard({
 
               cursor: "pointer",
 
-              fontSize: "11px"
+              fontSize: "10px"
 
             }}
 
@@ -599,7 +596,9 @@ function PostCard({
 
           </button>
 
-          {/* EDIT DELETE */}
+          {/* =========================================
+             EDIT / DELETE
+          ========================================= */}
 
           {
 
@@ -622,9 +621,9 @@ function PostCard({
 
                     color: "white",
 
-                    padding: "8px 12px",
+                    padding: "6px 10px",
 
-                    borderRadius: "10px",
+                    borderRadius: "8px",
 
                     display: "flex",
 
@@ -636,7 +635,7 @@ function PostCard({
 
                     cursor: "pointer",
 
-                    fontSize: "11px"
+                    fontSize: "10px"
 
                   }}
 
@@ -661,9 +660,9 @@ function PostCard({
 
                     color: "white",
 
-                    padding: "8px 12px",
+                    padding: "6px 10px",
 
-                    borderRadius: "10px",
+                    borderRadius: "8px",
 
                     display: "flex",
 
@@ -675,7 +674,7 @@ function PostCard({
 
                     cursor: "pointer",
 
-                    fontSize: "11px"
+                    fontSize: "10px"
 
                   }}
 
@@ -696,7 +695,7 @@ function PostCard({
         </div>
 
         {/* =========================================
-           COMMENTS
+           COMMENTS SECTION
         ========================================= */}
 
         {
@@ -705,7 +704,7 @@ function PostCard({
 
             <div
               style={{
-                marginTop: "16px"
+                marginTop: "14px"
               }}
             >
 
@@ -723,7 +722,7 @@ function PostCard({
 
               <div
                 style={{
-                  marginTop: "14px"
+                  marginTop: "12px"
                 }}
               >
 
