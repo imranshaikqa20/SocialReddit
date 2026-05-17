@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   FaArrowUp,
@@ -9,6 +9,11 @@ import {
 } from "react-icons/fa";
 
 import EditPostModal from "./EditPostModal";
+
+/* COMMENTS */
+
+import AddCommentForm from "../comments/AddCommentForm";
+import CommentList from "../comments/CommentList";
 
 /* =========================================
    BACKEND URL
@@ -25,7 +30,7 @@ function PostCard({
 
   id,
   title,
- content,
+  content,
   imageUrl,
   votes,
   author,
@@ -36,10 +41,17 @@ function PostCard({
 
 }) {
 
-  const [comment, setComment] =
-    useState("");
+  /* =========================================
+     STATES
+  ========================================= */
 
   const [showEditModal, setShowEditModal] =
+    useState(false);
+
+  const [commentsList, setCommentsList] =
+    useState([]);
+
+  const [showComments, setShowComments] =
     useState(false);
 
   /* =========================================
@@ -65,6 +77,39 @@ function PostCard({
     }
 
   }
+
+  /* =========================================
+     LOAD COMMENTS
+  ========================================= */
+
+  const fetchComments = async () => {
+
+    try {
+
+      const response = await fetch(
+
+        `${API_BASE}/api/comments/post/${id}`
+
+      );
+
+      const data =
+        await response.json();
+
+      setCommentsList(data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
+  useEffect(() => {
+
+    fetchComments();
+
+  }, [id]);
 
   /* =========================================
      DELETE POST
@@ -151,7 +196,7 @@ function PostCard({
       >
 
         {/* =========================================
-           COMMUNITY TAG
+           COMMUNITY
         ========================================= */}
 
         <div
@@ -421,7 +466,7 @@ function PostCard({
 
             gap: "10px",
 
-            marginBottom: "20px",
+            marginBottom: "18px",
 
             flexWrap: "wrap"
 
@@ -509,18 +554,30 @@ function PostCard({
 
           {/* COMMENTS */}
 
-          <div
+          <button
+
+            onClick={() =>
+              setShowComments(
+                !showComments
+              )
+            }
 
             style={{
 
               background:
                 "linear-gradient(to right,#2563eb,#3b82f6)",
 
+              border: "none",
+
+              color: "white",
+
               padding: "10px 16px",
 
               borderRadius: "12px",
 
               fontWeight: "700",
+
+              cursor: "pointer",
 
               display: "flex",
 
@@ -536,19 +593,19 @@ function PostCard({
 
             <FaComment />
 
-            {comments || 0}
+            {commentsList.length}
 
-          </div>
+          </button>
 
-          {/* =========================================
-             EDIT & DELETE
-          ========================================= */}
+          {/* EDIT & DELETE */}
 
           {
 
             showActions && (
 
               <>
+
+                {/* EDIT */}
 
                 <button
 
@@ -590,6 +647,8 @@ function PostCard({
                   Edit
 
                 </button>
+
+                {/* DELETE */}
 
                 <button
 
@@ -639,102 +698,52 @@ function PostCard({
         </div>
 
         {/* =========================================
-           COMMENT SECTION
+           COMMENT FORM
         ========================================= */}
 
         <div
-
           style={{
-
-            display: "flex",
-
-            alignItems: "center",
-
-            gap: "12px",
-
-            width: "100%"
-
+            marginTop: "12px"
           }}
-
         >
 
-          {/* INPUT */}
+          <AddCommentForm
 
-          <input
+            postId={id}
 
-            type="text"
-
-            placeholder="Write a comment..."
-
-            value={comment}
-
-            onChange={(e) =>
-              setComment(e.target.value)
+            onCommentAdded={
+              fetchComments
             }
-
-            style={{
-
-              flex: 1,
-
-              height: "50px",
-
-              padding: "0 18px",
-
-              borderRadius: "14px",
-
-              border:
-                "1px solid rgba(255,255,255,0.06)",
-
-              background:
-                "rgba(17,24,39,0.92)",
-
-              color: "white",
-
-              outline: "none",
-
-              fontSize: "14px"
-
-            }}
 
           />
 
-          {/* BUTTON */}
-
-          <button
-
-            style={{
-
-              minWidth: "130px",
-
-              height: "50px",
-
-              borderRadius: "14px",
-
-              border: "none",
-
-              background:
-                "linear-gradient(to right,#2563eb,#3b82f6)",
-
-              color: "white",
-
-              cursor: "pointer",
-
-              fontWeight: "700",
-
-              fontSize: "14px",
-
-              boxShadow:
-                "0 4px 18px rgba(37,99,235,0.35)"
-
-            }}
-
-          >
-
-            Comment
-
-          </button>
-
         </div>
+
+        {/* =========================================
+           COMMENTS LIST
+        ========================================= */}
+
+        {
+
+          showComments && (
+
+            <div
+              style={{
+                marginTop: "20px"
+              }}
+            >
+
+              <CommentList
+
+                comments={commentsList}
+
+              />
+
+            </div>
+
+          )
+
+        }
 
       </div>
 
