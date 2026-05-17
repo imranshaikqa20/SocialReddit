@@ -8,6 +8,8 @@ import {
   FaTrash
 } from "react-icons/fa";
 
+import EditPostModal from "./EditPostModal";
+
 /* =========================================
    BACKEND URL
 ========================================= */
@@ -30,15 +32,19 @@ function PostCard({
   comments,
   communityName,
   onPostUpdated,
-
-  /* IMPORTANT */
-
   showActions = false
 
 }) {
 
   const [comment, setComment] =
     useState("");
+
+  /* =========================================
+     EDIT MODAL STATE
+  ========================================= */
+
+  const [showEditModal, setShowEditModal] =
+    useState(false);
 
   /* =========================================
      FIX IMAGE URL
@@ -64,11 +70,6 @@ function PostCard({
 
   }
 
-  console.log(
-    "SHOW ACTIONS =>",
-    showActions
-  );
-
   /* =========================================
      DELETE POST
   ========================================= */
@@ -81,7 +82,9 @@ function PostCard({
       );
 
     if (!confirmDelete) {
+
       return;
+
     }
 
     try {
@@ -94,6 +97,10 @@ function PostCard({
           method: "DELETE"
         }
 
+      );
+
+      alert(
+        "Post deleted successfully"
       );
 
       if (onPostUpdated) {
@@ -114,554 +121,593 @@ function PostCard({
 
   return (
 
-    <div
-
-      style={{
-
-        background:
-          "rgba(15,23,42,0.92)",
-
-        border:
-          "1px solid rgba(255,255,255,0.06)",
-
-        borderRadius: "18px",
-
-        padding: "18px",
-
-        color: "white",
-
-        width: "100%",
-
-        maxWidth: "760px",
-
-        margin: "0 auto",
-
-        boxShadow:
-          "0px 4px 18px rgba(0,0,0,0.22)"
-
-      }}
-
-    >
-
-      {/* COMMUNITY */}
+    <>
 
       <div
 
         style={{
-
-          display: "inline-block",
-
-          padding: "6px 14px",
-
-          borderRadius: "999px",
 
           background:
-            "rgba(59,130,246,0.12)",
+            "rgba(15,23,42,0.92)",
 
-          color: "#60a5fa",
+          border:
+            "1px solid rgba(255,255,255,0.06)",
 
-          fontSize: "11px",
+          borderRadius: "18px",
 
-          fontWeight: "700",
+          padding: "18px",
 
-          marginBottom: "16px"
+          color: "white",
 
-        }}
+          width: "100%",
 
-      >
+          maxWidth: "760px",
 
-        {communityName || "General"}
+          margin: "0 auto",
 
-      </div>
-
-      {/* AUTHOR */}
-
-      <div
-
-        style={{
-
-          display: "flex",
-
-          alignItems: "center",
-
-          marginBottom: "18px"
+          boxShadow:
+            "0px 4px 18px rgba(0,0,0,0.22)"
 
         }}
 
       >
+
+        {/* COMMUNITY */}
 
         <div
 
           style={{
 
-            width: "42px",
+            display: "inline-block",
 
-            height: "42px",
+            padding: "6px 14px",
 
-            borderRadius: "50%",
+            borderRadius: "999px",
 
             background:
-              "linear-gradient(135deg,#3b82f6,#2563eb)",
+              "rgba(59,130,246,0.12)",
 
-            display: "flex",
+            color: "#60a5fa",
 
-            alignItems: "center",
+            fontSize: "11px",
 
-            justifyContent: "center",
+            fontWeight: "700",
 
-            fontWeight: "800",
-
-            fontSize: "16px",
-
-            marginRight: "12px"
+            marginBottom: "16px"
 
           }}
 
         >
 
-          {author?.charAt(0)?.toUpperCase() || "A"}
+          {communityName || "General"}
 
         </div>
 
-        <div>
+        {/* AUTHOR */}
+
+        <div
+
+          style={{
+
+            display: "flex",
+
+            alignItems: "center",
+
+            marginBottom: "18px"
+
+          }}
+
+        >
 
           <div
 
             style={{
 
-              fontWeight: "700",
+              width: "42px",
 
-              fontSize: "16px"
+              height: "42px",
+
+              borderRadius: "50%",
+
+              background:
+                "linear-gradient(135deg,#3b82f6,#2563eb)",
+
+              display: "flex",
+
+              alignItems: "center",
+
+              justifyContent: "center",
+
+              fontWeight: "800",
+
+              fontSize: "16px",
+
+              marginRight: "12px"
 
             }}
 
           >
 
-            {author || "Anonymous"}
+            {author?.charAt(0)?.toUpperCase() || "A"}
 
           </div>
 
-          <div
+          <div>
 
-            style={{
+            <div
 
-              fontSize: "12px",
+              style={{
 
-              color: "#94a3b8"
+                fontWeight: "700",
 
-            }}
+                fontSize: "16px"
 
-          >
+              }}
 
-            Posted in community
+            >
+
+              {author || "Anonymous"}
+
+            </div>
+
+            <div
+
+              style={{
+
+                fontSize: "12px",
+
+                color: "#94a3b8"
+
+              }}
+
+            >
+
+              Posted in community
+
+            </div>
 
           </div>
 
         </div>
 
-      </div>
+        {/* TITLE */}
 
-      {/* TITLE */}
+        <h2
 
-      <h2
+          style={{
 
-        style={{
+            fontSize: "22px",
 
-          fontSize: "22px",
+            marginBottom: "12px",
 
-          marginBottom: "12px",
+            fontWeight: "800"
 
-          fontWeight: "800"
+          }}
 
-        }}
+        >
 
-      >
+          {title}
 
-        {title}
+        </h2>
 
-      </h2>
+        {/* CONTENT */}
 
-      {/* CONTENT */}
+        <p
 
-      <p
+          style={{
 
-        style={{
+            color: "#cbd5e1",
 
-          color: "#cbd5e1",
+            lineHeight: "1.6",
 
-          lineHeight: "1.6",
+            marginBottom: "16px",
 
-          marginBottom: "16px",
+            fontSize: "14px"
 
-          fontSize: "14px"
+          }}
 
-        }}
+        >
 
-      >
+          {content}
 
-        {content}
+        </p>
 
-      </p>
+        {/* IMAGE */}
 
-      {/* IMAGE */}
+        {
 
-      {
+          finalImageUrl && (
 
-        finalImageUrl && (
-
-          <div
-
-            style={{
-
-              width: "100%",
-
-              marginBottom: "18px"
-
-            }}
-
-          >
-
-            <img
-
-              src={finalImageUrl}
-
-              alt="post"
+            <div
 
               style={{
 
                 width: "100%",
 
-                maxHeight: "350px",
-
-                objectFit: "cover",
-
-                borderRadius: "14px",
-
-                border:
-                  "1px solid rgba(255,255,255,0.08)"
+                marginBottom: "18px"
 
               }}
 
-              onError={(e) => {
+            >
 
-                e.target.style.display =
-                  "none";
+              <img
 
-              }}
+                src={finalImageUrl}
 
-            />
-
-          </div>
-
-        )
-
-      }
-
-      {/* DIVIDER */}
-
-      <hr
-
-        style={{
-
-          border: "none",
-
-          borderTop:
-            "1px solid rgba(255,255,255,0.08)",
-
-          marginBottom: "16px"
-
-        }}
-
-      />
-
-      {/* BUTTONS */}
-
-      <div
-
-        style={{
-
-          display: "flex",
-
-          gap: "10px",
-
-          marginBottom: "16px",
-
-          flexWrap: "wrap"
-
-        }}
-
-      >
-
-        {/* UPVOTE */}
-
-        <button
-
-          style={{
-
-            background: "#22c55e",
-
-            border: "none",
-
-            color: "white",
-
-            padding: "10px 14px",
-
-            borderRadius: "12px",
-
-            fontWeight: "700",
-
-            cursor: "pointer",
-
-            display: "flex",
-
-            alignItems: "center",
-
-            gap: "6px"
-
-          }}
-
-        >
-
-          <FaArrowUp />
-
-          Upvote
-
-        </button>
-
-        {/* DOWNVOTE */}
-
-        <button
-
-          style={{
-
-            background: "#ef4444",
-
-            border: "none",
-
-            color: "white",
-
-            padding: "10px 14px",
-
-            borderRadius: "12px",
-
-            fontWeight: "700",
-
-            cursor: "pointer",
-
-            display: "flex",
-
-            alignItems: "center",
-
-            gap: "6px"
-
-          }}
-
-        >
-
-          <FaArrowDown />
-
-          Downvote
-
-        </button>
-
-        {/* COMMENTS */}
-
-        <div
-
-          style={{
-
-            background: "#2563eb",
-
-            padding: "10px 14px",
-
-            borderRadius: "12px",
-
-            fontWeight: "700",
-
-            display: "flex",
-
-            alignItems: "center",
-
-            gap: "6px"
-
-          }}
-
-        >
-
-          <FaComment />
-
-          {comments || 0}
-
-        </div>
-
-        {/* =========================================
-           EDIT & DELETE
-        ========================================= */}
-
-        {
-
-          showActions && (
-
-            <>
-
-              {/* EDIT */}
-
-              <button
+                alt="post"
 
                 style={{
 
-                  background: "#f59e0b",
+                  width: "100%",
 
-                  border: "none",
+                  maxHeight: "350px",
 
-                  color: "white",
+                  objectFit: "cover",
 
-                  padding: "10px 14px",
+                  borderRadius: "14px",
 
-                  borderRadius: "12px",
-
-                  fontWeight: "700",
-
-                  cursor: "pointer",
-
-                  display: "flex",
-
-                  alignItems: "center",
-
-                  gap: "6px"
+                  border:
+                    "1px solid rgba(255,255,255,0.08)"
 
                 }}
 
-              >
+                onError={(e) => {
 
-                <FaEdit />
-
-                Edit
-
-              </button>
-
-              {/* DELETE */}
-
-              <button
-
-                onClick={handleDelete}
-
-                style={{
-
-                  background: "#dc2626",
-
-                  border: "none",
-
-                  color: "white",
-
-                  padding: "10px 14px",
-
-                  borderRadius: "12px",
-
-                  fontWeight: "700",
-
-                  cursor: "pointer",
-
-                  display: "flex",
-
-                  alignItems: "center",
-
-                  gap: "6px"
+                  e.target.style.display =
+                    "none";
 
                 }}
 
-              >
+              />
 
-                <FaTrash />
-
-                Delete
-
-              </button>
-
-            </>
+            </div>
 
           )
 
         }
 
-      </div>
+        {/* DIVIDER */}
 
-      {/* COMMENT BOX */}
-
-      <div
-
-        style={{
-
-          display: "flex",
-
-          gap: "10px"
-
-        }}
-
-      >
-
-        <input
-
-          type="text"
-
-          placeholder="Write a comment..."
-
-          value={comment}
-
-          onChange={(e) =>
-            setComment(e.target.value)
-          }
+        <hr
 
           style={{
 
-            flex: 1,
+            border: "none",
 
-            padding: "12px",
-
-            borderRadius: "12px",
-
-            border:
+            borderTop:
               "1px solid rgba(255,255,255,0.08)",
 
-            background: "#111827",
-
-            color: "white",
-
-            outline: "none"
+            marginBottom: "16px"
 
           }}
 
         />
 
-        <button
+        {/* BUTTONS */}
+
+        <div
 
           style={{
 
-            background: "#3b82f6",
+            display: "flex",
 
-            border: "none",
+            gap: "10px",
 
-            color: "white",
+            marginBottom: "16px",
 
-            padding: "12px 18px",
-
-            borderRadius: "12px",
-
-            cursor: "pointer",
-
-            fontWeight: "700"
+            flexWrap: "wrap"
 
           }}
 
         >
 
-          Comment
+          {/* UPVOTE */}
 
-        </button>
+          <button
+
+            style={{
+
+              background: "#22c55e",
+
+              border: "none",
+
+              color: "white",
+
+              padding: "10px 14px",
+
+              borderRadius: "12px",
+
+              fontWeight: "700",
+
+              cursor: "pointer",
+
+              display: "flex",
+
+              alignItems: "center",
+
+              gap: "6px"
+
+            }}
+
+          >
+
+            <FaArrowUp />
+
+            Upvote
+
+          </button>
+
+          {/* DOWNVOTE */}
+
+          <button
+
+            style={{
+
+              background: "#ef4444",
+
+              border: "none",
+
+              color: "white",
+
+              padding: "10px 14px",
+
+              borderRadius: "12px",
+
+              fontWeight: "700",
+
+              cursor: "pointer",
+
+              display: "flex",
+
+              alignItems: "center",
+
+              gap: "6px"
+
+            }}
+
+          >
+
+            <FaArrowDown />
+
+            Downvote
+
+          </button>
+
+          {/* COMMENTS */}
+
+          <div
+
+            style={{
+
+              background: "#2563eb",
+
+              padding: "10px 14px",
+
+              borderRadius: "12px",
+
+              fontWeight: "700",
+
+              display: "flex",
+
+              alignItems: "center",
+
+              gap: "6px"
+
+            }}
+
+          >
+
+            <FaComment />
+
+            {comments || 0}
+
+          </div>
+
+          {/* EDIT & DELETE */}
+
+          {
+
+            showActions && (
+
+              <>
+
+                {/* EDIT */}
+
+                <button
+
+                  onClick={() =>
+                    setShowEditModal(true)
+                  }
+
+                  style={{
+
+                    background: "#f59e0b",
+
+                    border: "none",
+
+                    color: "white",
+
+                    padding: "10px 14px",
+
+                    borderRadius: "12px",
+
+                    fontWeight: "700",
+
+                    cursor: "pointer",
+
+                    display: "flex",
+
+                    alignItems: "center",
+
+                    gap: "6px"
+
+                  }}
+
+                >
+
+                  <FaEdit />
+
+                  Edit
+
+                </button>
+
+                {/* DELETE */}
+
+                <button
+
+                  onClick={handleDelete}
+
+                  style={{
+
+                    background: "#dc2626",
+
+                    border: "none",
+
+                    color: "white",
+
+                    padding: "10px 14px",
+
+                    borderRadius: "12px",
+
+                    fontWeight: "700",
+
+                    cursor: "pointer",
+
+                    display: "flex",
+
+                    alignItems: "center",
+
+                    gap: "6px"
+
+                  }}
+
+                >
+
+                  <FaTrash />
+
+                  Delete
+
+                </button>
+
+              </>
+
+            )
+
+          }
+
+        </div>
+
+        {/* COMMENT BOX */}
+
+        <div
+
+          style={{
+
+            display: "flex",
+
+            gap: "10px"
+
+          }}
+
+        >
+
+          <input
+
+            type="text"
+
+            placeholder="Write a comment..."
+
+            value={comment}
+
+            onChange={(e) =>
+              setComment(e.target.value)
+            }
+
+            style={{
+
+              flex: 1,
+
+              padding: "12px",
+
+              borderRadius: "12px",
+
+              border:
+                "1px solid rgba(255,255,255,0.08)",
+
+              background: "#111827",
+
+              color: "white",
+
+              outline: "none"
+
+            }}
+
+          />
+
+          <button
+
+            style={{
+
+              background: "#3b82f6",
+
+              border: "none",
+
+              color: "white",
+
+              padding: "12px 18px",
+
+              borderRadius: "12px",
+
+              cursor: "pointer",
+
+              fontWeight: "700"
+
+            }}
+
+          >
+
+            Comment
+
+          </button>
+
+        </div>
 
       </div>
 
-    </div>
+      {/* =========================================
+         EDIT MODAL
+      ========================================= */}
+
+      {
+
+        showEditModal && (
+
+          <EditPostModal
+
+            post={{
+
+              id,
+              title,
+              content,
+              imageUrl
+
+            }}
+
+            onClose={() =>
+              setShowEditModal(false)
+            }
+
+            onPostUpdated={
+              onPostUpdated
+            }
+
+          />
+
+        )
+
+      }
+
+    </>
 
   );
 
