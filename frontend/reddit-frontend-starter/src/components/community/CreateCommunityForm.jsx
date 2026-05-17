@@ -43,7 +43,10 @@ function CreateCommunityForm() {
 
     /* Validation */
 
-    if (!name || !description) {
+    if (
+      !name.trim() ||
+      !description.trim()
+    ) {
 
       alert(
         "Please fill all fields ❌"
@@ -61,9 +64,10 @@ function CreateCommunityForm() {
 
       await createCommunity({
 
-        name,
+        name: name.trim(),
 
-        description
+        description:
+          description.trim()
 
       });
 
@@ -73,14 +77,18 @@ function CreateCommunityForm() {
 
       /* Redirect */
 
-      navigate("/home");
+      navigate("/community/1");
 
     } catch (error) {
 
       console.log(error);
 
       alert(
+
+        error?.response?.data ||
+
         "Failed to create community ❌"
+
       );
 
     } finally {
@@ -466,6 +474,9 @@ function CreateCommunityForm() {
                 fontWeight: "700",
 
                 cursor: "pointer",
+
+                opacity:
+                  loading ? 0.7 : 1,
 
                 boxShadow:
                   "0px 0px 16px rgba(37,99,235,0.30)"

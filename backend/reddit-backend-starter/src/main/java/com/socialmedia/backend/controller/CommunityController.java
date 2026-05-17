@@ -1,67 +1,59 @@
 package com.socialmedia.backend.controller;
 
 import com.socialmedia.backend.entity.Community;
-
 import com.socialmedia.backend.service.CommunityService;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-
 import java.util.List;
-
 import java.util.Map;
 
 @RestController
-
 @RequestMapping("/api/communities")
-
-@CrossOrigin(origins = "http://localhost:5173")
-
+@CrossOrigin(origins = "*")
 public class CommunityController {
 
     @Autowired
-
     private CommunityService
             communityService;
 
     /* Create Community */
 
     @PostMapping
-
     public ResponseEntity<?> createCommunity(
-
-            @RequestBody
-            Community community
-
+            @RequestBody Community community
     ) {
 
         try {
 
-            /* Validation */
+            /* Null Validation */
+
+            if (community == null) {
+
+                return ResponseEntity
+                        .badRequest()
+                        .body(
+                                "Community data is missing"
+                        );
+
+            }
+
+            /* Name Validation */
 
             if (
-
                     community.getName() == null ||
-
                             community.getName()
                                     .trim()
                                     .isEmpty()
-
             ) {
 
                 return ResponseEntity
                         .badRequest()
                         .body(
-
-                                "Community name is required "
-
+                                "Community name is required"
                         );
 
             }
@@ -75,11 +67,9 @@ public class CommunityController {
                                     community
                             );
 
-            return ResponseEntity.ok(
-
-                    savedCommunity
-
-            );
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(savedCommunity);
 
         } catch (Exception e) {
 
@@ -89,8 +79,7 @@ public class CommunityController {
                     )
                     .body(
 
-                            "Failed to create community  : "
-
+                            "Failed to create community : "
                                     + e.getMessage()
 
                     );
@@ -102,15 +91,16 @@ public class CommunityController {
     /* Get All Communities */
 
     @GetMapping
-
     public ResponseEntity<List<Community>>
     getAllCommunities() {
 
-        return ResponseEntity.ok(
+        List<Community> communities =
 
                 communityService
-                        .getAllCommunities()
+                        .getAllCommunities();
 
+        return ResponseEntity.ok(
+                communities
         );
 
     }
@@ -118,12 +108,8 @@ public class CommunityController {
     /* Get Community By Id */
 
     @GetMapping("/{id}")
-
     public ResponseEntity<?> getCommunityById(
-
-            @PathVariable
-            Long id
-
+            @PathVariable Long id
     ) {
 
         try {
@@ -134,9 +120,7 @@ public class CommunityController {
                             .getCommunityById(id);
 
             return ResponseEntity.ok(
-
                     community
-
             );
 
         } catch (Exception e) {
@@ -146,9 +130,7 @@ public class CommunityController {
                             HttpStatus.NOT_FOUND
                     )
                     .body(
-
-                            "Community not found "
-
+                            "Community not found"
                     );
 
         }
@@ -158,15 +140,9 @@ public class CommunityController {
     /* Join Community */
 
     @PostMapping("/{id}/join")
-
     public ResponseEntity<?> joinCommunity(
-
-            @PathVariable
-            Long id,
-
-            @RequestParam
-            String username
-
+            @PathVariable Long id,
+            @RequestParam String username
     ) {
 
         try {
@@ -175,15 +151,20 @@ public class CommunityController {
 
                     communityService
                             .joinCommunity(
-
                                     id,
-
                                     username
-
                             );
 
-            return ResponseEntity.ok(
+            Map<String, Object> response =
+                    new HashMap<>();
+
+            response.put(
+                    "message",
                     message
+            );
+
+            return ResponseEntity.ok(
+                    response
             );
 
         } catch (Exception e) {
@@ -193,9 +174,8 @@ public class CommunityController {
                             HttpStatus.INTERNAL_SERVER_ERROR
                     )
                     .body(
-
-                            "Failed to join community "
-
+                            "Failed to join community : "
+                                    + e.getMessage()
                     );
 
         }
@@ -205,15 +185,9 @@ public class CommunityController {
     /* Leave Community */
 
     @DeleteMapping("/{id}/leave")
-
     public ResponseEntity<?> leaveCommunity(
-
-            @PathVariable
-            Long id,
-
-            @RequestParam
-            String username
-
+            @PathVariable Long id,
+            @RequestParam String username
     ) {
 
         try {
@@ -222,15 +196,20 @@ public class CommunityController {
 
                     communityService
                             .leaveCommunity(
-
                                     id,
-
                                     username
-
                             );
 
-            return ResponseEntity.ok(
+            Map<String, Object> response =
+                    new HashMap<>();
+
+            response.put(
+                    "message",
                     message
+            );
+
+            return ResponseEntity.ok(
+                    response
             );
 
         } catch (Exception e) {
@@ -240,9 +219,8 @@ public class CommunityController {
                             HttpStatus.INTERNAL_SERVER_ERROR
                     )
                     .body(
-
-                            "Failed to leave community "
-
+                            "Failed to leave community : "
+                                    + e.getMessage()
                     );
 
         }
@@ -252,12 +230,8 @@ public class CommunityController {
     /* Member Count */
 
     @GetMapping("/{id}/members")
-
     public ResponseEntity<?> getMemberCount(
-
-            @PathVariable
-            Long id
-
+            @PathVariable Long id
     ) {
 
         try {
@@ -286,9 +260,8 @@ public class CommunityController {
                             HttpStatus.INTERNAL_SERVER_ERROR
                     )
                     .body(
-
-                            "Failed to fetch members "
-
+                            "Failed to fetch members : "
+                                    + e.getMessage()
                     );
 
         }
@@ -298,15 +271,9 @@ public class CommunityController {
     /* Joined Status */
 
     @GetMapping("/{id}/joined")
-
     public ResponseEntity<?> isJoined(
-
-            @PathVariable
-            Long id,
-
-            @RequestParam
-            String username
-
+            @PathVariable Long id,
+            @RequestParam String username
     ) {
 
         try {
@@ -315,11 +282,8 @@ public class CommunityController {
 
                     communityService
                             .isJoined(
-
                                     id,
-
                                     username
-
                             );
 
             Map<String, Object> response =
@@ -341,9 +305,8 @@ public class CommunityController {
                             HttpStatus.INTERNAL_SERVER_ERROR
                     )
                     .body(
-
-                            "Failed to check joined status "
-
+                            "Failed to check joined status : "
+                                    + e.getMessage()
                     );
 
         }

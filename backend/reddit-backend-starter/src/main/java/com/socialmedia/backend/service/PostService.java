@@ -1,7 +1,6 @@
 package com.socialmedia.backend.service;
 
 import com.socialmedia.backend.dto.request.CreatePostRequest;
-
 import com.socialmedia.backend.dto.response.PostResponse;
 
 import java.util.List;
@@ -55,7 +54,7 @@ public interface PostService {
     );
 
     /* =========================================
-       Edit / Update Post
+       Update Post
     ========================================= */
 
     PostResponse updatePost(

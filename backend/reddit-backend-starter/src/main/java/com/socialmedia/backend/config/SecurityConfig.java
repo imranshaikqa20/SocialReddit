@@ -74,25 +74,25 @@ public class SecurityConfig {
                                 "/**"
                         ).permitAll()
 
-                        /* Public Auth APIs */
+                        /* Auth APIs */
 
                         .requestMatchers(
                                 "/api/auth/**"
                         ).permitAll()
 
-                        /* Public Posts APIs */
+                        /* Posts APIs */
 
                         .requestMatchers(
                                 "/api/posts/**"
                         ).permitAll()
 
-                        /* Public Comments APIs */
+                        /* Comments APIs */
 
                         .requestMatchers(
                                 "/api/comments/**"
                         ).permitAll()
 
-                        /* Public Communities APIs */
+                        /* Community APIs */
 
                         .requestMatchers(
                                 "/api/communities/**"
@@ -111,17 +111,17 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
 
-                        /* All Other Requests */
+                        /* Everything Else */
 
                         .anyRequest().permitAll()
 
                 )
 
-                /* Disable Default Login Form */
+                /* Disable Default Login */
 
                 .formLogin(form -> form.disable())
 
-                /* Disable HTTP Basic */
+                /* Disable Basic Auth */
 
                 .httpBasic(httpBasic -> httpBasic.disable());
 
@@ -139,21 +139,25 @@ public class SecurityConfig {
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
-        /* Allow Frontend URLs */
+        /* =====================================
+           Allow Frontend Origins
+        ===================================== */
 
-        configuration.setAllowedOrigins(
+        configuration.setAllowedOriginPatterns(
 
                 List.of(
 
                         "http://localhost:5173",
 
-                        "https://socialreddit.onrender.com"
+                        "https://*.onrender.com"
 
                 )
 
         );
 
-        /* Allow HTTP Methods */
+        /* =====================================
+           Allow HTTP Methods
+        ===================================== */
 
         configuration.setAllowedMethods(
 
@@ -169,7 +173,9 @@ public class SecurityConfig {
 
         );
 
-        /* Allow Headers */
+        /* =====================================
+           Allow Headers
+        ===================================== */
 
         configuration.setAllowedHeaders(
 
@@ -177,11 +183,33 @@ public class SecurityConfig {
 
         );
 
-        /* Allow Credentials */
+        /* =====================================
+           Expose Headers
+        ===================================== */
+
+        configuration.setExposedHeaders(
+
+                List.of(
+                        "Authorization"
+                )
+
+        );
+
+        /* =====================================
+           Allow Credentials
+        ===================================== */
 
         configuration.setAllowCredentials(true);
 
-        /* Register CORS */
+        /* =====================================
+           Cache Duration
+        ===================================== */
+
+        configuration.setMaxAge(3600L);
+
+        /* =====================================
+           Register Configuration
+        ===================================== */
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();

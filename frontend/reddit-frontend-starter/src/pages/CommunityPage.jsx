@@ -65,7 +65,7 @@ function CommunityPage() {
     useState(false);
 
   /* =========================================
-     FIX FOR /community ROUTE
+     Redirect Fix
   ========================================= */
 
   useEffect(() => {
@@ -74,29 +74,56 @@ function CommunityPage() {
 
       navigate("/community/1");
 
-      return;
-
     }
 
   }, [id, navigate]);
 
   /* =========================================
-     Load Data
+     Load Community Data
   ========================================= */
 
   useEffect(() => {
 
     if (!id) return;
 
-    fetchCommunity();
-
-    fetchPosts();
-
-    fetchMembers();
-
-    fetchJoinedStatus();
+    loadCommunityData();
 
   }, [id]);
+
+  /* =========================================
+     Load All Data
+  ========================================= */
+
+  const loadCommunityData =
+    async () => {
+
+      try {
+
+        setLoading(true);
+
+        await Promise.all([
+
+          fetchCommunity(),
+
+          fetchPosts(),
+
+          fetchMembers(),
+
+          fetchJoinedStatus()
+
+        ]);
+
+      } catch (error) {
+
+        console.log(error);
+
+      } finally {
+
+        setLoading(false);
+
+      }
+
+    };
 
   /* =========================================
      Fetch Community
@@ -131,16 +158,18 @@ function CommunityPage() {
 
     try {
 
-      setLoading(true);
-
       const data =
         await getPostsByCommunity(id);
 
       const sortedPosts =
 
-        data.sort(
-          (a, b) => b.id - a.id
-        );
+        Array.isArray(data)
+
+          ? data.sort(
+              (a, b) => b.id - a.id
+            )
+
+          : [];
 
       setPosts(sortedPosts);
 
@@ -148,13 +177,7 @@ function CommunityPage() {
 
       console.log(error);
 
-      alert(
-        "Failed to load posts ❌"
-      );
-
-    } finally {
-
-      setLoading(false);
+      setPosts([]);
 
     }
 
@@ -171,11 +194,13 @@ function CommunityPage() {
       const count =
         await getMemberCount(id);
 
-      setMembers(count);
+      setMembers(count || 0);
 
     } catch (error) {
 
       console.log(error);
+
+      setMembers(0);
 
     }
 
@@ -189,6 +214,8 @@ function CommunityPage() {
     async () => {
 
       try {
+
+        if (!username) return;
 
         const status =
           await isJoined(
@@ -229,7 +256,9 @@ function CommunityPage() {
 
       console.log(error);
 
-      alert("Failed to join ❌");
+      alert(
+        "Failed to join community ❌"
+      );
 
     } finally {
 
@@ -256,13 +285,17 @@ function CommunityPage() {
 
       setJoined(false);
 
-      setMembers((prev) => prev - 1);
+      setMembers((prev) =>
+        Math.max(prev - 1, 0)
+      );
 
     } catch (error) {
 
       console.log(error);
 
-      alert("Failed to leave ❌");
+      alert(
+        "Failed to leave community ❌"
+      );
 
     } finally {
 
@@ -290,8 +323,6 @@ function CommunityPage() {
       }}
 
     >
-
-      {/* Background */}
 
       <Navbar />
 
@@ -478,17 +509,11 @@ function CommunityPage() {
         {/* Title */}
 
         <h2
-
           style={{
-
             marginBottom: "18px"
-
           }}
-
         >
-
           Community Discussions
-
         </h2>
 
         {/* Loading */}
@@ -545,9 +570,7 @@ function CommunityPage() {
             >
 
               <h3>
-
                 No Posts Yet 🚀
-
               </h3>
 
             </div>
@@ -603,7 +626,7 @@ function CommunityPage() {
                 }
 
                 communityName={
-                  post.communityName
+                  post.communityName || ""
                 }
 
                 communityId={id}
@@ -628,7 +651,9 @@ function CommunityPage() {
 
 }
 
-/* Styles */
+/* =========================================
+   Styles
+========================================= */
 
 const buttonJoin = {
 

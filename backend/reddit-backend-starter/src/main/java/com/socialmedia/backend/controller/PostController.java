@@ -7,6 +7,7 @@ import com.socialmedia.backend.service.PostService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/posts")
-@CrossOrigin(origins = "http://localhost:5173")
-
+@CrossOrigin(origins = "*")
 public class PostController {
 
     @Autowired
@@ -34,18 +34,37 @@ public class PostController {
     ========================================= */
 
     @PostMapping
-    public ResponseEntity<PostResponse> createPost(
+    public ResponseEntity<?> createPost(
 
             @RequestBody
             CreatePostRequest request
 
     ) {
 
-        PostResponse createdPost =
+        try {
 
-                postService.createPost(request);
+            PostResponse createdPost =
 
-        return ResponseEntity.ok(createdPost);
+                    postService.createPost(request);
+
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(createdPost);
+
+        } catch (Exception e) {
+
+            return ResponseEntity
+                    .status(
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                    )
+                    .body(
+
+                            "Failed to create post : "
+                                    + e.getMessage()
+
+                    );
+
+        }
 
     }
 
@@ -62,6 +81,18 @@ public class PostController {
     ) {
 
         try {
+
+            /* Validation */
+
+            if (file.isEmpty()) {
+
+                return ResponseEntity
+                        .badRequest()
+                        .body(
+                                "Please select image"
+                        );
+
+            }
 
             /* Upload */
 
@@ -84,10 +115,13 @@ public class PostController {
         } catch (Exception e) {
 
             return ResponseEntity
-                    .internalServerError()
+                    .status(
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                    )
                     .body(
 
-                            "Image upload failed "
+                            "Image upload failed : "
+                                    + e.getMessage()
 
                     );
 
@@ -116,21 +150,37 @@ public class PostController {
     ========================================= */
 
     @GetMapping("/community/{communityId}")
-    public ResponseEntity<List<PostResponse>>
-    getPostsByCommunity(
+    public ResponseEntity<?> getPostsByCommunity(
 
             @PathVariable
             Long communityId
 
     ) {
 
-        List<PostResponse> posts =
+        try {
 
-                postService.getPostsByCommunity(
-                        communityId
-                );
+            List<PostResponse> posts =
 
-        return ResponseEntity.ok(posts);
+                    postService.getPostsByCommunity(
+                            communityId
+                    );
+
+            return ResponseEntity.ok(posts);
+
+        } catch (Exception e) {
+
+            return ResponseEntity
+                    .status(
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                    )
+                    .body(
+
+                            "Failed to fetch community posts : "
+                                    + e.getMessage()
+
+                    );
+
+        }
 
     }
 
@@ -160,19 +210,32 @@ public class PostController {
     ========================================= */
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostResponse>
-    getPostById(
+    public ResponseEntity<?> getPostById(
 
             @PathVariable
             Long id
 
     ) {
 
-        PostResponse post =
+        try {
 
-                postService.getPostById(id);
+            PostResponse post =
 
-        return ResponseEntity.ok(post);
+                    postService.getPostById(id);
+
+            return ResponseEntity.ok(post);
+
+        } catch (Exception e) {
+
+            return ResponseEntity
+                    .status(
+                            HttpStatus.NOT_FOUND
+                    )
+                    .body(
+                            "Post not found"
+                    );
+
+        }
 
     }
 
@@ -181,8 +244,7 @@ public class PostController {
     ========================================= */
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostResponse>
-    updatePost(
+    public ResponseEntity<?> updatePost(
 
             @PathVariable
             Long id,
@@ -192,14 +254,31 @@ public class PostController {
 
     ) {
 
-        PostResponse updatedPost =
+        try {
 
-                postService.updatePost(
-                        id,
-                        request
-                );
+            PostResponse updatedPost =
 
-        return ResponseEntity.ok(updatedPost);
+                    postService.updatePost(
+                            id,
+                            request
+                    );
+
+            return ResponseEntity.ok(updatedPost);
+
+        } catch (Exception e) {
+
+            return ResponseEntity
+                    .status(
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                    )
+                    .body(
+
+                            "Failed to update post : "
+                                    + e.getMessage()
+
+                    );
+
+        }
 
     }
 
@@ -208,19 +287,35 @@ public class PostController {
     ========================================= */
 
     @PutMapping("/{id}/upvote")
-    public ResponseEntity<PostResponse>
-    upvotePost(
+    public ResponseEntity<?> upvotePost(
 
             @PathVariable
             Long id
 
     ) {
 
-        PostResponse updatedPost =
+        try {
 
-                postService.upvotePost(id);
+            PostResponse updatedPost =
 
-        return ResponseEntity.ok(updatedPost);
+                    postService.upvotePost(id);
+
+            return ResponseEntity.ok(updatedPost);
+
+        } catch (Exception e) {
+
+            return ResponseEntity
+                    .status(
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                    )
+                    .body(
+
+                            "Failed to upvote post : "
+                                    + e.getMessage()
+
+                    );
+
+        }
 
     }
 
@@ -229,19 +324,35 @@ public class PostController {
     ========================================= */
 
     @PutMapping("/{id}/downvote")
-    public ResponseEntity<PostResponse>
-    downvotePost(
+    public ResponseEntity<?> downvotePost(
 
             @PathVariable
             Long id
 
     ) {
 
-        PostResponse updatedPost =
+        try {
 
-                postService.downvotePost(id);
+            PostResponse updatedPost =
 
-        return ResponseEntity.ok(updatedPost);
+                    postService.downvotePost(id);
+
+            return ResponseEntity.ok(updatedPost);
+
+        } catch (Exception e) {
+
+            return ResponseEntity
+                    .status(
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                    )
+                    .body(
+
+                            "Failed to downvote post : "
+                                    + e.getMessage()
+
+                    );
+
+        }
 
     }
 
@@ -250,21 +361,37 @@ public class PostController {
     ========================================= */
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String>
-    deletePost(
+    public ResponseEntity<?> deletePost(
 
             @PathVariable
             Long id
 
     ) {
 
-        postService.deletePost(id);
+        try {
 
-        return ResponseEntity.ok(
+            postService.deletePost(id);
 
-                "Post Deleted Successfully "
+            return ResponseEntity.ok(
 
-        );
+                    "Post Deleted Successfully"
+
+            );
+
+        } catch (Exception e) {
+
+            return ResponseEntity
+                    .status(
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                    )
+                    .body(
+
+                            "Failed to delete post : "
+                                    + e.getMessage()
+
+                    );
+
+        }
 
     }
 

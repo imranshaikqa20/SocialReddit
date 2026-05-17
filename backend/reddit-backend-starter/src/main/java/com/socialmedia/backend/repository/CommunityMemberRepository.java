@@ -1,23 +1,19 @@
 package com.socialmedia.backend.repository;
 
 import com.socialmedia.backend.entity.Community;
-
 import com.socialmedia.backend.entity.CommunityMember;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
 import java.util.Optional;
 
 @Repository
-
 public interface CommunityMemberRepository
         extends JpaRepository<CommunityMember, Long> {
 
-
+    /* Find Member By Username And Community */
 
     Optional<CommunityMember>
     findByUsernameAndCommunity(
@@ -28,7 +24,7 @@ public interface CommunityMemberRepository
 
     );
 
-
+    /* Count Members In Community */
 
     long countByCommunity(
 
@@ -36,7 +32,7 @@ public interface CommunityMemberRepository
 
     );
 
-
+    /* Find Communities Joined By Username */
 
     List<CommunityMember>
     findByUsername(

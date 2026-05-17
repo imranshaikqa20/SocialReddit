@@ -1,23 +1,20 @@
 package com.socialmedia.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-
 @Table(name = "communities")
-
 public class Community {
 
     /* Primary Key */
 
     @Id
-
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
-
     private Long id;
 
     /* Community Name */
@@ -27,16 +24,19 @@ public class Community {
             unique = true,
             length = 100
     )
-
     private String name;
 
     /* Community Description */
 
-    @Column(
-            length = 1000
-    )
-
+    @Column(length = 1000)
     private String description;
+
+    /* Community Owner */
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 
     /* Created Time */
 
@@ -54,7 +54,6 @@ public class Community {
     /* Before Persist */
 
     @PrePersist
-
     public void prePersist() {
 
         if (createdAt == null) {
@@ -104,6 +103,18 @@ public class Community {
 
         this.description =
                 description;
+
+    }
+
+    public User getUser() {
+
+        return user;
+
+    }
+
+    public void setUser(User user) {
+
+        this.user = user;
 
     }
 

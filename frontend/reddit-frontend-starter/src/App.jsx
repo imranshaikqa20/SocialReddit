@@ -51,7 +51,7 @@ function App() {
           path="/"
           element={
             token
-              ? <HomePage />
+              ? <Navigate to="/home" />
               : <Navigate to="/login" />
           }
         />
@@ -64,7 +64,7 @@ function App() {
           path="/login"
           element={
             token
-              ? <Navigate to="/" />
+              ? <Navigate to="/home" />
               : <LoginForm />
           }
         />
@@ -77,7 +77,7 @@ function App() {
           path="/signup"
           element={
             token
-              ? <Navigate to="/" />
+              ? <Navigate to="/home" />
               : <SignupForm />
           }
         />
@@ -135,17 +135,21 @@ function App() {
         />
 
         {/* =========================================
-            COMMUNITY
+            COMMUNITY REDIRECT
         ========================================= */}
 
         <Route
           path="/community"
           element={
             token
-              ? <CommunityPage />
+              ? <Navigate to="/community/1" />
               : <Navigate to="/login" />
           }
         />
+
+        {/* =========================================
+            COMMUNITY PAGE
+        ========================================= */}
 
         <Route
           path="/community/:id"
@@ -157,14 +161,18 @@ function App() {
         />
 
         {/* =========================================
-            FALLBACK
+            FALLBACK ROUTE
         ========================================= */}
 
         <Route
           path="*"
           element={
             <Navigate
-              to={token ? "/" : "/login"}
+              to={
+                token
+                  ? "/home"
+                  : "/login"
+              }
             />
           }
         />

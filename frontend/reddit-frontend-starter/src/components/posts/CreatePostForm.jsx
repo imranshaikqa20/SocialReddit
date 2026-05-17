@@ -97,6 +97,8 @@ function CreatePostForm() {
 
       console.log(error);
 
+      setCommunities([]);
+
     }
 
   };
@@ -200,9 +202,9 @@ function CreatePostForm() {
 
     if (
 
-      !title ||
+      !title.trim() ||
 
-      !content ||
+      !content.trim() ||
 
       !communityId
 
@@ -222,6 +224,8 @@ function CreatePostForm() {
 
       let imageUrl = "";
 
+      /* Upload Image */
+
       if (image) {
 
         imageUrl =
@@ -235,9 +239,11 @@ function CreatePostForm() {
 
       await createPost({
 
-        title,
+        title:
+          title.trim(),
 
-        content,
+        content:
+          content.trim(),
 
         imageUrl,
 
@@ -264,18 +270,20 @@ function CreatePostForm() {
 
       setImagePreview("");
 
-      /* =========================================
-         Redirect Home
-      ========================================= */
+      /* Redirect */
 
-      navigate("/");
+      navigate("/home");
 
     } catch (error) {
 
       console.log(error);
 
       alert(
+
+        error?.response?.data ||
+
         "Failed to create post ❌"
+
       );
 
     } finally {
@@ -784,6 +792,11 @@ function CreatePostForm() {
               fontWeight: "700",
 
               cursor: "pointer",
+
+              opacity:
+                loading || imageUploading
+                  ? 0.7
+                  : 1,
 
               boxShadow:
                 "0 6px 18px rgba(37,99,235,0.30)"

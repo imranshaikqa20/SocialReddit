@@ -1,106 +1,90 @@
 package com.socialmedia.backend.service;
 
 import com.socialmedia.backend.entity.Community;
-
 import com.socialmedia.backend.entity.CommunityMember;
-
 import com.socialmedia.backend.repository.CommunityMemberRepository;
-
 import com.socialmedia.backend.repository.CommunityRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-
 import java.util.List;
 
 @Service
-
 public class CommunityService {
 
     @Autowired
-
     private CommunityRepository
             communityRepository;
 
     @Autowired
-
     private CommunityMemberRepository
             communityMemberRepository;
 
     /* Create Community */
 
     public Community createCommunity(
-
             Community community
-
     ) {
 
-        /* Validation */
+        /* Null Validation */
+
+        if (community == null) {
+
+            throw new RuntimeException(
+                    "Community data is missing"
+            );
+
+        }
+
+        /* Name Validation */
 
         if (
-
                 community.getName() == null ||
-
                         community.getName()
                                 .trim()
                                 .isEmpty()
-
         ) {
 
             throw new RuntimeException(
-
                     "Community name is required"
-
             );
 
         }
 
-        /* Trim */
+        /* Trim Name */
 
         community.setName(
-
                 community.getName()
                         .trim()
-
         );
 
+        /* Trim Description */
+
         if (
-
                 community.getDescription() != null
-
         ) {
 
             community.setDescription(
-
                     community.getDescription()
                             .trim()
-
             );
 
         }
 
-        /* Duplicate */
+        /* Duplicate Check */
 
         boolean exists =
-
                 communityRepository
                         .findByNameIgnoreCase(
-
                                 community.getName()
-
                         )
-
                         .isPresent();
 
         if (exists) {
 
             throw new RuntimeException(
-
                     "Community already exists"
-
             );
 
         }
@@ -108,18 +92,16 @@ public class CommunityService {
         /* Created Time */
 
         if (
-
                 community.getCreatedAt() == null
-
         ) {
 
             community.setCreatedAt(
-
                     LocalDateTime.now()
-
             );
 
         }
+
+        /* Save */
 
         return communityRepository
                 .save(community);
@@ -139,9 +121,7 @@ public class CommunityService {
     /* Get Community By Id */
 
     public Community getCommunityById(
-
             Long id
-
     ) {
 
         return communityRepository
@@ -150,9 +130,7 @@ public class CommunityService {
                 .orElseThrow(
 
                         () -> new RuntimeException(
-
                                 "Community Not Found"
-
                         )
 
                 );
@@ -162,15 +140,11 @@ public class CommunityService {
     /* Join Community */
 
     public String joinCommunity(
-
             Long communityId,
-
             String username
-
     ) {
 
         Community community =
-
                 getCommunityById(
                         communityId
                 );
@@ -179,18 +153,14 @@ public class CommunityService {
 
                 communityMemberRepository
                         .findByUsernameAndCommunity(
-
                                 username,
-
                                 community
-
                         )
-
                         .isPresent();
 
         if (alreadyJoined) {
 
-            return "Already Joined ";
+            return "Already Joined";
 
         }
 
@@ -208,22 +178,18 @@ public class CommunityService {
         communityMemberRepository
                 .save(member);
 
-        return "Community Joined ";
+        return "Community Joined";
 
     }
 
     /* Leave Community */
 
     public String leaveCommunity(
-
             Long communityId,
-
             String username
-
     ) {
 
         Community community =
-
                 getCommunityById(
                         communityId
                 );
@@ -232,19 +198,14 @@ public class CommunityService {
 
                 communityMemberRepository
                         .findByUsernameAndCommunity(
-
                                 username,
-
                                 community
-
                         )
 
                         .orElseThrow(
 
                                 () -> new RuntimeException(
-
                                         "You are not a member"
-
                                 )
 
                         );
@@ -252,20 +213,17 @@ public class CommunityService {
         communityMemberRepository
                 .delete(member);
 
-        return "Community Left ";
+        return "Community Left";
 
     }
 
     /* Member Count */
 
     public long getMemberCount(
-
             Long communityId
-
     ) {
 
         Community community =
-
                 getCommunityById(
                         communityId
                 );
@@ -280,28 +238,20 @@ public class CommunityService {
     /* Joined Status */
 
     public boolean isJoined(
-
             Long communityId,
-
             String username
-
     ) {
 
         Community community =
-
                 getCommunityById(
                         communityId
                 );
 
         return communityMemberRepository
                 .findByUsernameAndCommunity(
-
                         username,
-
                         community
-
                 )
-
                 .isPresent();
 
     }

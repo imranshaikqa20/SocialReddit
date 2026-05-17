@@ -1,19 +1,16 @@
 package com.socialmedia.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
-
 import lombok.Getter;
-
 import lombok.NoArgsConstructor;
-
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
-
 @Table(
 
         name = "community_members",
@@ -47,17 +44,14 @@ public class CommunityMember {
     /* Primary Key */
 
     @Id
-
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
-
     private Long id;
 
     /* Username */
 
     @Column(nullable = false)
-
     private String username;
 
     /* Community */
@@ -71,6 +65,7 @@ public class CommunityMember {
             nullable = false
     )
 
+    @JsonIgnore
     private Community community;
 
     /* Joined Time */
@@ -80,7 +75,6 @@ public class CommunityMember {
     /* Before Insert */
 
     @PrePersist
-
     public void prePersist() {
 
         if (joinedAt == null) {

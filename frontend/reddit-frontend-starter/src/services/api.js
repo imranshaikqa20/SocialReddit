@@ -1,13 +1,19 @@
 import axios from "axios";
 
 /* =========================================
+   API BASE URL
+========================================= */
+
+export const API_BASE_URL =
+  "https://socialreddit-backend.onrender.com/api";
+
+/* =========================================
    Create Axios Instance
 ========================================= */
 
 const api = axios.create({
 
-  baseURL:
-    "https://socialreddit-backend.onrender.com/api",
+  baseURL: API_BASE_URL,
 
   headers: {
     "Content-Type": "application/json"
@@ -25,10 +31,12 @@ api.interceptors.request.use(
 
   (config) => {
 
+    /* Get JWT Token */
+
     const token =
       localStorage.getItem("token");
 
-    /* Attach JWT Token */
+    /* Attach Authorization Header */
 
     if (token) {
 
@@ -64,11 +72,13 @@ api.interceptors.response.use(
   async (error) => {
 
     console.log(
-      "API ERROR : ",
+      "API ERROR :",
       error.response || error
     );
 
-    /* Unauthorized */
+    /* =====================================
+       Unauthorized
+    ===================================== */
 
     if (
       error.response?.status === 401
@@ -84,7 +94,9 @@ api.interceptors.response.use(
 
     }
 
-    /* Bad Request */
+    /* =====================================
+       Bad Request
+    ===================================== */
 
     else if (
       error.response?.status === 400
@@ -96,25 +108,49 @@ api.interceptors.response.use(
 
         error.response?.data?.error ||
 
+        error.response?.data ||
+
         "Bad Request ❌"
 
       );
 
     }
 
-    /* Internal Server Error */
+    /* =====================================
+       Not Found
+    ===================================== */
+
+    else if (
+      error.response?.status === 404
+    ) {
+
+      alert(
+        "API Endpoint Not Found ❌"
+      );
+
+    }
+
+    /* =====================================
+       Internal Server Error
+    ===================================== */
 
     else if (
       error.response?.status === 500
     ) {
 
       alert(
+
+        error.response?.data ||
+
         "Internal Server Error ❌"
+
       );
 
     }
 
-    /* Backend Sleeping or Network Error */
+    /* =====================================
+       Network Error / Backend Sleeping
+    ===================================== */
 
     else if (
 

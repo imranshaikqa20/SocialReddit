@@ -1,6 +1,8 @@
 import api from "./api";
 
-/* Get All Communities */
+/* =========================================
+   Get All Communities
+========================================= */
 
 export const getAllCommunities =
   async () => {
@@ -16,7 +18,10 @@ export const getAllCommunities =
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "Get Communities Error :",
+        error
+      );
 
       throw error;
 
@@ -24,7 +29,9 @@ export const getAllCommunities =
 
   };
 
-/* Get Community By Id */
+/* =========================================
+   Get Community By Id
+========================================= */
 
 export const getCommunityById =
   async (communityId) => {
@@ -42,7 +49,10 @@ export const getCommunityById =
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "Get Community Error :",
+        error
+      );
 
       throw error;
 
@@ -50,7 +60,9 @@ export const getCommunityById =
 
   };
 
-/* Create Community */
+/* =========================================
+   Create Community
+========================================= */
 
 export const createCommunity =
   async (communityData) => {
@@ -62,7 +74,13 @@ export const createCommunity =
 
           "/communities",
 
-          communityData
+          {
+            name:
+              communityData.name,
+
+            description:
+              communityData.description
+          }
 
         );
 
@@ -70,7 +88,10 @@ export const createCommunity =
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "Create Community Error :",
+        error
+      );
 
       throw error;
 
@@ -78,7 +99,9 @@ export const createCommunity =
 
   };
 
-/* Get Posts By Community */
+/* =========================================
+   Get Posts By Community
+========================================= */
 
 export const getPostsByCommunity =
   async (communityId) => {
@@ -92,19 +115,24 @@ export const getPostsByCommunity =
 
         );
 
-      return response.data;
+      return response.data || [];
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "Get Posts Error :",
+        error
+      );
 
-      throw error;
+      return [];
 
     }
 
   };
 
-/* Join Community */
+/* =========================================
+   Join Community
+========================================= */
 
 export const joinCommunity =
   async (
@@ -120,7 +148,17 @@ export const joinCommunity =
       const response =
         await api.post(
 
-          `/communities/${communityId}/join?username=${username}`
+          `/communities/${communityId}/join`,
+
+          null,
+
+          {
+
+            params: {
+              username
+            }
+
+          }
 
         );
 
@@ -128,7 +166,10 @@ export const joinCommunity =
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "Join Community Error :",
+        error
+      );
 
       throw error;
 
@@ -136,7 +177,9 @@ export const joinCommunity =
 
   };
 
-/* Leave Community */
+/* =========================================
+   Leave Community
+========================================= */
 
 export const leaveCommunity =
   async (
@@ -152,7 +195,15 @@ export const leaveCommunity =
       const response =
         await api.delete(
 
-          `/communities/${communityId}/leave?username=${username}`
+          `/communities/${communityId}/leave`,
+
+          {
+
+            params: {
+              username
+            }
+
+          }
 
         );
 
@@ -160,7 +211,10 @@ export const leaveCommunity =
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "Leave Community Error :",
+        error
+      );
 
       throw error;
 
@@ -168,7 +222,9 @@ export const leaveCommunity =
 
   };
 
-/* Get Member Count */
+/* =========================================
+   Get Member Count
+========================================= */
 
 export const getMemberCount =
   async (communityId) => {
@@ -182,19 +238,26 @@ export const getMemberCount =
 
         );
 
-      return response.data.members;
+      return (
+        response.data.members || 0
+      );
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "Member Count Error :",
+        error
+      );
 
-      throw error;
+      return 0;
 
     }
 
   };
 
-/* Check Joined Status */
+/* =========================================
+   Check Joined Status
+========================================= */
 
 export const isJoined =
   async (
@@ -210,17 +273,30 @@ export const isJoined =
       const response =
         await api.get(
 
-          `/communities/${communityId}/joined?username=${username}`
+          `/communities/${communityId}/joined`,
+
+          {
+
+            params: {
+              username
+            }
+
+          }
 
         );
 
-      return response.data.joined;
+      return (
+        response.data.joined || false
+      );
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "Joined Status Error :",
+        error
+      );
 
-      throw error;
+      return false;
 
     }
 
