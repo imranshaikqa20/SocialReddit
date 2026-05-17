@@ -397,7 +397,7 @@ function Navbar({
 
           >
 
-            🏠 Home
+            Home
 
           </button>
 
@@ -467,7 +467,7 @@ function Navbar({
 
           >
 
-            ✍️ Post
+             Post
 
           </button>
 
@@ -502,7 +502,7 @@ function Navbar({
 
           >
 
-            👥 Community
+             Community
 
           </button>
 
@@ -537,7 +537,7 @@ function Navbar({
 
         >
 
-          🚪 Logout
+           Logout
 
         </button>
 
