@@ -12,28 +12,36 @@ import java.util.Optional;
 public interface UserRepository
         extends JpaRepository<User, Long> {
 
-    /* =========================
+    /* =========================================
        Find User By Email
-       ========================= */
+    ========================================= */
 
     Optional<User> findByEmail(
             String email
     );
 
-    /* =========================
+    /* =========================================
        Check Email Exists
-       ========================= */
+    ========================================= */
 
     boolean existsByEmail(
             String email
     );
 
-    /* =========================
+    /* =========================================
        Check Username Exists
-       ========================= */
+    ========================================= */
 
     boolean existsByUsername(
             String username
+    );
+
+    /* =========================================
+       Delete User By Email
+    ========================================= */
+
+    void deleteByEmail(
+            String email
     );
 
 }
