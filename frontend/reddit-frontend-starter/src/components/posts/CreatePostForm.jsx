@@ -83,7 +83,7 @@ function CreatePostForm() {
       const data =
         await getAllCommunities();
 
-      setCommunities(data);
+      setCommunities(data || []);
 
     } catch (error) {
 
@@ -162,7 +162,7 @@ function CreatePostForm() {
 
         );
 
-      return response.data.imageUrl;
+      return response.data.imageUrl || "";
 
     } catch (error) {
 
@@ -221,7 +221,9 @@ function CreatePostForm() {
 
       }
 
-      /* IMPORTANT FIX */
+      /* =========================================
+         Create Post
+      ========================================= */
 
       await createPost({
 
@@ -254,6 +256,11 @@ function CreatePostForm() {
 
       setImagePreview("");
 
+      /* Redirect Home */
+
+      window.location.href =
+        "/home";
+
     } catch (error) {
 
       console.log(error);
@@ -276,11 +283,18 @@ function CreatePostForm() {
 
       style={{
 
+        minHeight: "100vh",
+
+        background:
+          "linear-gradient(to bottom,#020617,#020617)",
+
+        padding: "40px 16px",
+
         display: "flex",
 
         justifyContent: "center",
 
-        padding: "16px"
+        alignItems: "flex-start"
 
       }}
 
