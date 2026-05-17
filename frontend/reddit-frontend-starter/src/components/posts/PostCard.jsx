@@ -1,12 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-import { useNavigate } from "react-router-dom";
-
-import api from "../../services/api";
-
-import CommentList from "../comments/CommentList";
-
-import AddCommentForm from "../comments/AddCommentForm";
+import {
+  FaArrowUp,
+  FaArrowDown,
+  FaComment
+} from "react-icons/fa";
 
 /* =========================================
    BACKEND URL
@@ -23,7 +21,7 @@ function PostCard({
 
   id,
   title,
-  content,
+ content,
   imageUrl,
   votes,
   author,
@@ -34,286 +32,23 @@ function PostCard({
 
 }) {
 
-  const navigate = useNavigate();
+  const [comment, setComment] =
+    useState("");
 
   /* =========================================
-     STATES
+     FIX IMAGE URL
   ========================================= */
 
-  const [showComments, setShowComments] =
-    useState(false);
+  const finalImageUrl =
 
-  const [voteCount, setVoteCount] =
-    useState(votes || 0);
-
-  const [loading, setLoading] =
-    useState(false);
-
-  const [editing, setEditing] =
-    useState(false);
-
-  const [deleted, setDeleted] =
-    useState(false);
-
-  /* =========================================
-     EDIT STATES
-  ========================================= */
-
-  const [editTitle, setEditTitle] =
-    useState(title);
-
-  const [editContent, setEditContent] =
-    useState(content);
-
-  const [editImageUrl, setEditImageUrl] =
-    useState(imageUrl || "");
-
-  /* =========================================
-     USER
-  ========================================= */
-
-  const loggedInUser =
-
-    localStorage.getItem("username")
-
-    ||
-
-    "User";
-
-  /* =========================================
-     AUTHOR
-  ========================================= */
-
-  const cleanAuthor =
-
-    author &&
-    typeof author === "string" &&
-    author.trim() !== ""
-
-      ? author
-
-      : "Anonymous";
-
-  const displayAuthor =
-
-    cleanAuthor.split("@")[0];
-
-  const isOwner =
-
-    loggedInUser
-      .trim()
-      .toLowerCase()
-
-    ===
-
-    cleanAuthor
-      .trim()
-      .toLowerCase();
-
-  /* =========================================
-     DELETE
-  ========================================= */
-
-  if (deleted) {
-
-    return null;
-
-  }
-
-  /* =========================================
-     IMAGE FIX
-  ========================================= */
-
-  let finalImageUrl = "";
-
-  if (editImageUrl) {
-
-    /* FULL URL */
-
-    if (
-      editImageUrl.startsWith("http")
-    ) {
-
-      finalImageUrl =
-        editImageUrl;
-
-    } else {
-
-      /* REMOVE EXTRA SLASHES */
-
-      const cleanPath =
-
-        editImageUrl.replace(
-          /^\/+/,
-          ""
-        );
-
-      /* FINAL IMAGE URL */
-
-      finalImageUrl =
-        `${API_BASE}/${cleanPath}`;
-
-    }
-
-  }
+    imageUrl
+      ? `${API_BASE}${imageUrl}`
+      : null;
 
   console.log(
     "FINAL IMAGE URL =>",
     finalImageUrl
   );
-
-  /* =========================================
-     UPVOTE
-  ========================================= */
-
-  const handleUpvote = async () => {
-
-    try {
-
-      setLoading(true);
-
-      const response =
-        await api.put(
-          `/posts/${id}/upvote`
-        );
-
-      setVoteCount(
-        response.data.votes
-      );
-
-    } catch (error) {
-
-      console.log(error);
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
-  };
-
-  /* =========================================
-     DOWNVOTE
-  ========================================= */
-
-  const handleDownvote = async () => {
-
-    try {
-
-      setLoading(true);
-
-      const response =
-        await api.put(
-          `/posts/${id}/downvote`
-        );
-
-      setVoteCount(
-        response.data.votes
-      );
-
-    } catch (error) {
-
-      console.log(error);
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
-  };
-
-  /* =========================================
-     DELETE
-  ========================================= */
-
-  const handleDelete = async () => {
-
-    const confirmDelete =
-      window.confirm(
-        "Delete this post?"
-      );
-
-    if (!confirmDelete) {
-
-      return;
-
-    }
-
-    try {
-
-      await api.delete(
-        `/posts/${id}`
-      );
-
-      setDeleted(true);
-
-      if (onPostUpdated) {
-
-        onPostUpdated();
-
-      }
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert(
-        "Delete failed ❌"
-      );
-
-    }
-
-  };
-
-  /* =========================================
-     SAVE EDIT
-  ========================================= */
-
-  const handleSaveEdit = async () => {
-
-    try {
-
-      await api.put(
-
-        `/posts/${id}`,
-
-        {
-
-          title: editTitle,
-
-          content: editContent,
-
-          imageUrl: editImageUrl
-
-        }
-
-      );
-
-      setEditing(false);
-
-      if (onPostUpdated) {
-
-        onPostUpdated();
-
-      }
-
-      alert(
-        "Post Updated 🚀"
-      );
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert(
-        "Update failed ❌"
-      );
-
-    }
-
-  };
 
   return (
 
@@ -322,25 +57,22 @@ function PostCard({
       style={{
 
         background:
-          "linear-gradient(135deg,#0f172a,#111827)",
+          "rgba(15,23,42,0.82)",
 
         border:
-          "1px solid rgba(59,130,246,0.08)",
+          "1px solid rgba(255,255,255,0.06)",
 
-        borderRadius: "16px",
+        borderRadius: "26px",
 
-        padding: "16px",
+        padding: "22px",
+
+        color: "white",
 
         boxShadow:
-          "0 6px 18px rgba(0,0,0,0.24)",
+          "0px 8px 30px rgba(0,0,0,0.28)",
 
-        overflow: "hidden",
-
-        maxWidth: "720px",
-
-        margin: "0 auto",
-
-        color: "white"
+        backdropFilter:
+          "blur(12px)"
 
       }}
 
@@ -350,56 +82,37 @@ function PostCard({
          COMMUNITY
       ========================================= */}
 
-      {
+      <div
 
-        communityName && (
+        style={{
 
-          <button
+          display: "inline-block",
 
-            onClick={() =>
+          padding: "7px 16px",
 
-              navigate(
-                `/community/${communityId}`
-              )
+          borderRadius: "999px",
 
-            }
+          background:
+            "rgba(59,130,246,0.12)",
 
-            style={{
+          color: "#60a5fa",
 
-              background:
-                "rgba(37,99,235,0.12)",
+          fontSize: "12px",
 
-              border:
-                "1px solid rgba(59,130,246,0.14)",
+          fontWeight: "700",
 
-              color: "#60a5fa",
+          marginBottom: "20px"
 
-              padding: "5px 12px",
+        }}
 
-              borderRadius: "999px",
+      >
 
-              fontSize: "10px",
+        {communityName || "General"}
 
-              fontWeight: "700",
-
-              cursor: "pointer",
-
-              marginBottom: "14px"
-
-            }}
-
-          >
-
-            {communityName}
-
-          </button>
-
-        )
-
-      }
+      </div>
 
       {/* =========================================
-         HEADER
+         AUTHOR
       ========================================= */}
 
       <div
@@ -408,399 +121,211 @@ function PostCard({
 
           display: "flex",
 
-          justifyContent: "space-between",
-
           alignItems: "center",
 
-          marginBottom: "14px"
+          marginBottom: "20px"
 
         }}
 
       >
 
-        {/* USER */}
-
         <div
 
           style={{
+
+            width: "48px",
+
+            height: "48px",
+
+            borderRadius: "50%",
+
+            background:
+              "linear-gradient(135deg,#3b82f6,#2563eb)",
 
             display: "flex",
 
             alignItems: "center",
 
-            gap: "10px"
+            justifyContent: "center",
+
+            fontWeight: "800",
+
+            fontSize: "18px",
+
+            marginRight: "14px"
 
           }}
 
         >
 
-          {/* AVATAR */}
+          {author?.charAt(0)?.toUpperCase() || "A"}
+
+        </div>
+
+        <div>
 
           <div
 
             style={{
 
-              width: "38px",
-
-              height: "38px",
-
-              borderRadius: "50%",
-
-              background:
-                "linear-gradient(to right,#2563eb,#38bdf8)",
-
-              display: "flex",
-
-              alignItems: "center",
-
-              justifyContent: "center",
-
-              color: "white",
-
               fontWeight: "700",
 
-              fontSize: "14px"
+              fontSize: "17px"
 
             }}
 
           >
 
-            {
-
-              displayAuthor
-                .charAt(0)
-                .toUpperCase()
-
-            }
+            {author || "Anonymous"}
 
           </div>
 
-          {/* INFO */}
+          <div
 
-          <div>
+            style={{
 
-            <h4
+              fontSize: "13px",
 
-              style={{
+              color: "#94a3b8"
 
-                margin: 0,
+            }}
 
-                color: "#f8fafc",
+          >
 
-                fontSize: "14px"
-
-              }}
-
-            >
-
-              {displayAuthor}
-
-            </h4>
-
-            <p
-
-              style={{
-
-                margin: "2px 0 0 0",
-
-                color: "#94a3b8",
-
-                fontSize: "11px"
-
-              }}
-
-            >
-
-              Posted in community
-
-            </p>
+            Posted in community
 
           </div>
-
-        </div>
-
-        {/* VOTES */}
-
-        <div
-
-          style={{
-
-            background:
-              "rgba(37,99,235,0.12)",
-
-            color: "#60a5fa",
-
-            padding: "6px 10px",
-
-            borderRadius: "10px",
-
-            fontSize: "11px",
-
-            fontWeight: "700"
-
-          }}
-
-        >
-
-          {voteCount} Votes
 
         </div>
 
       </div>
 
       {/* =========================================
-         EDIT MODE
+         TITLE
+      ========================================= */}
+
+      <h2
+
+        style={{
+
+          fontSize: "34px",
+
+          marginBottom: "16px",
+
+          fontWeight: "800"
+
+        }}
+
+      >
+
+        {title}
+
+      </h2>
+
+      {/* =========================================
+         CONTENT
+      ========================================= */}
+
+      <p
+
+        style={{
+
+          color: "#cbd5e1",
+
+          lineHeight: "1.8",
+
+          marginBottom: "22px"
+
+        }}
+
+      >
+
+        {content}
+
+      </p>
+
+      {/* =========================================
+         IMAGE
       ========================================= */}
 
       {
 
-        editing ? (
+        finalImageUrl && (
 
-          <div>
+          <div
 
-            <input
+            style={{
 
-              type="text"
+              width: "100%",
 
-              value={editTitle}
+              marginBottom: "24px"
 
-              onChange={(e) =>
+            }}
 
-                setEditTitle(
-                  e.target.value
-                )
+          >
 
-              }
+            <img
 
-              style={{
+              src={finalImageUrl}
 
-                width: "100%",
-
-                padding: "10px",
-
-                marginBottom: "10px",
-
-                borderRadius: "10px",
-
-                border: "none",
-
-                background: "#1e293b",
-
-                color: "white"
-
-              }}
-
-            />
-
-            <textarea
-
-              value={editContent}
-
-              onChange={(e) =>
-
-                setEditContent(
-                  e.target.value
-                )
-
-              }
-
-              rows={4}
+              alt="post"
 
               style={{
 
                 width: "100%",
 
-                padding: "10px",
+                maxHeight: "520px",
 
-                marginBottom: "10px",
+                objectFit: "cover",
 
-                borderRadius: "10px",
+                borderRadius: "20px",
 
-                border: "none",
+                border:
+                  "1px solid rgba(255,255,255,0.08)"
 
-                background: "#1e293b",
+              }}
 
-                color: "white"
+              onError={(e) => {
+
+                console.log(
+
+                  "IMAGE LOAD FAILED =>",
+
+                  finalImageUrl
+
+                );
+
+                e.target.style.display =
+                  "none";
 
               }}
 
             />
-
-            <input
-
-              type="text"
-
-              value={editImageUrl}
-
-              onChange={(e) =>
-
-                setEditImageUrl(
-                  e.target.value
-                )
-
-              }
-
-              placeholder="Image URL"
-
-              style={{
-
-                width: "100%",
-
-                padding: "10px",
-
-                marginBottom: "10px",
-
-                borderRadius: "10px",
-
-                border: "none",
-
-                background: "#1e293b",
-
-                color: "white"
-
-              }}
-
-            />
-
-            <button
-
-              onClick={handleSaveEdit}
-
-              style={{
-
-                background:
-                  "#2563eb",
-
-                border: "none",
-
-                color: "white",
-
-                padding: "10px 16px",
-
-                borderRadius: "10px",
-
-                cursor: "pointer",
-
-                fontWeight: "700"
-
-              }}
-
-            >
-
-              Save Changes
-
-            </button>
 
           </div>
-
-        ) : (
-
-          <>
-
-            {/* TITLE */}
-
-            <h2
-
-              style={{
-
-                color: "#f8fafc",
-
-                fontSize: "18px",
-
-                fontWeight: "700",
-
-                marginBottom: "10px"
-
-              }}
-
-            >
-
-              {editTitle}
-
-            </h2>
-
-            {/* CONTENT */}
-
-            <p
-
-              style={{
-
-                color: "#cbd5e1",
-
-                fontSize: "13px",
-
-                lineHeight: "22px",
-
-                marginBottom: "14px"
-
-              }}
-
-            >
-
-              {editContent}
-
-            </p>
-
-            {/* IMAGE */}
-
-            {
-
-              finalImageUrl && (
-
-                <img
-
-                  src={finalImageUrl}
-
-                  alt="Post"
-
-                  style={{
-
-                    width: "100%",
-
-                    maxHeight: "280px",
-
-                    objectFit: "cover",
-
-                    borderRadius: "12px",
-
-                    marginBottom: "14px",
-
-                    border:
-                      "1px solid rgba(255,255,255,0.08)"
-
-                  }}
-
-                  onLoad={() => {
-
-                    console.log(
-                      "IMAGE LOADED SUCCESS"
-                    );
-
-                  }}
-
-                  onError={(e) => {
-
-                    console.log(
-                      "IMAGE FAILED =>",
-                      finalImageUrl
-                    );
-
-                    e.target.style.display =
-                      "none";
-
-                  }}
-
-                />
-
-              )
-
-            }
-
-          </>
 
         )
 
       }
+
+      {/* =========================================
+         DIVIDER
+      ========================================= */}
+
+      <hr
+
+        style={{
+
+          border: "none",
+
+          borderTop:
+            "1px solid rgba(255,255,255,0.08)",
+
+          marginBottom: "20px"
+
+        }}
+
+      />
 
       {/* =========================================
          ACTIONS
@@ -812,248 +337,186 @@ function PostCard({
 
           display: "flex",
 
-          gap: "8px",
+          gap: "14px",
 
-          flexWrap: "wrap",
-
-          marginTop: "14px",
-
-          paddingTop: "14px",
-
-          borderTop:
-            "1px solid rgba(255,255,255,0.06)"
+          marginBottom: "20px"
 
         }}
 
       >
 
-        {/* UPVOTE */}
-
         <button
-
-          onClick={handleUpvote}
-
-          disabled={loading}
 
           style={{
 
-            background: "#16a34a",
+            background: "#22c55e",
 
             border: "none",
 
             color: "white",
 
-            padding: "8px 14px",
+            padding: "12px 22px",
 
-            borderRadius: "10px",
+            borderRadius: "14px",
 
             fontWeight: "700",
 
-            cursor: "pointer",
+            display: "flex",
 
-            fontSize: "12px"
+            alignItems: "center",
+
+            gap: "8px",
+
+            cursor: "pointer"
 
           }}
 
         >
 
-          👍 {voteCount}
+          <FaArrowUp />
+
+          Upvote
 
         </button>
 
-        {/* DOWNVOTE */}
-
         <button
-
-          onClick={handleDownvote}
-
-          disabled={loading}
 
           style={{
 
-            background: "#dc2626",
+            background: "#ef4444",
 
             border: "none",
 
             color: "white",
 
-            padding: "8px 14px",
+            padding: "12px 22px",
 
-            borderRadius: "10px",
+            borderRadius: "14px",
 
             fontWeight: "700",
 
-            cursor: "pointer",
+            display: "flex",
 
-            fontSize: "12px"
+            alignItems: "center",
+
+            gap: "8px",
+
+            cursor: "pointer"
 
           }}
 
         >
 
-          👎
+          <FaArrowDown />
+
+          Downvote
 
         </button>
 
-        {/* COMMENTS */}
-
-        <button
-
-          onClick={() =>
-
-            setShowComments(
-              !showComments
-            )
-
-          }
+        <div
 
           style={{
 
             background: "#2563eb",
 
-            border: "none",
+            padding: "12px 18px",
 
-            color: "white",
+            borderRadius: "14px",
 
-            padding: "8px 14px",
+            display: "flex",
 
-            borderRadius: "10px",
+            alignItems: "center",
 
-            fontWeight: "700",
+            gap: "8px",
 
-            cursor: "pointer",
-
-            fontSize: "12px"
+            fontWeight: "700"
 
           }}
 
         >
 
-          💬 {comments || 0}
+          <FaComment />
 
-        </button>
+          {votes || 0}
 
-        {/* EDIT */}
-
-        {
-
-          isOwner && (
-
-            <button
-
-              onClick={() =>
-
-                setEditing(!editing)
-
-              }
-
-              style={{
-
-                background: "#f59e0b",
-
-                border: "none",
-
-                color: "white",
-
-                padding: "8px 14px",
-
-                borderRadius: "10px",
-
-                fontWeight: "700",
-
-                cursor: "pointer",
-
-                fontSize: "12px"
-
-              }}
-
-            >
-
-              ✏ Edit
-
-            </button>
-
-          )
-
-        }
-
-        {/* DELETE */}
-
-        {
-
-          isOwner && (
-
-            <button
-
-              onClick={handleDelete}
-
-              style={{
-
-                background: "#ef4444",
-
-                border: "none",
-
-                color: "white",
-
-                padding: "8px 14px",
-
-                borderRadius: "10px",
-
-                fontWeight: "700",
-
-                cursor: "pointer",
-
-                fontSize: "12px"
-
-              }}
-
-            >
-
-              🗑 Delete
-
-            </button>
-
-          )
-
-        }
+        </div>
 
       </div>
 
       {/* =========================================
-         COMMENTS
+         COMMENT BOX
       ========================================= */}
 
-      {
+      <div
 
-        showComments && (
+        style={{
 
-          <div
+          display: "flex",
 
-            style={{
+          gap: "12px"
 
-              marginTop: "18px"
+        }}
 
-            }}
+      >
 
-          >
+        <input
 
-            <AddCommentForm
+          type="text"
 
-              postId={id}
+          placeholder="Write a comment..."
 
-            />
+          value={comment}
 
-            <CommentList
+          onChange={(e) =>
+            setComment(e.target.value)
+          }
 
-              postId={id}
+          style={{
 
-            />
+            flex: 1,
 
-          </div>
+            padding: "14px",
 
-        )
+            borderRadius: "14px",
 
-      }
+            border:
+              "1px solid rgba(255,255,255,0.08)",
+
+            background: "#111827",
+
+            color: "white"
+
+          }}
+
+        />
+
+        <button
+
+          style={{
+
+            background: "#3b82f6",
+
+            border: "none",
+
+            color: "white",
+
+            padding: "14px 22px",
+
+            borderRadius: "14px",
+
+            cursor: "pointer",
+
+            fontWeight: "700"
+
+          }}
+
+        >
+
+          Comment
+
+        </button>
+
+      </div>
 
     </div>
 
