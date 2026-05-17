@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 
 import org.springframework.security.config.Customizer;
+
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import org.springframework.web.cors.CorsConfiguration;
+
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -97,7 +99,9 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        /* OPTIONS */
+                        /* =====================================
+                           ALLOW OPTIONS
+                        ===================================== */
 
                         .requestMatchers(
 
@@ -107,7 +111,9 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* AUTH */
+                        /* =====================================
+                           AUTH APIs
+                        ===================================== */
 
                         .requestMatchers(
 
@@ -115,7 +121,9 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* POSTS */
+                        /* =====================================
+                           POSTS APIs
+                        ===================================== */
 
                         .requestMatchers(
 
@@ -123,7 +131,9 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* COMMUNITIES */
+                        /* =====================================
+                           COMMUNITIES APIs
+                        ===================================== */
 
                         .requestMatchers(
 
@@ -131,7 +141,9 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* COMMENTS */
+                        /* =====================================
+                           COMMENTS APIs
+                        ===================================== */
 
                         .requestMatchers(
 
@@ -139,7 +151,19 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* UPLOADS */
+                        /* =====================================
+                           VOTES APIs
+                        ===================================== */
+
+                        .requestMatchers(
+
+                                "/api/votes/**"
+
+                        ).permitAll()
+
+                        /* =====================================
+                           FILE UPLOADS
+                        ===================================== */
 
                         .requestMatchers(
 
@@ -147,7 +171,9 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* SWAGGER */
+                        /* =====================================
+                           SWAGGER
+                        ===================================== */
 
                         .requestMatchers(
 
@@ -157,9 +183,11 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* EVERYTHING ELSE */
+                        /* =====================================
+                           ALLOW EVERYTHING
+                        ===================================== */
 
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
 
                 );
 
@@ -244,7 +272,7 @@ public class SecurityConfig {
         );
 
         /* =====================================
-           CREDENTIALS
+           ALLOW CREDENTIALS
         ===================================== */
 
         configuration.setAllowCredentials(true);
@@ -256,7 +284,7 @@ public class SecurityConfig {
         configuration.setMaxAge(3600L);
 
         /* =====================================
-           REGISTER
+           REGISTER CONFIG
         ===================================== */
 
         UrlBasedCorsConfigurationSource source =
