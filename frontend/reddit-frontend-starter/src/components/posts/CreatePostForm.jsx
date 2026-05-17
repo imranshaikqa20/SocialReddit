@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import api from "../../services/api";
 
 import { createPost } from "../../services/postService";
@@ -9,6 +11,12 @@ import {
 } from "../../services/communityService";
 
 function CreatePostForm() {
+
+  /* =========================================
+     Navigation
+  ========================================= */
+
+  const navigate = useNavigate();
 
   /* =========================================
      Form States
@@ -256,10 +264,11 @@ function CreatePostForm() {
 
       setImagePreview("");
 
-      /* Redirect Home */
+      /* =========================================
+         Redirect Home
+      ========================================= */
 
-      window.location.href =
-        "/home";
+      navigate("/");
 
     } catch (error) {
 

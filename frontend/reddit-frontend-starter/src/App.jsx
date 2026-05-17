@@ -44,15 +44,17 @@ function App() {
       <Routes>
 
         {/* =========================================
-            ROOT REDIRECT
+            ROOT ROUTE
         ========================================= */}
 
         <Route
           path="/"
           element={
+
             token
-              ? <Navigate to="/home" />
+              ? <HomePage />
               : <Navigate to="/login" />
+
           }
         />
 
@@ -62,7 +64,13 @@ function App() {
 
         <Route
           path="/login"
-          element={<LoginForm />}
+          element={
+
+            token
+              ? <Navigate to="/" />
+              : <LoginForm />
+
+          }
         />
 
         {/* =========================================
@@ -71,7 +79,13 @@ function App() {
 
         <Route
           path="/signup"
-          element={<SignupForm />}
+          element={
+
+            token
+              ? <Navigate to="/" />
+              : <SignupForm />
+
+          }
         />
 
         {/* =========================================
@@ -80,7 +94,13 @@ function App() {
 
         <Route
           path="/home"
-          element={<HomePage />}
+          element={
+
+            token
+              ? <HomePage />
+              : <Navigate to="/login" />
+
+          }
         />
 
         {/* =========================================
@@ -89,7 +109,13 @@ function App() {
 
         <Route
           path="/profile"
-          element={<ProfilePage />}
+          element={
+
+            token
+              ? <ProfilePage />
+              : <Navigate to="/login" />
+
+          }
         />
 
         {/* =========================================
@@ -98,7 +124,13 @@ function App() {
 
         <Route
           path="/post"
-          element={<CreatePostPage />}
+          element={
+
+            token
+              ? <CreatePostPage />
+              : <Navigate to="/login" />
+
+          }
         />
 
         {/* =========================================
@@ -107,7 +139,13 @@ function App() {
 
         <Route
           path="/create-community"
-          element={<CreateCommunityForm />}
+          element={
+
+            token
+              ? <CreateCommunityForm />
+              : <Navigate to="/login" />
+
+          }
         />
 
         {/* =========================================
@@ -116,12 +154,24 @@ function App() {
 
         <Route
           path="/community"
-          element={<CommunityPage />}
+          element={
+
+            token
+              ? <CommunityPage />
+              : <Navigate to="/login" />
+
+          }
         />
 
         <Route
           path="/community/:id"
-          element={<CommunityPage />}
+          element={
+
+            token
+              ? <CommunityPage />
+              : <Navigate to="/login" />
+
+          }
         />
 
         {/* =========================================
@@ -131,11 +181,9 @@ function App() {
         <Route
           path="*"
           element={
-
-            token
-              ? <Navigate to="/home" />
-              : <Navigate to="/login" />
-
+            <Navigate
+              to={token ? "/" : "/login"}
+            />
           }
         />
 
