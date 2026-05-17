@@ -51,10 +51,6 @@ function PostCard({
   const [showComments, setShowComments] =
     useState(false);
 
-  /* =========================================
-     VOTE STATE
-  ========================================= */
-
   const [voteCount, setVoteCount] =
     useState(votes || 0);
 
@@ -147,10 +143,6 @@ function PostCard({
         data
       );
 
-      /* =========================================
-         UPDATE VOTE COUNT
-      ========================================= */
-
       setVoteCount(
 
         data?.votes ??
@@ -197,10 +189,6 @@ function PostCard({
         "DOWNVOTE RESPONSE:",
         data
       );
-
-      /* =========================================
-         UPDATE VOTE COUNT
-      ========================================= */
 
       setVoteCount(
 
@@ -302,9 +290,7 @@ function PostCard({
 
       >
 
-        {/* =========================================
-           COMMUNITY TAG
-        ========================================= */}
+        {/* COMMUNITY */}
 
         <div
 
@@ -335,9 +321,7 @@ function PostCard({
 
         </div>
 
-        {/* =========================================
-           AUTHOR
-        ========================================= */}
+        {/* AUTHOR */}
 
         <div
 
@@ -422,9 +406,7 @@ function PostCard({
 
           </div>
 
-          {/* =========================================
-             VOTE COUNT
-          ========================================= */}
+          {/* VOTES */}
 
           <div
 
@@ -455,9 +437,7 @@ function PostCard({
 
         </div>
 
-        {/* =========================================
-           TITLE
-        ========================================= */}
+        {/* TITLE */}
 
         <h2
 
@@ -479,9 +459,7 @@ function PostCard({
 
         </h2>
 
-        {/* =========================================
-           CONTENT
-        ========================================= */}
+        {/* CONTENT */}
 
         <p
 
@@ -503,9 +481,7 @@ function PostCard({
 
         </p>
 
-        {/* =========================================
-           IMAGE
-        ========================================= */}
+        {/* IMAGE */}
 
         {
 
@@ -545,13 +521,6 @@ function PostCard({
 
                 }}
 
-                onError={(e) => {
-
-                  e.target.style.display =
-                    "none";
-
-                }}
-
               />
 
             </div>
@@ -560,9 +529,7 @@ function PostCard({
 
         }
 
-        {/* =========================================
-           ACTIONS
-        ========================================= */}
+        {/* ACTIONS */}
 
         <div
 
@@ -578,9 +545,7 @@ function PostCard({
 
         >
 
-          {/* =========================================
-             UPVOTE
-          ========================================= */}
+          {/* UPVOTE */}
 
           <button
 
@@ -621,9 +586,7 @@ function PostCard({
 
           </button>
 
-          {/* =========================================
-             DOWNVOTE
-          ========================================= */}
+          {/* DOWNVOTE */}
 
           <button
 
@@ -664,9 +627,231 @@ function PostCard({
 
           </button>
 
+          {/* COMMENTS */}
+
+          <button
+
+            onClick={() =>
+              setShowComments(
+                !showComments
+              )
+            }
+
+            style={{
+
+              background:
+                "linear-gradient(to right,#2563eb,#3b82f6)",
+
+              border: "none",
+
+              color: "white",
+
+              padding: "6px 10px",
+
+              borderRadius: "8px",
+
+              display: "flex",
+
+              alignItems: "center",
+
+              gap: "4px",
+
+              fontWeight: "700",
+
+              cursor: "pointer",
+
+              fontSize: "10px"
+
+            }}
+
+          >
+
+            <FaComment />
+
+            {
+
+              showComments
+                ? "Hide"
+                : commentsList.length
+
+            }
+
+          </button>
+
+          {/* EDIT / DELETE */}
+
+          {
+
+            showActions && (
+
+              <>
+
+                <button
+
+                  onClick={() =>
+                    setShowEditModal(true)
+                  }
+
+                  style={{
+
+                    background:
+                      "linear-gradient(to right,#f59e0b,#d97706)",
+
+                    border: "none",
+
+                    color: "white",
+
+                    padding: "6px 10px",
+
+                    borderRadius: "8px",
+
+                    display: "flex",
+
+                    alignItems: "center",
+
+                    gap: "4px",
+
+                    fontWeight: "700",
+
+                    cursor: "pointer",
+
+                    fontSize: "10px"
+
+                  }}
+
+                >
+
+                  <FaEdit />
+
+                  Edit
+
+                </button>
+
+                <button
+
+                  onClick={handleDelete}
+
+                  style={{
+
+                    background:
+                      "linear-gradient(to right,#dc2626,#b91c1c)",
+
+                    border: "none",
+
+                    color: "white",
+
+                    padding: "6px 10px",
+
+                    borderRadius: "8px",
+
+                    display: "flex",
+
+                    alignItems: "center",
+
+                    gap: "4px",
+
+                    fontWeight: "700",
+
+                    cursor: "pointer",
+
+                    fontSize: "10px"
+
+                  }}
+
+                >
+
+                  <FaTrash />
+
+                  Delete
+
+                </button>
+
+              </>
+
+            )
+
+          }
+
         </div>
 
+        {/* COMMENTS SECTION */}
+
+        {
+
+          showComments && (
+
+            <div
+              style={{
+                marginTop: "12px"
+              }}
+            >
+
+              <AddCommentForm
+
+                postId={id}
+
+                onCommentAdded={() => {
+
+                  fetchComments();
+
+                }}
+
+              />
+
+              <div
+                style={{
+                  marginTop: "12px"
+                }}
+              >
+
+                <CommentList
+
+                  postId={id}
+
+                  refreshTrigger={
+                    commentsList.length
+                  }
+
+                />
+
+              </div>
+
+            </div>
+
+          )
+
+        }
+
       </div>
+
+      {/* EDIT MODAL */}
+
+      {
+
+        showEditModal && (
+
+          <EditPostModal
+
+            post={{
+              id,
+              title,
+              content,
+              imageUrl
+            }}
+
+            onClose={() =>
+              setShowEditModal(false)
+            }
+
+            onPostUpdated={
+              onPostUpdated
+            }
+
+          />
+
+        )
+
+      }
 
     </>
 
