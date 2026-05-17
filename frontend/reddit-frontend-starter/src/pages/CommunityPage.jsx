@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { useParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate
+} from "react-router-dom";
 
 import Navbar from "../components/layout/Navbar";
 
@@ -29,6 +32,8 @@ function CommunityPage() {
   ========================================= */
 
   const { id } = useParams();
+
+  const navigate = useNavigate();
 
   /* =========================================
      Logged User
@@ -60,10 +65,28 @@ function CommunityPage() {
     useState(false);
 
   /* =========================================
+     FIX FOR /community ROUTE
+  ========================================= */
+
+  useEffect(() => {
+
+    if (!id) {
+
+      navigate("/community/1");
+
+      return;
+
+    }
+
+  }, [id, navigate]);
+
+  /* =========================================
      Load Data
   ========================================= */
 
   useEffect(() => {
+
+    if (!id) return;
 
     fetchCommunity();
 
@@ -113,14 +136,10 @@ function CommunityPage() {
       const data =
         await getPostsByCommunity(id);
 
-      /* Latest First */
-
       const sortedPosts =
 
         data.sort(
-
           (a, b) => b.id - a.id
-
         );
 
       setPosts(sortedPosts);
@@ -272,69 +291,9 @@ function CommunityPage() {
 
     >
 
-      {/* =========================================
-         Glow Effects
-      ========================================= */}
-
-      <div
-
-        style={{
-
-          position: "fixed",
-
-          top: "-120px",
-
-          left: "-120px",
-
-          width: "260px",
-
-          height: "260px",
-
-          background:
-            "rgba(37,99,235,0.14)",
-
-          filter: "blur(120px)",
-
-          zIndex: 0
-
-        }}
-
-      />
-
-      <div
-
-        style={{
-
-          position: "fixed",
-
-          bottom: "-120px",
-
-          right: "-120px",
-
-          width: "260px",
-
-          height: "260px",
-
-          background:
-            "rgba(59,130,246,0.12)",
-
-          filter: "blur(120px)",
-
-          zIndex: 0
-
-        }}
-
-      />
-
-      {/* =========================================
-         Navbar
-      ========================================= */}
+      {/* Background */}
 
       <Navbar />
-
-      {/* =========================================
-         Main Container
-      ========================================= */}
 
       <div
 
@@ -354,9 +313,7 @@ function CommunityPage() {
 
       >
 
-        {/* =========================================
-           Community Header
-        ========================================= */}
+        {/* Header */}
 
         {
 
@@ -376,18 +333,11 @@ function CommunityPage() {
 
                 padding: "24px",
 
-                marginBottom: "24px",
-
-                backdropFilter: "blur(12px)",
-
-                boxShadow:
-                  "0px 6px 24px rgba(0,0,0,0.25)"
+                marginBottom: "24px"
 
               }}
 
             >
-
-              {/* Top */}
 
               <div
 
@@ -407,8 +357,6 @@ function CommunityPage() {
 
               >
 
-                {/* Left */}
-
                 <div>
 
                   <h1
@@ -419,9 +367,7 @@ function CommunityPage() {
 
                       fontSize: "32px",
 
-                      fontWeight: "700",
-
-                      color: "#f8fafc"
+                      fontWeight: "700"
 
                     }}
 
@@ -437,13 +383,7 @@ function CommunityPage() {
 
                       marginTop: "10px",
 
-                      color: "#94a3b8",
-
-                      fontSize: "14px",
-
-                      lineHeight: "26px",
-
-                      maxWidth: "800px"
+                      color: "#94a3b8"
 
                     }}
 
@@ -461,8 +401,6 @@ function CommunityPage() {
 
                 </div>
 
-                {/* Join Button */}
-
                 {
 
                   joined ? (
@@ -473,26 +411,7 @@ function CommunityPage() {
 
                       disabled={joinLoading}
 
-                      style={{
-
-                        background:
-                          "linear-gradient(to right,#dc2626,#ef4444)",
-
-                        border: "none",
-
-                        color: "white",
-
-                        padding: "11px 18px",
-
-                        borderRadius: "12px",
-
-                        fontWeight: "700",
-
-                        cursor: "pointer",
-
-                        fontSize: "13px"
-
-                      }}
+                      style={buttonLeave}
 
                     >
 
@@ -508,26 +427,7 @@ function CommunityPage() {
 
                       disabled={joinLoading}
 
-                      style={{
-
-                        background:
-                          "linear-gradient(to right,#2563eb,#3b82f6)",
-
-                        border: "none",
-
-                        color: "white",
-
-                        padding: "11px 18px",
-
-                        borderRadius: "12px",
-
-                        fontWeight: "700",
-
-                        cursor: "pointer",
-
-                        fontSize: "13px"
-
-                      }}
+                      style={buttonJoin}
 
                     >
 
@@ -541,8 +441,6 @@ function CommunityPage() {
 
               </div>
 
-              {/* Stats */}
-
               <div
 
                 style={{
@@ -551,65 +449,19 @@ function CommunityPage() {
 
                   display: "flex",
 
-                  gap: "12px",
-
-                  flexWrap: "wrap"
+                  gap: "12px"
 
                 }}
 
               >
 
-                <div
-
-                  style={{
-
-                    background:
-                      "rgba(37,99,235,0.12)",
-
-                    border:
-                      "1px solid rgba(59,130,246,0.16)",
-
-                    borderRadius: "12px",
-
-                    padding: "8px 14px",
-
-                    color: "#dbeafe",
-
-                    fontSize: "12px",
-
-                    fontWeight: "600"
-
-                  }}
-
-                >
+                <div style={statsBlue}>
 
                   {posts.length} Posts
 
                 </div>
 
-                <div
-
-                  style={{
-
-                    background:
-                      "rgba(124,58,237,0.12)",
-
-                    border:
-                      "1px solid rgba(139,92,246,0.16)",
-
-                    borderRadius: "12px",
-
-                    padding: "8px 14px",
-
-                    color: "#ddd6fe",
-
-                    fontSize: "12px",
-
-                    fontWeight: "600"
-
-                  }}
-
-                >
+                <div style={statsPurple}>
 
                   {members} Members
 
@@ -623,11 +475,9 @@ function CommunityPage() {
 
         }
 
-        {/* =========================================
-           Discussion Title
-        ========================================= */}
+        {/* Title */}
 
-        <div
+        <h2
 
           style={{
 
@@ -637,31 +487,11 @@ function CommunityPage() {
 
         >
 
-          <h2
+          Community Discussions
 
-            style={{
+        </h2>
 
-              color: "#f8fafc",
-
-              fontSize: "22px",
-
-              fontWeight: "700",
-
-              margin: 0
-
-            }}
-
-          >
-
-            Community Discussions
-
-          </h2>
-
-        </div>
-
-        {/* =========================================
-           Loading
-        ========================================= */}
+        {/* Loading */}
 
         {
 
@@ -689,9 +519,7 @@ function CommunityPage() {
 
         }
 
-        {/* =========================================
-           Empty State
-        ========================================= */}
+        {/* Empty */}
 
         {
 
@@ -710,49 +538,17 @@ function CommunityPage() {
 
                 padding: "40px",
 
-                textAlign: "center",
-
-                border:
-                  "1px solid rgba(255,255,255,0.05)"
+                textAlign: "center"
 
               }}
 
             >
 
-              <h3
-
-                style={{
-
-                  color: "#f8fafc",
-
-                  marginBottom: "10px"
-
-                }}
-
-              >
+              <h3>
 
                 No Posts Yet 🚀
 
               </h3>
-
-              <p
-
-                style={{
-
-                  color: "#94a3b8",
-
-                  margin: 0,
-
-                  fontSize: "14px"
-
-                }}
-
-              >
-
-                Be the first person
-                to create a discussion.
-
-              </p>
 
             </div>
 
@@ -760,9 +556,7 @@ function CommunityPage() {
 
         }
 
-        {/* =========================================
-           Posts
-        ========================================= */}
+        {/* Posts */}
 
         <div
 
@@ -800,8 +594,6 @@ function CommunityPage() {
                   post.votes || 0
                 }
 
-                /* IMPORTANT FIX */
-
                 author={
                   post.author || ""
                 }
@@ -835,5 +627,85 @@ function CommunityPage() {
   );
 
 }
+
+/* Styles */
+
+const buttonJoin = {
+
+  background:
+    "linear-gradient(to right,#2563eb,#3b82f6)",
+
+  border: "none",
+
+  color: "white",
+
+  padding: "11px 18px",
+
+  borderRadius: "12px",
+
+  fontWeight: "700",
+
+  cursor: "pointer"
+
+};
+
+const buttonLeave = {
+
+  background:
+    "linear-gradient(to right,#dc2626,#ef4444)",
+
+  border: "none",
+
+  color: "white",
+
+  padding: "11px 18px",
+
+  borderRadius: "12px",
+
+  fontWeight: "700",
+
+  cursor: "pointer"
+
+};
+
+const statsBlue = {
+
+  background:
+    "rgba(37,99,235,0.12)",
+
+  border:
+    "1px solid rgba(59,130,246,0.16)",
+
+  borderRadius: "12px",
+
+  padding: "8px 14px",
+
+  color: "#dbeafe",
+
+  fontSize: "12px",
+
+  fontWeight: "600"
+
+};
+
+const statsPurple = {
+
+  background:
+    "rgba(124,58,237,0.12)",
+
+  border:
+    "1px solid rgba(139,92,246,0.16)",
+
+  borderRadius: "12px",
+
+  padding: "8px 14px",
+
+  color: "#ddd6fe",
+
+  fontSize: "12px",
+
+  fontWeight: "600"
+
+};
 
 export default CommunityPage;

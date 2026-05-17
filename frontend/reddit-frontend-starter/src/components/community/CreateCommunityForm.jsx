@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../layout/Navbar";
 
 import {
-
   createCommunity
-
 } from "../../services/communityService";
 
 function CreateCommunityForm() {
+
+  /* =========================================
+     Navigation
+  ========================================= */
 
   const navigate = useNavigate();
 
@@ -276,11 +278,7 @@ function CreateCommunityForm() {
              Form
           ========================================= */}
 
-          <form
-
-            onSubmit={handleSubmit}
-
-          >
+          <form onSubmit={handleSubmit}>
 
             {/* Community Name */}
 
