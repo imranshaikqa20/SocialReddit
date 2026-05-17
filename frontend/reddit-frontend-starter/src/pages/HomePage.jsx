@@ -98,7 +98,7 @@ function HomePage() {
       </style>
 
       {/* =========================================
-         BACKGROUND GLOW EFFECTS
+         BACKGROUND GLOW
       ========================================= */}
 
       <div
@@ -111,12 +111,12 @@ function HomePage() {
 
           left: "-120px",
 
-          width: "260px",
+          width: "280px",
 
-          height: "260px",
+          height: "280px",
 
           background:
-            "rgba(37,99,235,0.14)",
+            "rgba(37,99,235,0.15)",
 
           filter: "blur(120px)",
 
@@ -136,9 +136,9 @@ function HomePage() {
 
           right: "-120px",
 
-          width: "260px",
+          width: "280px",
 
-          height: "260px",
+          height: "280px",
 
           background:
             "rgba(59,130,246,0.12)",
@@ -193,11 +193,11 @@ function HomePage() {
 
           maxWidth: "1500px",
 
-          margin: "26px auto",
+          margin: "30px auto",
 
           display: "flex",
 
-          gap: "24px",
+          gap: "28px",
 
           alignItems: "flex-start",
 
@@ -220,7 +220,7 @@ function HomePage() {
         </div>
 
         {/* =========================================
-           FEED SECTION
+           FEED WRAPPER
         ========================================= */}
 
         <div
@@ -238,7 +238,7 @@ function HomePage() {
         >
 
           {/* =========================================
-             FEED HEADER
+             HEADER SECTION
           ========================================= */}
 
           <div
@@ -251,18 +251,18 @@ function HomePage() {
 
               alignItems: "center",
 
-              marginBottom: "26px",
-
               flexWrap: "wrap",
 
-              gap: "18px"
+              gap: "20px",
+
+              marginBottom: "28px"
 
             }}
 
           >
 
             {/* =========================================
-               LEFT CONTENT
+               LEFT
             ========================================= */}
 
             <div>
@@ -273,18 +273,16 @@ function HomePage() {
 
                   margin: 0,
 
-                  fontSize: "42px",
+                  fontSize: "44px",
 
                   fontWeight: "800",
 
+                  lineHeight: "54px",
+
                   color: "#f8fafc",
 
-                  letterSpacing: "0.5px",
-
-                  lineHeight: "52px",
-
                   textShadow:
-                    "0px 0px 14px rgba(59,130,246,0.22)"
+                    "0px 0px 18px rgba(59,130,246,0.20)"
 
                 }}
 
@@ -298,13 +296,13 @@ function HomePage() {
 
                 style={{
 
-                  marginTop: "10px",
+                  marginTop: "12px",
 
                   color: "#94a3b8",
 
                   fontSize: "15px",
 
-                  lineHeight: "28px",
+                  lineHeight: "30px",
 
                   maxWidth: "760px"
 
@@ -313,8 +311,8 @@ function HomePage() {
               >
 
                 Discover trending discussions,
-                memes, technology updates,
-                gaming news, ISRO launches
+                memes, gaming updates,
+                technology news, ISRO launches
                 and community posts from
                 creators around the world.
 
@@ -323,7 +321,7 @@ function HomePage() {
             </div>
 
             {/* =========================================
-               RIGHT BADGE
+               LIVE BADGE
             ========================================= */}
 
             <div
@@ -331,16 +329,14 @@ function HomePage() {
               style={{
 
                 background:
-                  "rgba(15,23,42,0.72)",
+                  "rgba(15,23,42,0.75)",
 
                 border:
-                  "1px solid rgba(59,130,246,0.16)",
+                  "1px solid rgba(59,130,246,0.18)",
 
-                backdropFilter: "blur(12px)",
+                padding: "14px 22px",
 
-                padding: "14px 20px",
-
-                borderRadius: "16px",
+                borderRadius: "18px",
 
                 color: "#dbeafe",
 
@@ -348,8 +344,10 @@ function HomePage() {
 
                 fontWeight: "700",
 
+                backdropFilter: "blur(14px)",
+
                 boxShadow:
-                  "0px 0px 20px rgba(37,99,235,0.12)"
+                  "0px 0px 24px rgba(37,99,235,0.12)"
 
               }}
 
@@ -362,7 +360,7 @@ function HomePage() {
           </div>
 
           {/* =========================================
-             POSTS CONTAINER
+             POSTS CARD
           ========================================= */}
 
           <div
@@ -370,21 +368,21 @@ function HomePage() {
             style={{
 
               background:
-                "rgba(15,23,42,0.50)",
-
-              borderRadius: "28px",
-
-              padding: "24px",
+                "rgba(15,23,42,0.58)",
 
               border:
                 "1px solid rgba(255,255,255,0.05)",
 
-              backdropFilter: "blur(14px)",
+              borderRadius: "30px",
+
+              padding: "26px",
+
+              backdropFilter: "blur(16px)",
 
               boxShadow:
-                "0px 10px 35px rgba(0,0,0,0.34)",
+                "0px 10px 40px rgba(0,0,0,0.34)",
 
-              minHeight: "400px"
+              minHeight: "500px"
 
             }}
 
