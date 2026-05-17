@@ -1,48 +1,98 @@
 package com.socialmedia.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "communities")
+
 public class Community {
 
-    /* Primary Key */
+    /* =========================================
+       PRIMARY KEY
+    ========================================= */
 
     @Id
+
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
+
     private Long id;
 
-    /* Community Name */
+    /* =========================================
+       COMMUNITY NAME
+    ========================================= */
 
     @Column(
             nullable = false,
             unique = true,
             length = 100
     )
+
     private String name;
 
-    /* Community Description */
+    /* =========================================
+       COMMUNITY DESCRIPTION
+    ========================================= */
 
     @Column(length = 1000)
+
     private String description;
 
-    /* Community Owner */
+    /* =========================================
+       COMMUNITY OWNER
+    ========================================= */
 
-    @ManyToOne
+    @ManyToOne(
+            fetch = FetchType.LAZY
+    )
+
     @JoinColumn(name = "user_id")
-    @JsonIgnore
+
+    @JsonIgnoreProperties({
+            "posts",
+            "password",
+            "hibernateLazyInitializer",
+            "handler"
+    })
+
     private User user;
 
-    /* Created Time */
+    /* =========================================
+       COMMUNITY POSTS
+    ========================================= */
+
+    @OneToMany(
+
+            mappedBy = "community",
+
+            cascade = CascadeType.ALL,
+
+            orphanRemoval = true
+
+    )
+
+    @JsonIgnoreProperties("community")
+
+    private List<Post> posts =
+            new ArrayList<>();
+
+    /* =========================================
+       CREATED TIME
+    ========================================= */
 
     private LocalDateTime createdAt;
 
-    /* Default Constructor */
+    /* =========================================
+       DEFAULT CONSTRUCTOR
+    ========================================= */
 
     public Community() {
 
@@ -51,9 +101,12 @@ public class Community {
 
     }
 
-    /* Before Persist */
+    /* =========================================
+       BEFORE PERSIST
+    ========================================= */
 
     @PrePersist
+
     public void prePersist() {
 
         if (createdAt == null) {
@@ -65,7 +118,9 @@ public class Community {
 
     }
 
-    /* Getters & Setters */
+    /* =========================================
+       GETTERS & SETTERS
+    ========================================= */
 
     public Long getId() {
 
@@ -115,6 +170,20 @@ public class Community {
     public void setUser(User user) {
 
         this.user = user;
+
+    }
+
+    public List<Post> getPosts() {
+
+        return posts;
+
+    }
+
+    public void setPosts(
+            List<Post> posts
+    ) {
+
+        this.posts = posts;
 
     }
 

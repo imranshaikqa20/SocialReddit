@@ -23,14 +23,16 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+
 public class SecurityConfig {
 
     /* =========================================
-       Password Encoder
+       PASSWORD ENCODER
     ========================================= */
 
     @Bean
@@ -41,30 +43,32 @@ public class SecurityConfig {
     }
 
     /* =========================================
-       Security Filter Chain
+       SECURITY FILTER CHAIN
     ========================================= */
 
     @Bean
     public SecurityFilterChain securityFilterChain(
+
             HttpSecurity http
+
     ) throws Exception {
 
         http
 
                 /* =====================================
-                   Disable CSRF
+                   DISABLE CSRF
                 ===================================== */
 
                 .csrf(csrf -> csrf.disable())
 
                 /* =====================================
-                   Enable CORS
+                   ENABLE CORS
                 ===================================== */
 
                 .cors(Customizer.withDefaults())
 
                 /* =====================================
-                   Stateless Session
+                   STATELESS SESSION
                 ===================================== */
 
                 .sessionManagement(session ->
@@ -78,7 +82,7 @@ public class SecurityConfig {
                 )
 
                 /* =====================================
-                   Disable Default Spring Login
+                   DISABLE DEFAULT LOGIN
                 ===================================== */
 
                 .formLogin(form -> form.disable())
@@ -88,7 +92,7 @@ public class SecurityConfig {
                 .logout(logout -> logout.disable())
 
                 /* =====================================
-                   Authorization Rules
+                   AUTHORIZATION RULES
                 ===================================== */
 
                 .authorizeHttpRequests(auth -> auth
@@ -103,7 +107,7 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* Auth */
+                        /* AUTH */
 
                         .requestMatchers(
 
@@ -111,7 +115,7 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* Posts */
+                        /* POSTS */
 
                         .requestMatchers(
 
@@ -119,7 +123,7 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* Communities */
+                        /* COMMUNITIES */
 
                         .requestMatchers(
 
@@ -127,7 +131,7 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* Comments */
+                        /* COMMENTS */
 
                         .requestMatchers(
 
@@ -135,7 +139,7 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* Uploads */
+                        /* UPLOADS */
 
                         .requestMatchers(
 
@@ -143,7 +147,7 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* Swagger */
+                        /* SWAGGER */
 
                         .requestMatchers(
 
@@ -153,9 +157,9 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        /* Everything Else */
+                        /* EVERYTHING ELSE */
 
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
 
                 );
 
@@ -164,7 +168,7 @@ public class SecurityConfig {
     }
 
     /* =========================================
-       CORS Configuration
+       CORS CONFIGURATION
     ========================================= */
 
     @Bean
@@ -173,11 +177,17 @@ public class SecurityConfig {
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
+        /* =====================================
+           ALLOWED ORIGINS
+        ===================================== */
+
         configuration.setAllowedOriginPatterns(
 
-                List.of(
+                Arrays.asList(
 
                         "http://localhost:5173",
+
+                        "http://localhost:3000",
 
                         "https://*.onrender.com"
 
@@ -185,9 +195,13 @@ public class SecurityConfig {
 
         );
 
+        /* =====================================
+           ALLOWED METHODS
+        ===================================== */
+
         configuration.setAllowedMethods(
 
-                List.of(
+                Arrays.asList(
 
                         "GET",
 
@@ -203,25 +217,47 @@ public class SecurityConfig {
 
         );
 
+        /* =====================================
+           ALLOWED HEADERS
+        ===================================== */
+
         configuration.setAllowedHeaders(
 
                 List.of("*")
 
         );
 
+        /* =====================================
+           EXPOSED HEADERS
+        ===================================== */
+
         configuration.setExposedHeaders(
 
-                List.of(
+                Arrays.asList(
 
-                        "Authorization"
+                        "Authorization",
+
+                        "Content-Type"
 
                 )
 
         );
 
+        /* =====================================
+           CREDENTIALS
+        ===================================== */
+
         configuration.setAllowCredentials(true);
 
+        /* =====================================
+           CACHE
+        ===================================== */
+
         configuration.setMaxAge(3600L);
+
+        /* =====================================
+           REGISTER
+        ===================================== */
 
         UrlBasedCorsConfigurationSource source =
 

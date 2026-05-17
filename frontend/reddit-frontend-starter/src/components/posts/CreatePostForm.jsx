@@ -11,13 +11,13 @@ import {
 function CreatePostForm() {
 
   /* =========================================
-     Navigation
+     NAVIGATION
   ========================================= */
 
   const navigate = useNavigate();
 
   /* =========================================
-     Form States
+     FORM STATES
   ========================================= */
 
   const [title, setTitle] =
@@ -26,25 +26,28 @@ function CreatePostForm() {
   const [content, setContent] =
     useState("");
 
+  const [imageUrl, setImageUrl] =
+    useState("");
+
   const [communityId, setCommunityId] =
     useState("");
 
   /* =========================================
-     Communities
+     COMMUNITIES
   ========================================= */
 
   const [communities, setCommunities] =
     useState([]);
 
   /* =========================================
-     Loading
+     LOADING
   ========================================= */
 
   const [loading, setLoading] =
     useState(false);
 
   /* =========================================
-     Logged User
+     LOGGED USER
   ========================================= */
 
   const username =
@@ -56,7 +59,7 @@ function CreatePostForm() {
     "Anonymous";
 
   /* =========================================
-     Fetch Communities
+     FETCH COMMUNITIES
   ========================================= */
 
   useEffect(() => {
@@ -72,11 +75,22 @@ function CreatePostForm() {
       const data =
         await getAllCommunities();
 
-      setCommunities(data || []);
+      const safeData =
+
+        Array.isArray(data)
+
+          ? data
+
+          : [];
+
+      setCommunities(safeData);
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "COMMUNITY FETCH ERROR :",
+        error.response?.data || error.message
+      );
 
       setCommunities([]);
 
@@ -85,12 +99,14 @@ function CreatePostForm() {
   };
 
   /* =========================================
-     Submit
+     SUBMIT
   ========================================= */
 
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+
+    /* VALIDATION */
 
     if (
 
@@ -115,10 +131,10 @@ function CreatePostForm() {
       setLoading(true);
 
       /* =========================================
-         Create Post
+         CREATE POST
       ========================================= */
 
-      await createPost({
+      const payload = {
 
         title:
           title.trim(),
@@ -126,34 +142,52 @@ function CreatePostForm() {
         content:
           content.trim(),
 
-        author: username,
+        imageUrl:
+          imageUrl.trim(),
+
+        author:
+          username || "Anonymous",
 
         communityId:
           Number(communityId)
 
-      });
+      };
+
+      console.log(
+        "POST PAYLOAD =>",
+        payload
+      );
+
+      await createPost(payload);
 
       alert(
         "Post Created Successfully 🚀"
       );
 
-      /* Reset */
+      /* RESET FORM */
 
       setTitle("");
 
       setContent("");
 
+      setImageUrl("");
+
       setCommunityId("");
 
-      /* Redirect */
+      /* REDIRECT */
 
       navigate("/home");
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "CREATE POST ERROR :",
+        error.response?.data || error.message
+      );
 
       alert(
+
+        error?.response?.data?.message ||
 
         error?.response?.data?.error ||
 
@@ -175,363 +209,217 @@ function CreatePostForm() {
 
       style={{
 
-        minHeight: "100vh",
-
-        background:
-          "linear-gradient(to bottom,#020617,#020617)",
-
-        padding: "40px 16px",
-
-        display: "flex",
-
-        justifyContent: "center",
-
-        alignItems: "flex-start"
+        width: "100%"
 
       }}
 
     >
 
-      {/* Main Card */}
+      {/* =========================================
+         HEADING
+      ========================================= */}
 
       <div
-
         style={{
-
-          width: "100%",
-
-          maxWidth: "700px",
-
-          background:
-            "linear-gradient(135deg,#0f172a,#111827)",
-
-          border:
-            "1px solid rgba(59,130,246,0.08)",
-
-          borderRadius: "22px",
-
-          padding: "24px",
-
-          boxShadow:
-            "0 6px 24px rgba(0,0,0,0.30)",
-
-          backdropFilter: "blur(10px)"
-
+          marginBottom: "22px"
         }}
-
       >
 
-        {/* Heading */}
+        <h1
+
+          style={{
+
+            margin: 0,
+
+            color: "#f8fafc",
+
+            fontSize: "28px",
+
+            fontWeight: "800"
+
+          }}
+
+        >
+
+          Create New Post 🚀
+
+        </h1>
+
+        <p
+
+          style={{
+
+            marginTop: "8px",
+
+            color: "#94a3b8",
+
+            fontSize: "13px",
+
+            lineHeight: "22px"
+
+          }}
+
+        >
+
+          Share discussions and
+          updates with your
+          community.
+
+        </p>
+
+      </div>
+
+      {/* =========================================
+         FORM
+      ========================================= */}
+
+      <form onSubmit={handleSubmit}>
+
+        {/* =========================================
+           COMMUNITY
+        ========================================= */}
 
         <div
           style={{
-            marginBottom: "22px"
+            marginBottom: "18px"
           }}
         >
 
-          <h1
+          <label
 
             style={{
 
-              margin: 0,
+              display: "block",
+
+              marginBottom: "8px",
+
+              color: "#dbeafe",
+
+              fontWeight: "600",
+
+              fontSize: "14px"
+
+            }}
+
+          >
+
+            Select Community
+
+          </label>
+
+          <select
+
+            value={communityId}
+
+            onChange={(e) =>
+
+              setCommunityId(
+                e.target.value
+              )
+
+            }
+
+            style={{
+
+              width: "100%",
+
+              padding: "13px",
+
+              borderRadius: "14px",
+
+              border:
+                "1px solid rgba(59,130,246,0.14)",
+
+              background:
+                "rgba(30,41,59,0.85)",
 
               color: "#f8fafc",
 
-              fontSize: "28px",
+              outline: "none",
 
-              fontWeight: "800"
-
-            }}
-
-          >
-
-            Create New Post
-
-          </h1>
-
-          <p
-
-            style={{
-
-              marginTop: "8px",
-
-              color: "#94a3b8",
-
-              fontSize: "13px",
-
-              lineHeight: "22px"
+              fontSize: "14px"
 
             }}
 
           >
 
-            Share discussions and
-            updates with your
-            community.
+            <option value="">
+              Choose Community
+            </option>
 
-          </p>
+            {
+
+              communities.map(
+                (community) => (
+
+                  <option
+
+                    key={community.id}
+
+                    value={community.id}
+
+                  >
+
+                    {community.name}
+
+                  </option>
+
+                )
+              )
+
+            }
+
+          </select>
 
         </div>
 
-        {/* Form */}
+        {/* =========================================
+           TITLE
+        ========================================= */}
 
-        <form onSubmit={handleSubmit}>
+        <div
+          style={{
+            marginBottom: "18px"
+          }}
+        >
 
-          {/* Community */}
+          <label
 
-          <div
             style={{
-              marginBottom: "18px"
+
+              display: "block",
+
+              marginBottom: "8px",
+
+              color: "#dbeafe",
+
+              fontWeight: "600",
+
+              fontSize: "14px"
+
             }}
+
           >
 
-            <label
+            Post Title
 
-              style={{
+          </label>
 
-                display: "block",
+          <input
 
-                marginBottom: "8px",
+            type="text"
 
-                color: "#dbeafe",
+            placeholder="Enter your post title..."
 
-                fontWeight: "600",
+            value={title}
 
-                fontSize: "14px"
+            onChange={(e) =>
 
-              }}
+              setTitle(
+                e.target.value
+              )
 
-            >
-
-              Select Community
-
-            </label>
-
-            <select
-
-              value={communityId}
-
-              onChange={(e) =>
-
-                setCommunityId(
-                  e.target.value
-                )
-
-              }
-
-              style={{
-
-                width: "100%",
-
-                padding: "13px",
-
-                borderRadius: "14px",
-
-                border:
-                  "1px solid rgba(59,130,246,0.14)",
-
-                background:
-                  "rgba(30,41,59,0.85)",
-
-                color: "#f8fafc",
-
-                outline: "none",
-
-                fontSize: "14px"
-
-              }}
-
-            >
-
-              <option value="">
-                Choose Community
-              </option>
-
-              {
-
-                communities.map(
-                  (community) => (
-
-                    <option
-
-                      key={community.id}
-
-                      value={community.id}
-
-                    >
-
-                      {community.name}
-
-                    </option>
-
-                  )
-                )
-
-              }
-
-            </select>
-
-          </div>
-
-          {/* Title */}
-
-          <div
-            style={{
-              marginBottom: "18px"
-            }}
-          >
-
-            <label
-
-              style={{
-
-                display: "block",
-
-                marginBottom: "8px",
-
-                color: "#dbeafe",
-
-                fontWeight: "600",
-
-                fontSize: "14px"
-
-              }}
-
-            >
-
-              Post Title
-
-            </label>
-
-            <input
-
-              type="text"
-
-              placeholder="Enter your post title..."
-
-              value={title}
-
-              onChange={(e) =>
-
-                setTitle(
-                  e.target.value
-                )
-
-              }
-
-              style={{
-
-                width: "100%",
-
-                padding: "14px",
-
-                borderRadius: "14px",
-
-                border:
-                  "1px solid rgba(59,130,246,0.14)",
-
-                background:
-                  "rgba(30,41,59,0.85)",
-
-                color: "#f8fafc",
-
-                outline: "none",
-
-                fontSize: "14px",
-
-                boxSizing: "border-box"
-
-              }}
-
-            />
-
-          </div>
-
-          {/* Content */}
-
-          <div
-            style={{
-              marginBottom: "24px"
-            }}
-          >
-
-            <label
-
-              style={{
-
-                display: "block",
-
-                marginBottom: "8px",
-
-                color: "#dbeafe",
-
-                fontWeight: "600",
-
-                fontSize: "14px"
-
-              }}
-
-            >
-
-              Content
-
-            </label>
-
-            <textarea
-
-              rows="6"
-
-              placeholder="Write your post content..."
-
-              value={content}
-
-              onChange={(e) =>
-
-                setContent(
-                  e.target.value
-                )
-
-              }
-
-              style={{
-
-                width: "100%",
-
-                padding: "15px",
-
-                borderRadius: "14px",
-
-                border:
-                  "1px solid rgba(59,130,246,0.14)",
-
-                background:
-                  "rgba(30,41,59,0.85)",
-
-                color: "#f8fafc",
-
-                outline: "none",
-
-                resize: "none",
-
-                fontSize: "14px",
-
-                lineHeight: "24px",
-
-                boxSizing: "border-box"
-
-              }}
-
-            />
-
-          </div>
-
-          {/* Submit */}
-
-          <button
-
-            type="submit"
-
-            disabled={loading}
+            }
 
             style={{
 
@@ -539,43 +427,235 @@ function CreatePostForm() {
 
               padding: "14px",
 
-              border: "none",
+              borderRadius: "14px",
 
-              borderRadius: "15px",
+              border:
+                "1px solid rgba(59,130,246,0.14)",
 
               background:
-                "linear-gradient(to right,#2563eb,#3b82f6)",
+                "rgba(30,41,59,0.85)",
 
-              color: "white",
+              color: "#f8fafc",
 
-              fontSize: "15px",
+              outline: "none",
 
-              fontWeight: "700",
+              fontSize: "14px",
 
-              cursor: "pointer",
+              boxSizing: "border-box"
 
-              opacity:
-                loading ? 0.7 : 1
+            }}
+
+          />
+
+        </div>
+
+        {/* =========================================
+           CONTENT
+        ========================================= */}
+
+        <div
+          style={{
+            marginBottom: "18px"
+          }}
+        >
+
+          <label
+
+            style={{
+
+              display: "block",
+
+              marginBottom: "8px",
+
+              color: "#dbeafe",
+
+              fontWeight: "600",
+
+              fontSize: "14px"
 
             }}
 
           >
 
-            {
+            Content
 
-              loading
+          </label>
 
-                ? "Publishing Post..."
+          <textarea
 
-                : "Publish Post"
+            rows="6"
+
+            placeholder="Write your post content..."
+
+            value={content}
+
+            onChange={(e) =>
+
+              setContent(
+                e.target.value
+              )
 
             }
 
-          </button>
+            style={{
 
-        </form>
+              width: "100%",
 
-      </div>
+              padding: "15px",
+
+              borderRadius: "14px",
+
+              border:
+                "1px solid rgba(59,130,246,0.14)",
+
+              background:
+                "rgba(30,41,59,0.85)",
+
+              color: "#f8fafc",
+
+              outline: "none",
+
+              resize: "none",
+
+              fontSize: "14px",
+
+              lineHeight: "24px",
+
+              boxSizing: "border-box"
+
+            }}
+
+          />
+
+        </div>
+
+        {/* =========================================
+           IMAGE URL
+        ========================================= */}
+
+        <div
+          style={{
+            marginBottom: "24px"
+          }}
+        >
+
+          <label
+
+            style={{
+
+              display: "block",
+
+              marginBottom: "8px",
+
+              color: "#dbeafe",
+
+              fontWeight: "600",
+
+              fontSize: "14px"
+
+            }}
+
+          >
+
+            Image URL (Optional)
+
+          </label>
+
+          <input
+
+            type="text"
+
+            placeholder="Paste image URL..."
+
+            value={imageUrl}
+
+            onChange={(e) =>
+
+              setImageUrl(
+                e.target.value
+              )
+
+            }
+
+            style={{
+
+              width: "100%",
+
+              padding: "14px",
+
+              borderRadius: "14px",
+
+              border:
+                "1px solid rgba(59,130,246,0.14)",
+
+              background:
+                "rgba(30,41,59,0.85)",
+
+              color: "#f8fafc",
+
+              outline: "none",
+
+              fontSize: "14px",
+
+              boxSizing: "border-box"
+
+            }}
+
+          />
+
+        </div>
+
+        {/* =========================================
+           SUBMIT
+        ========================================= */}
+
+        <button
+
+          type="submit"
+
+          disabled={loading}
+
+          style={{
+
+            width: "100%",
+
+            padding: "14px",
+
+            border: "none",
+
+            borderRadius: "15px",
+
+            background:
+              "linear-gradient(to right,#2563eb,#3b82f6)",
+
+            color: "white",
+
+            fontSize: "15px",
+
+            fontWeight: "700",
+
+            cursor: "pointer",
+
+            opacity:
+              loading ? 0.7 : 1
+
+          }}
+
+        >
+
+          {
+
+            loading
+
+              ? "Publishing Post..."
+
+              : "Publish Post"
+
+          }
+
+        </button>
+
+      </form>
 
     </div>
 

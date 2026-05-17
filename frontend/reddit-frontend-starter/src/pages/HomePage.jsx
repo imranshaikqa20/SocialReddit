@@ -9,7 +9,7 @@ import CommunitySidebar from "../components/community/CommunitySidebar";
 function HomePage() {
 
   /* =========================================
-     Search State
+     SEARCH STATE
   ========================================= */
 
   const [searchTerm, setSearchTerm] =
@@ -35,7 +35,7 @@ function HomePage() {
     >
 
       {/* =========================================
-         Global Styles
+         GLOBAL STYLES
       ========================================= */}
 
       <style>
@@ -92,7 +92,7 @@ function HomePage() {
       </style>
 
       {/* =========================================
-         Background Glow Effects
+         BACKGROUND GLOW EFFECTS
       ========================================= */}
 
       <div
@@ -146,15 +146,21 @@ function HomePage() {
       />
 
       {/* =========================================
-         Navbar
+         NAVBAR
       ========================================= */}
 
       <div
+
         style={{
+
           position: "sticky",
+
           top: 0,
+
           zIndex: 100
+
         }}
+
       >
 
         <Navbar
@@ -168,7 +174,7 @@ function HomePage() {
       </div>
 
       {/* =========================================
-         Main Layout
+         MAIN LAYOUT
       ========================================= */}
 
       <div
@@ -198,13 +204,13 @@ function HomePage() {
       >
 
         {/* =========================================
-           Sidebar
+           COMMUNITY SIDEBAR
         ========================================= */}
 
         <CommunitySidebar />
 
         {/* =========================================
-           Feed Section
+           FEED SECTION
         ========================================= */}
 
         <div
@@ -222,7 +228,7 @@ function HomePage() {
         >
 
           {/* =========================================
-             Feed Header
+             FEED HEADER
           ========================================= */}
 
           <div
@@ -245,7 +251,7 @@ function HomePage() {
 
           >
 
-            {/* Left Content */}
+            {/* LEFT CONTENT */}
 
             <div>
 
@@ -301,7 +307,7 @@ function HomePage() {
 
             </div>
 
-            {/* Right Badge */}
+            {/* RIGHT BADGE */}
 
             <div
 
@@ -332,14 +338,14 @@ function HomePage() {
 
             >
 
-               Live Community Feed
+              🔴 Live Community Feed
 
             </div>
 
           </div>
 
           {/* =========================================
-             Feed Wrapper
+             FEED WRAPPER
           ========================================= */}
 
           <div
@@ -359,19 +365,21 @@ function HomePage() {
               backdropFilter: "blur(14px)",
 
               boxShadow:
-                "0px 8px 30px rgba(0,0,0,0.30)"
+                "0px 8px 30px rgba(0,0,0,0.30)",
+
+              minHeight: "300px"
 
             }}
 
           >
 
             {/* =========================================
-               Feed List
+               POSTS LIST
             ========================================= */}
 
             <PostList
 
-              searchTerm={searchTerm}
+              searchTerm={searchTerm || ""}
 
             />
 

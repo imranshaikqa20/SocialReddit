@@ -1,6 +1,7 @@
 package com.socialmedia.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
 
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
 public class Comment {
 
     /* =========================================
-       Comment ID
+       COMMENT ID
     ========================================= */
 
     @Id
@@ -35,7 +36,7 @@ public class Comment {
     private Long id;
 
     /* =========================================
-       Comment Content
+       COMMENT CONTENT
     ========================================= */
 
     @Column(
@@ -46,20 +47,21 @@ public class Comment {
     private String content;
 
     /* =========================================
-       Comment Author
+       COMMENT AUTHOR
     ========================================= */
+
+    @Column(nullable = false)
 
     private String author;
 
     /* =========================================
-       Created Time
+       CREATED TIME
     ========================================= */
 
-    private LocalDateTime createdAt =
-            LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     /* =========================================
-       Post Relation
+       POST RELATION
     ========================================= */
 
     @ManyToOne(
@@ -72,6 +74,45 @@ public class Comment {
 
     @JsonBackReference
 
+    @JsonIgnoreProperties({
+            "commentsList",
+            "hibernateLazyInitializer",
+            "handler"
+    })
+
     private Post post;
+
+    /* =========================================
+       BEFORE INSERT
+    ========================================= */
+
+    @PrePersist
+
+    public void prePersist() {
+
+        /* Created Time */
+
+        if (createdAt == null) {
+
+            createdAt =
+                    LocalDateTime.now();
+
+        }
+
+        /* Default Author */
+
+        if (
+
+                author == null ||
+
+                        author.trim().isEmpty()
+
+        ) {
+
+            author = "Anonymous";
+
+        }
+
+    }
 
 }

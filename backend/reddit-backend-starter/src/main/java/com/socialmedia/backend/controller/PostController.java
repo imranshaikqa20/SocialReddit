@@ -20,7 +20,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/posts")
-@CrossOrigin(origins = "*")
+
+@CrossOrigin(
+        origins = "*",
+        allowedHeaders = "*"
+)
+
 public class PostController {
 
     @Autowired
@@ -30,7 +35,7 @@ public class PostController {
     private FileUploadService fileUploadService;
 
     /* =========================================
-       Create New Post
+       CREATE POST
     ========================================= */
 
     @PostMapping
@@ -43,6 +48,56 @@ public class PostController {
 
         try {
 
+            /* VALIDATION */
+
+            if (
+
+                    request.getTitle() == null ||
+
+                            request.getTitle().trim().isEmpty()
+
+            ) {
+
+                return ResponseEntity
+                        .badRequest()
+                        .body(
+                                "Post title is required"
+                        );
+
+            }
+
+            if (
+
+                    request.getContent() == null ||
+
+                            request.getContent().trim().isEmpty()
+
+            ) {
+
+                return ResponseEntity
+                        .badRequest()
+                        .body(
+                                "Post content is required"
+                        );
+
+            }
+
+            if (
+
+                    request.getCommunityId() == null
+
+            ) {
+
+                return ResponseEntity
+                        .badRequest()
+                        .body(
+                                "Community is required"
+                        );
+
+            }
+
+            /* CREATE */
+
             PostResponse createdPost =
 
                     postService.createPost(request);
@@ -52,6 +107,8 @@ public class PostController {
                     .body(createdPost);
 
         } catch (Exception e) {
+
+            e.printStackTrace();
 
             return ResponseEntity
                     .status(
@@ -69,7 +126,7 @@ public class PostController {
     }
 
     /* =========================================
-       Upload Image
+       IMAGE UPLOAD
     ========================================= */
 
     @PostMapping("/upload")
@@ -82,7 +139,7 @@ public class PostController {
 
         try {
 
-            /* Validation */
+            /* EMPTY FILE */
 
             if (file.isEmpty()) {
 
@@ -94,13 +151,13 @@ public class PostController {
 
             }
 
-            /* Upload */
+            /* UPLOAD */
 
             String imageUrl =
 
                     fileUploadService.uploadFile(file);
 
-            /* Response */
+            /* RESPONSE */
 
             Map<String, String> response =
                     new HashMap<>();
@@ -113,6 +170,8 @@ public class PostController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
+
+            e.printStackTrace();
 
             return ResponseEntity
                     .status(
@@ -130,23 +189,41 @@ public class PostController {
     }
 
     /* =========================================
-       Get All Posts
+       GET ALL POSTS
     ========================================= */
 
     @GetMapping
-    public ResponseEntity<List<PostResponse>>
-    getAllPosts() {
+    public ResponseEntity<?> getAllPosts() {
 
-        List<PostResponse> posts =
+        try {
 
-                postService.getAllPosts();
+            List<PostResponse> posts =
 
-        return ResponseEntity.ok(posts);
+                    postService.getAllPosts();
+
+            return ResponseEntity.ok(posts);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return ResponseEntity
+                    .status(
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                    )
+                    .body(
+
+                            "Failed to fetch posts : "
+                                    + e.getMessage()
+
+                    );
+
+        }
 
     }
 
     /* =========================================
-       Get Posts By Community
+       GET POSTS BY COMMUNITY
     ========================================= */
 
     @GetMapping("/community/{communityId}")
@@ -169,6 +246,8 @@ public class PostController {
 
         } catch (Exception e) {
 
+            e.printStackTrace();
+
             return ResponseEntity
                     .status(
                             HttpStatus.INTERNAL_SERVER_ERROR
@@ -185,28 +264,46 @@ public class PostController {
     }
 
     /* =========================================
-       Search Posts
+       SEARCH POSTS
     ========================================= */
 
     @GetMapping("/search")
-    public ResponseEntity<List<PostResponse>>
-    searchPosts(
+    public ResponseEntity<?> searchPosts(
 
             @RequestParam
             String keyword
 
     ) {
 
-        List<PostResponse> posts =
+        try {
 
-                postService.searchPosts(keyword);
+            List<PostResponse> posts =
 
-        return ResponseEntity.ok(posts);
+                    postService.searchPosts(keyword);
+
+            return ResponseEntity.ok(posts);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return ResponseEntity
+                    .status(
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                    )
+                    .body(
+
+                            "Search failed : "
+                                    + e.getMessage()
+
+                    );
+
+        }
 
     }
 
     /* =========================================
-       Get Single Post
+       GET SINGLE POST
     ========================================= */
 
     @GetMapping("/{id}")
@@ -227,6 +324,8 @@ public class PostController {
 
         } catch (Exception e) {
 
+            e.printStackTrace();
+
             return ResponseEntity
                     .status(
                             HttpStatus.NOT_FOUND
@@ -240,7 +339,7 @@ public class PostController {
     }
 
     /* =========================================
-       Edit Post
+       UPDATE POST
     ========================================= */
 
     @PutMapping("/{id}")
@@ -267,6 +366,8 @@ public class PostController {
 
         } catch (Exception e) {
 
+            e.printStackTrace();
+
             return ResponseEntity
                     .status(
                             HttpStatus.INTERNAL_SERVER_ERROR
@@ -283,7 +384,7 @@ public class PostController {
     }
 
     /* =========================================
-       Upvote Post
+       UPVOTE POST
     ========================================= */
 
     @PutMapping("/{id}/upvote")
@@ -304,6 +405,8 @@ public class PostController {
 
         } catch (Exception e) {
 
+            e.printStackTrace();
+
             return ResponseEntity
                     .status(
                             HttpStatus.INTERNAL_SERVER_ERROR
@@ -320,7 +423,7 @@ public class PostController {
     }
 
     /* =========================================
-       Downvote Post
+       DOWNVOTE POST
     ========================================= */
 
     @PutMapping("/{id}/downvote")
@@ -341,6 +444,8 @@ public class PostController {
 
         } catch (Exception e) {
 
+            e.printStackTrace();
+
             return ResponseEntity
                     .status(
                             HttpStatus.INTERNAL_SERVER_ERROR
@@ -357,7 +462,7 @@ public class PostController {
     }
 
     /* =========================================
-       Delete Post
+       DELETE POST
     ========================================= */
 
     @DeleteMapping("/{id}")
@@ -379,6 +484,8 @@ public class PostController {
             );
 
         } catch (Exception e) {
+
+            e.printStackTrace();
 
             return ResponseEntity
                     .status(

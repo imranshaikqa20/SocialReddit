@@ -26,7 +26,47 @@ function CreatePostPage() {
     >
 
       {/* =========================================
-         Background Glow
+         GLOBAL STYLES
+      ========================================= */}
+
+      <style>
+
+        {`
+
+          * {
+            box-sizing: border-box;
+          }
+
+          body {
+            margin: 0;
+            padding: 0;
+            background: #020617;
+            font-family: Arial, sans-serif;
+          }
+
+          ::-webkit-scrollbar {
+            width: 8px;
+          }
+
+          ::-webkit-scrollbar-track {
+            background: #020617;
+          }
+
+          ::-webkit-scrollbar-thumb {
+            background: linear-gradient(
+              to bottom,
+              #2563eb,
+              #3b82f6
+            );
+            border-radius: 20px;
+          }
+
+        `}
+
+      </style>
+
+      {/* =========================================
+         BACKGROUND GLOW
       ========================================= */}
 
       <div
@@ -80,7 +120,7 @@ function CreatePostPage() {
       />
 
       {/* =========================================
-         Navbar
+         NAVBAR
       ========================================= */}
 
       <div
@@ -102,7 +142,7 @@ function CreatePostPage() {
       </div>
 
       {/* =========================================
-         Main Wrapper
+         MAIN WRAPPER
       ========================================= */}
 
       <div
@@ -128,7 +168,7 @@ function CreatePostPage() {
       >
 
         {/* =========================================
-           Form Container
+           FORM CONTAINER
         ========================================= */}
 
         <div
@@ -157,6 +197,70 @@ function CreatePostPage() {
           }}
 
         >
+
+          {/* =========================================
+             PAGE HEADER
+          ========================================= */}
+
+          <div
+
+            style={{
+
+              marginBottom: "24px"
+
+            }}
+
+          >
+
+            <h1
+
+              style={{
+
+                margin: 0,
+
+                marginBottom: "10px",
+
+                fontSize: "32px",
+
+                fontWeight: "800",
+
+                color: "#f8fafc"
+
+              }}
+
+            >
+
+              Create New Post 🚀
+
+            </h1>
+
+            <p
+
+              style={{
+
+                margin: 0,
+
+                color: "#94a3b8",
+
+                fontSize: "14px",
+
+                lineHeight: "24px"
+
+              }}
+
+            >
+
+              Share your thoughts, images,
+              memes, technology updates,
+              or community discussions.
+
+            </p>
+
+          </div>
+
+          {/* =========================================
+             CREATE POST FORM
+          ========================================= */}
 
           <CreatePostForm />
 

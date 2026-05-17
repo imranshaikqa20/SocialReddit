@@ -26,7 +26,7 @@ function PostCard({
   const navigate = useNavigate();
 
   /* =========================================
-     States
+     STATES
   ========================================= */
 
   const [showComments, setShowComments] =
@@ -45,20 +45,20 @@ function PostCard({
     useState(false);
 
   /* =========================================
-     Edit States
+     EDIT STATES
   ========================================= */
 
   const [editTitle, setEditTitle] =
-    useState(title);
+    useState(title || "");
 
   const [editContent, setEditContent] =
-    useState(content);
+    useState(content || "");
 
   const [editImageUrl, setEditImageUrl] =
     useState(imageUrl || "");
 
   /* =========================================
-     Logged User
+     LOGGED USER
   ========================================= */
 
   const loggedInUser =
@@ -67,10 +67,10 @@ function PostCard({
 
     ||
 
-    "User";
+    "";
 
   /* =========================================
-     Clean Author
+     SAFE AUTHOR
   ========================================= */
 
   const cleanAuthor =
@@ -87,22 +87,18 @@ function PostCard({
 
       ? author
 
-      : null;
+      : "Anonymous";
 
   /* =========================================
-     Display Author
+     DISPLAY AUTHOR
   ========================================= */
 
   const displayAuthor =
 
-    cleanAuthor
-
-      ? cleanAuthor.split("@")[0]
-
-      : "Anonymous";
+    cleanAuthor.split("@")[0];
 
   /* =========================================
-     Check Owner
+     OWNER CHECK
   ========================================= */
 
   const isOwner =
@@ -122,7 +118,7 @@ function PostCard({
       .toLowerCase();
 
   /* =========================================
-     Hide Deleted
+     HIDE DELETED
   ========================================= */
 
   if (deleted) {
@@ -132,7 +128,7 @@ function PostCard({
   }
 
   /* =========================================
-     Upvote
+     UPVOTE
   ========================================= */
 
   const handleUpvote = async () => {
@@ -146,12 +142,15 @@ function PostCard({
       );
 
       setVoteCount(
-        response.data.votes
+        response?.data?.votes || 0
       );
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "UPVOTE ERROR :",
+        error.response?.data || error.message
+      );
 
     } finally {
 
@@ -162,7 +161,7 @@ function PostCard({
   };
 
   /* =========================================
-     Downvote
+     DOWNVOTE
   ========================================= */
 
   const handleDownvote = async () => {
@@ -176,12 +175,15 @@ function PostCard({
       );
 
       setVoteCount(
-        response.data.votes
+        response?.data?.votes || 0
       );
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "DOWNVOTE ERROR :",
+        error.response?.data || error.message
+      );
 
     } finally {
 
@@ -192,7 +194,7 @@ function PostCard({
   };
 
   /* =========================================
-     Delete
+     DELETE POST
   ========================================= */
 
   const handleDelete = async () => {
@@ -224,7 +226,10 @@ function PostCard({
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "DELETE ERROR :",
+        error.response?.data || error.message
+      );
 
       alert(
         "Failed to delete ❌"
@@ -235,7 +240,7 @@ function PostCard({
   };
 
   /* =========================================
-     Save Edit
+     SAVE EDIT
   ========================================= */
 
   const handleSaveEdit = async () => {
@@ -272,7 +277,10 @@ function PostCard({
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "UPDATE ERROR :",
+        error.response?.data || error.message
+      );
 
       alert(
         "Failed to update ❌"
@@ -309,7 +317,9 @@ function PostCard({
 
     >
 
-      {/* Community Badge */}
+      {/* =========================================
+         COMMUNITY BADGE
+      ========================================= */}
 
       {
 
@@ -318,6 +328,8 @@ function PostCard({
           <button
 
             onClick={() =>
+
+              communityId &&
 
               navigate(
                 `/community/${communityId}`
@@ -359,7 +371,9 @@ function PostCard({
 
       }
 
-      {/* Header */}
+      {/* =========================================
+         HEADER
+      ========================================= */}
 
       <div
 
@@ -371,13 +385,17 @@ function PostCard({
 
           alignItems: "center",
 
-          marginBottom: "14px"
+          marginBottom: "14px",
+
+          gap: "10px",
+
+          flexWrap: "wrap"
 
         }}
 
       >
 
-        {/* User */}
+        {/* USER */}
 
         <div
 
@@ -393,7 +411,7 @@ function PostCard({
 
         >
 
-          {/* Avatar */}
+          {/* AVATAR */}
 
           <div
 
@@ -434,7 +452,7 @@ function PostCard({
 
           </div>
 
-          {/* Info */}
+          {/* INFO */}
 
           <div>
 
@@ -478,7 +496,7 @@ function PostCard({
 
         </div>
 
-        {/* Votes */}
+        {/* VOTES */}
 
         <div
 
@@ -507,7 +525,9 @@ function PostCard({
 
       </div>
 
-      {/* Edit Mode */}
+      {/* =========================================
+         EDIT MODE
+      ========================================= */}
 
       {
 
@@ -660,7 +680,7 @@ function PostCard({
 
           <>
 
-            {/* Title */}
+            {/* TITLE */}
 
             <h2
 
@@ -682,7 +702,7 @@ function PostCard({
 
             </h2>
 
-            {/* Content */}
+            {/* CONTENT */}
 
             <p
 
@@ -704,7 +724,7 @@ function PostCard({
 
             </p>
 
-            {/* Image */}
+            {/* IMAGE */}
 
             {
 
@@ -740,6 +760,13 @@ function PostCard({
 
                     }}
 
+                    onError={(e) => {
+
+                      e.target.style.display =
+                        "none";
+
+                    }}
+
                   />
 
                 </div>
@@ -754,7 +781,9 @@ function PostCard({
 
       }
 
-      {/* Action Buttons */}
+      {/* =========================================
+         ACTION BUTTONS
+      ========================================= */}
 
       <div
 
@@ -848,9 +877,7 @@ function PostCard({
           onClick={() =>
 
             setShowComments(
-
               !showComments
-
             )
 
           }
@@ -966,7 +993,9 @@ function PostCard({
 
       </div>
 
-      {/* Comments */}
+      {/* =========================================
+         COMMENTS
+      ========================================= */}
 
       {
 

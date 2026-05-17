@@ -1,7 +1,7 @@
 import api from "./api";
 
 /* =========================================
-   Get All Communities
+   GET ALL COMMUNITIES
 ========================================= */
 
 export const getAllCommunities =
@@ -14,13 +14,42 @@ export const getAllCommunities =
           "/api/communities"
         );
 
-      return response.data;
+      /* SAFE ARRAY */
+
+      const communities =
+
+        Array.isArray(response.data)
+
+          ? response.data
+
+          : [];
+
+      return communities.map(
+        (community) => ({
+
+          ...community,
+
+          id:
+            community.id || null,
+
+          name:
+            community.name ||
+            "Unknown Community",
+
+          description:
+            community.description || "",
+
+          posts:
+            community.posts || []
+
+        })
+      );
 
     } catch (error) {
 
       console.log(
-        "Get Communities Error :",
-        error.response?.data || error
+        "GET COMMUNITIES ERROR :",
+        error.response?.data || error.message
       );
 
       return [];
@@ -30,7 +59,7 @@ export const getAllCommunities =
   };
 
 /* =========================================
-   Get Community By Id
+   GET COMMUNITY BY ID
 ========================================= */
 
 export const getCommunityById =
@@ -50,8 +79,8 @@ export const getCommunityById =
     } catch (error) {
 
       console.log(
-        "Get Community Error :",
-        error.response?.data || error
+        "GET COMMUNITY ERROR :",
+        error.response?.data || error.message
       );
 
       return null;
@@ -61,7 +90,7 @@ export const getCommunityById =
   };
 
 /* =========================================
-   Create Community
+   CREATE COMMUNITY
 ========================================= */
 
 export const createCommunity =
@@ -69,18 +98,24 @@ export const createCommunity =
 
     try {
 
+      /* SAFE PAYLOAD */
+
+      const payload = {
+
+        name:
+          communityData.name?.trim(),
+
+        description:
+          communityData.description?.trim()
+
+      };
+
       const response =
         await api.post(
 
           "/api/communities",
 
-          {
-            name:
-              communityData.name,
-
-            description:
-              communityData.description
-          }
+          payload
 
         );
 
@@ -89,8 +124,8 @@ export const createCommunity =
     } catch (error) {
 
       console.log(
-        "Create Community Error :",
-        error.response?.data || error
+        "CREATE COMMUNITY ERROR :",
+        error.response?.data || error.message
       );
 
       throw error;
@@ -100,7 +135,7 @@ export const createCommunity =
   };
 
 /* =========================================
-   Get Posts By Community
+   GET POSTS BY COMMUNITY
 ========================================= */
 
 export const getPostsByCommunity =
@@ -115,17 +150,57 @@ export const getPostsByCommunity =
 
         );
 
-      return Array.isArray(response.data)
+      const posts =
 
-        ? response.data
+        Array.isArray(response.data)
 
-        : [];
+          ? response.data
+
+          : [];
+
+      /* SAFE FORMAT */
+
+      return posts.map((post) => ({
+
+        ...post,
+
+        communityName:
+
+          post.community?.name ||
+
+          "General",
+
+        communityId:
+
+          post.community?.id ||
+
+          null,
+
+        author:
+
+          post.author ||
+
+          "Anonymous",
+
+        votes:
+
+          post.votes || 0,
+
+        comments:
+
+          post.comments || 0,
+
+        imageUrl:
+
+          post.imageUrl || ""
+
+      }));
 
     } catch (error) {
 
       console.log(
-        "Get Posts Error :",
-        error.response?.data || error
+        "GET POSTS ERROR :",
+        error.response?.data || error.message
       );
 
       return [];
@@ -135,7 +210,7 @@ export const getPostsByCommunity =
   };
 
 /* =========================================
-   Join Community
+   JOIN COMMUNITY
 ========================================= */
 
 export const joinCommunity =
@@ -171,8 +246,8 @@ export const joinCommunity =
     } catch (error) {
 
       console.log(
-        "Join Community Error :",
-        error.response?.data || error
+        "JOIN COMMUNITY ERROR :",
+        error.response?.data || error.message
       );
 
       throw error;
@@ -182,7 +257,7 @@ export const joinCommunity =
   };
 
 /* =========================================
-   Leave Community
+   LEAVE COMMUNITY
 ========================================= */
 
 export const leaveCommunity =
@@ -216,8 +291,8 @@ export const leaveCommunity =
     } catch (error) {
 
       console.log(
-        "Leave Community Error :",
-        error.response?.data || error
+        "LEAVE COMMUNITY ERROR :",
+        error.response?.data || error.message
       );
 
       throw error;
@@ -227,7 +302,7 @@ export const leaveCommunity =
   };
 
 /* =========================================
-   Get Member Count
+   GET MEMBER COUNT
 ========================================= */
 
 export const getMemberCount =
@@ -243,14 +318,14 @@ export const getMemberCount =
         );
 
       return (
-        response.data.members || 0
+        response.data?.members || 0
       );
 
     } catch (error) {
 
       console.log(
-        "Member Count Error :",
-        error.response?.data || error
+        "MEMBER COUNT ERROR :",
+        error.response?.data || error.message
       );
 
       return 0;
@@ -260,7 +335,7 @@ export const getMemberCount =
   };
 
 /* =========================================
-   Check Joined Status
+   CHECK JOINED STATUS
 ========================================= */
 
 export const isJoined =
@@ -290,14 +365,14 @@ export const isJoined =
         );
 
       return (
-        response.data.joined || false
+        response.data?.joined || false
       );
 
     } catch (error) {
 
       console.log(
-        "Joined Status Error :",
-        error.response?.data || error
+        "JOINED STATUS ERROR :",
+        error.response?.data || error.message
       );
 
       return false;

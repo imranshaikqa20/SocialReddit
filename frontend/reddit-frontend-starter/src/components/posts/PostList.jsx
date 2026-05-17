@@ -11,7 +11,7 @@ function PostList({
 }) {
 
   /* =========================================
-     States
+     STATES
   ========================================= */
 
   const [posts, setPosts] =
@@ -21,7 +21,7 @@ function PostList({
     useState(true);
 
   /* =========================================
-     Fetch Posts
+     FETCH POSTS
   ========================================= */
 
   const fetchPosts = async () => {
@@ -30,14 +30,80 @@ function PostList({
 
       setLoading(true);
 
+      /* =========================================
+         API CALL
+      ========================================= */
+
       const response =
         await api.get("/api/posts");
 
-      /* Latest First */
+      /* =========================================
+         SAFE ARRAY CHECK
+      ========================================= */
+
+      const postsData =
+
+        Array.isArray(response.data)
+
+          ? response.data
+
+          : [];
+
+      /* =========================================
+         FORMAT POSTS
+      ========================================= */
+
+      const formattedPosts =
+
+        postsData.map((post) => ({
+
+          ...post,
+
+          /* SAFE COMMUNITY */
+
+          communityName:
+
+            post.community?.name ||
+
+            "General",
+
+          communityId:
+
+            post.community?.id ||
+
+            null,
+
+          /* SAFE AUTHOR */
+
+          author:
+
+            post.author ||
+
+            "Anonymous",
+
+          /* SAFE VALUES */
+
+          votes:
+
+            post.votes || 0,
+
+          comments:
+
+            post.comments || 0,
+
+          imageUrl:
+
+            post.imageUrl || ""
+
+        }));
+
+      /* =========================================
+         SORT LATEST FIRST
+      ========================================= */
 
       const sortedPosts =
 
-        (response.data || []).sort(
+        [...formattedPosts].sort(
 
           (a, b) => b.id - a.id
 
@@ -53,8 +119,8 @@ function PostList({
     } catch (error) {
 
       console.log(
-        "Fetch Posts Error :",
-        error.response?.data || error
+        "FETCH POSTS ERROR :",
+        error.response?.data || error.message
       );
 
       setPosts([]);
@@ -68,7 +134,7 @@ function PostList({
   };
 
   /* =========================================
-     Load Posts
+     LOAD POSTS
   ========================================= */
 
   useEffect(() => {
@@ -78,14 +144,14 @@ function PostList({
   }, []);
 
   /* =========================================
-     Filter Posts
+     FILTER POSTS
   ========================================= */
 
   const filteredPosts = posts.filter(
 
     (post) =>
 
-      post.title
+      post?.title
         ?.toLowerCase()
         .includes(
 
@@ -115,7 +181,7 @@ function PostList({
     >
 
       {/* =========================================
-         Loading
+         LOADING
       ========================================= */}
 
       {
@@ -175,7 +241,7 @@ function PostList({
       }
 
       {/* =========================================
-         Empty State
+         EMPTY STATE
       ========================================= */}
 
       {
@@ -255,7 +321,7 @@ function PostList({
       }
 
       {/* =========================================
-         Posts
+         POSTS LIST
       ========================================= */}
 
       {
@@ -275,42 +341,30 @@ function PostList({
             content={post.content}
 
             imageUrl={
-
-              post.imageUrl || ""
-
+              post.imageUrl
             }
 
             votes={
-
-              post.votes || 0
-
+              post.votes
             }
 
             author={
-
-              post.author || ""
-
+              post.author
             }
 
             comments={
-
-              post.comments || 0
-
+              post.comments
             }
 
             communityName={
-
-              post.communityName || ""
-
+              post.communityName
             }
 
             communityId={
-
-              post.communityId || null
-
+              post.communityId
             }
 
-            /* Refresh Feed */
+            /* REFRESH FEED */
 
             onPostUpdated={
               fetchPosts
