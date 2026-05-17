@@ -19,10 +19,6 @@ const API_BASE =
 
 function CreatePostForm() {
 
-  /* =========================================
-     NAVIGATION
-  ========================================= */
-
   const navigate = useNavigate();
 
   /* =========================================
@@ -98,8 +94,6 @@ function CreatePostForm() {
 
       console.log(error);
 
-      setCommunities([]);
-
     }
 
   };
@@ -113,20 +107,65 @@ function CreatePostForm() {
     const file =
       e.target.files[0];
 
-    if (!file) {
-
-      return;
-
-    }
+    if (!file) return;
 
     setImageFile(file);
 
-    /* LOCAL PREVIEW */
+    setImagePreview(
 
-    const previewURL =
-      URL.createObjectURL(file);
+      URL.createObjectURL(file)
 
-    setImagePreview(previewURL);
+    );
+
+  };
+
+  /* =========================================
+     UPLOAD IMAGE
+  ========================================= */
+
+  const uploadImage = async () => {
+
+    if (!imageFile) {
+
+      return "";
+
+    }
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "file",
+      imageFile
+    );
+
+    const response =
+      await fetch(
+
+        `${API_BASE}/api/posts/upload`,
+
+        {
+
+          method: "POST",
+
+          body: formData
+
+        }
+
+      );
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Image upload failed"
+      );
+
+    }
+
+    const data =
+      await response.json();
+
+    return data.imageUrl;
 
   };
 
@@ -149,7 +188,7 @@ function CreatePostForm() {
     ) {
 
       alert(
-        "Please fill all required fields ❌"
+        "Please fill all fields ❌"
       );
 
       return;
@@ -161,57 +200,59 @@ function CreatePostForm() {
       setLoading(true);
 
       /* =========================================
-         FORM DATA
+         STEP 1 -> UPLOAD IMAGE
       ========================================= */
 
-      const formData =
-        new FormData();
-
-      formData.append(
-        "title",
-        title.trim()
-      );
-
-      formData.append(
-        "content",
-        content.trim()
-      );
-
-      formData.append(
-        "author",
-        username
-      );
-
-      formData.append(
-        "communityId",
-        communityId
-      );
-
-      /* IMAGE */
+      let uploadedImageUrl = "";
 
       if (imageFile) {
 
-        formData.append(
-          "image",
-          imageFile
-        );
+        uploadedImageUrl =
+          await uploadImage();
 
       }
 
       /* =========================================
-         API CALL
+         STEP 2 -> CREATE POST
       ========================================= */
+
+      const payload = {
+
+        title:
+          title.trim(),
+
+        content:
+          content.trim(),
+
+        imageUrl:
+          uploadedImageUrl,
+
+        author:
+          username,
+
+        communityId:
+          Number(communityId)
+
+      };
 
       const response =
         await fetch(
 
-          `${API_BASE}/api/posts/create`,
+          `${API_BASE}/api/posts`,
 
           {
 
             method: "POST",
 
-            body: formData
+            headers: {
+
+              "Content-Type":
+                "application/json"
+
+            },
+
+            body:
+              JSON.stringify(payload)
 
           }
 
@@ -228,18 +269,6 @@ function CreatePostForm() {
       alert(
         "Post Created Successfully 🚀"
       );
-
-      /* RESET */
-
-      setTitle("");
-
-      setContent("");
-
-      setImageFile(null);
-
-      setImagePreview("");
-
-      setCommunityId("");
 
       navigate("/home");
 
@@ -263,9 +292,7 @@ function CreatePostForm() {
 
     <form onSubmit={handleSubmit}>
 
-      {/* =========================================
-         COMMUNITY
-      ========================================= */}
+      {/* COMMUNITY */}
 
       <div
         style={{
@@ -274,21 +301,12 @@ function CreatePostForm() {
       >
 
         <label
-
           style={{
-
             display: "block",
-
             marginBottom: "10px",
-
             color: "#dbeafe",
-
-            fontWeight: "700",
-
-            fontSize: "14px"
-
+            fontWeight: "700"
           }}
-
         >
 
           Select Community
@@ -315,17 +333,13 @@ function CreatePostForm() {
 
             borderRadius: "16px",
 
-            border:
-              "1px solid rgba(59,130,246,0.18)",
-
             background:
               "rgba(30,41,59,0.92)",
 
-            color: "#f8fafc",
+            color: "white",
 
-            outline: "none",
-
-            fontSize: "15px"
+            border:
+              "1px solid rgba(59,130,246,0.18)"
 
           }}
 
@@ -361,9 +375,7 @@ function CreatePostForm() {
 
       </div>
 
-      {/* =========================================
-         TITLE
-      ========================================= */}
+      {/* TITLE */}
 
       <div
         style={{
@@ -371,33 +383,11 @@ function CreatePostForm() {
         }}
       >
 
-        <label
-
-          style={{
-
-            display: "block",
-
-            marginBottom: "10px",
-
-            color: "#dbeafe",
-
-            fontWeight: "700",
-
-            fontSize: "14px"
-
-          }}
-
-        >
-
-          Post Title
-
-        </label>
-
         <input
 
           type="text"
 
-          placeholder="Enter your post title..."
+          placeholder="Post title..."
 
           value={title}
 
@@ -417,19 +407,13 @@ function CreatePostForm() {
 
             borderRadius: "16px",
 
-            border:
-              "1px solid rgba(59,130,246,0.18)",
-
             background:
               "rgba(30,41,59,0.92)",
 
-            color: "#f8fafc",
+            color: "white",
 
-            outline: "none",
-
-            fontSize: "15px",
-
-            boxSizing: "border-box"
+            border:
+              "1px solid rgba(59,130,246,0.18)"
 
           }}
 
@@ -437,9 +421,7 @@ function CreatePostForm() {
 
       </div>
 
-      {/* =========================================
-         CONTENT
-      ========================================= */}
+      {/* CONTENT */}
 
       <div
         style={{
@@ -447,33 +429,11 @@ function CreatePostForm() {
         }}
       >
 
-        <label
-
-          style={{
-
-            display: "block",
-
-            marginBottom: "10px",
-
-            color: "#dbeafe",
-
-            fontWeight: "700",
-
-            fontSize: "14px"
-
-          }}
-
-        >
-
-          Content
-
-        </label>
-
         <textarea
 
           rows="7"
 
-          placeholder="Write your post content..."
+          placeholder="Write content..."
 
           value={content}
 
@@ -493,23 +453,13 @@ function CreatePostForm() {
 
             borderRadius: "16px",
 
-            border:
-              "1px solid rgba(59,130,246,0.18)",
-
             background:
               "rgba(30,41,59,0.92)",
 
-            color: "#f8fafc",
+            color: "white",
 
-            outline: "none",
-
-            resize: "vertical",
-
-            fontSize: "15px",
-
-            lineHeight: "28px",
-
-            boxSizing: "border-box"
+            border:
+              "1px solid rgba(59,130,246,0.18)"
 
           }}
 
@@ -517,37 +467,13 @@ function CreatePostForm() {
 
       </div>
 
-      {/* =========================================
-         IMAGE UPLOAD
-      ========================================= */}
+      {/* IMAGE */}
 
       <div
         style={{
           marginBottom: "24px"
         }}
       >
-
-        <label
-
-          style={{
-
-            display: "block",
-
-            marginBottom: "12px",
-
-            color: "#dbeafe",
-
-            fontWeight: "700",
-
-            fontSize: "14px"
-
-          }}
-
-        >
-
-          Upload Image 🖼️
-
-        </label>
 
         <input
 
@@ -565,17 +491,10 @@ function CreatePostForm() {
 
             borderRadius: "16px",
 
-            border:
-              "1px solid rgba(59,130,246,0.18)",
-
             background:
               "rgba(30,41,59,0.92)",
 
-            color: "#f8fafc",
-
-            cursor: "pointer",
-
-            fontSize: "14px"
+            color: "white"
 
           }}
 
@@ -583,71 +502,33 @@ function CreatePostForm() {
 
       </div>
 
-      {/* =========================================
-         IMAGE PREVIEW
-      ========================================= */}
+      {/* PREVIEW */}
 
       {
 
         imagePreview && (
 
           <div
-
             style={{
-
-              marginBottom: "28px",
-
-              background:
-                "rgba(15,23,42,0.70)",
-
-              border:
-                "1px solid rgba(59,130,246,0.12)",
-
-              borderRadius: "20px",
-
-              padding: "14px",
-
-              overflow: "hidden"
-
+              marginBottom: "24px"
             }}
-
           >
-
-            <div
-
-              style={{
-
-                marginBottom: "12px",
-
-                color: "#cbd5e1",
-
-                fontSize: "13px",
-
-                fontWeight: "600"
-
-              }}
-
-            >
-
-              Image Preview
-
-            </div>
 
             <img
 
               src={imagePreview}
 
-              alt="Preview"
+              alt="preview"
 
               style={{
 
                 width: "100%",
 
+                borderRadius: "18px",
+
                 maxHeight: "420px",
 
-                objectFit: "cover",
-
-                borderRadius: "16px"
+                objectFit: "cover"
 
               }}
 
@@ -659,9 +540,7 @@ function CreatePostForm() {
 
       }
 
-      {/* =========================================
-         SUBMIT BUTTON
-      ========================================= */}
+      {/* BUTTON */}
 
       <button
 
@@ -684,14 +563,9 @@ function CreatePostForm() {
 
           color: "white",
 
-          fontSize: "16px",
-
           fontWeight: "800",
 
-          cursor: "pointer",
-
-          opacity:
-            loading ? 0.7 : 1
+          fontSize: "16px"
 
         }}
 
