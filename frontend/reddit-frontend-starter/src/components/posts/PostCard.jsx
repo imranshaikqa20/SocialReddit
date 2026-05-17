@@ -79,7 +79,7 @@ function PostCard({
   }
 
   /* =========================================
-     LOAD COMMENTS
+     LOAD COMMENTS COUNT
   ========================================= */
 
   const fetchComments = async () => {
@@ -95,11 +95,19 @@ function PostCard({
       const data =
         await response.json();
 
-      setCommentsList(data);
+      setCommentsList(
+
+        Array.isArray(data)
+          ? data
+          : []
+
+      );
 
     } catch (error) {
 
       console.log(error);
+
+      setCommentsList([]);
 
     }
 
@@ -196,7 +204,7 @@ function PostCard({
       >
 
         {/* =========================================
-           COMMUNITY
+           COMMUNITY TAG
         ========================================= */}
 
         <div
@@ -552,7 +560,7 @@ function PostCard({
 
           </button>
 
-          {/* COMMENTS */}
+          {/* COMMENTS BUTTON */}
 
           <button
 
@@ -593,11 +601,21 @@ function PostCard({
 
             <FaComment />
 
-            {commentsList.length}
+            {
+
+              showComments
+
+                ? "Hide Comments"
+
+                : `${commentsList.length} Comments`
+
+            }
 
           </button>
 
-          {/* EDIT & DELETE */}
+          {/* =========================================
+             EDIT & DELETE
+          ========================================= */}
 
           {
 
@@ -698,12 +716,12 @@ function PostCard({
         </div>
 
         {/* =========================================
-           COMMENT FORM
+           ADD COMMENT FORM
         ========================================= */}
 
         <div
           style={{
-            marginTop: "12px"
+            marginTop: "18px"
           }}
         >
 
@@ -711,9 +729,13 @@ function PostCard({
 
             postId={id}
 
-            onCommentAdded={
-              fetchComments
-            }
+            onCommentAdded={() => {
+
+              fetchComments();
+
+              setShowComments(true);
+
+            }}
 
           />
 
@@ -728,14 +750,32 @@ function PostCard({
           showComments && (
 
             <div
+
               style={{
-                marginTop: "20px"
+
+                marginTop: "24px",
+
+                background:
+                  "rgba(15,23,42,0.45)",
+
+                border:
+                  "1px solid rgba(255,255,255,0.05)",
+
+                borderRadius: "18px",
+
+                padding: "18px"
+
               }}
+
             >
 
               <CommentList
 
-                comments={commentsList}
+                postId={id}
+
+                refreshTrigger={
+                  commentsList.length
+                }
 
               />
 
