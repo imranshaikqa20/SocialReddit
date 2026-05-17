@@ -45,7 +45,7 @@ function Navbar({
     localStorage.removeItem("username");
 
     alert(
-      "Logout Successful "
+      "Logout Successful ✅"
     );
 
     window.location.href =
@@ -360,16 +360,12 @@ function Navbar({
 
         <button
 
-          onClick={() => {
-
-            console.log(
-              "Profile Clicked"
-            );
+          onClick={() =>
 
             window.location.href =
-              "/profile";
+              "/profile"
 
-          }}
+          }
 
           style={{
 
@@ -405,7 +401,7 @@ function Navbar({
           onClick={() =>
 
             window.location.href =
-              "/create-post"
+              "/post"
 
           }
 

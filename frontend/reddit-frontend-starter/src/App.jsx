@@ -5,24 +5,34 @@ import {
   Navigate
 } from "react-router-dom";
 
-/* Auth */
+/* =========================================
+   Auth Components
+========================================= */
 
 import LoginForm from "./components/auth/LoginForm";
 import SignupForm from "./components/auth/SignupForm";
 
-/* Pages */
+/* =========================================
+   Pages
+========================================= */
 
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import CommunityPage from "./pages/CommunityPage";
 import CreatePostPage from "./pages/create-post";
 
-/* Components */
+/* =========================================
+   Community Components
+========================================= */
 
 import CreateCommunityForm
   from "./components/community/CreateCommunityForm";
 
 function App() {
+
+  /* =========================================
+     Check Authentication
+  ========================================= */
 
   const token =
     localStorage.getItem("token");
@@ -33,7 +43,9 @@ function App() {
 
       <Routes>
 
-        {/* ROOT */}
+        {/* =========================================
+            ROOT REDIRECT
+        ========================================= */}
 
         <Route
           path="/"
@@ -44,68 +56,86 @@ function App() {
           }
         />
 
-        {/* LOGIN */}
+        {/* =========================================
+            LOGIN
+        ========================================= */}
 
         <Route
           path="/login"
           element={<LoginForm />}
         />
 
-        {/* SIGNUP */}
+        {/* =========================================
+            SIGNUP
+        ========================================= */}
 
         <Route
           path="/signup"
           element={<SignupForm />}
         />
 
-        {/* HOME */}
+        {/* =========================================
+            HOME PAGE
+        ========================================= */}
 
         <Route
           path="/home"
           element={<HomePage />}
         />
 
-        {/* PROFILE */}
+        {/* =========================================
+            PROFILE PAGE
+        ========================================= */}
 
         <Route
           path="/profile"
           element={<ProfilePage />}
         />
 
-        {/* CREATE POST */}
+        {/* =========================================
+            CREATE POST PAGE
+        ========================================= */}
 
         <Route
-          path="/create-post"
+          path="/post"
           element={<CreatePostPage />}
         />
 
-        {/* CREATE COMMUNITY */}
+        {/* =========================================
+            CREATE COMMUNITY
+        ========================================= */}
 
         <Route
           path="/create-community"
           element={<CreateCommunityForm />}
         />
 
-        {/* COMMUNITY */}
+        {/* =========================================
+            COMMUNITY PAGE
+        ========================================= */}
+
+        <Route
+          path="/community"
+          element={<CommunityPage />}
+        />
 
         <Route
           path="/community/:id"
           element={<CommunityPage />}
         />
 
-        {/* FALLBACK */}
+        {/* =========================================
+            FALLBACK ROUTE
+        ========================================= */}
 
         <Route
           path="*"
           element={
-            <div
-              style={{
-                color: "white",
-                padding: "40px"
-              }}
-            >
-              PAGE NOT FOUND
-            </div>
+
+            token
+              ? <Navigate to="/home" />
+              : <Navigate to="/login" />
+
           }
         />
 
