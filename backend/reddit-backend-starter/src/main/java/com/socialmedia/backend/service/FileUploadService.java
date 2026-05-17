@@ -22,12 +22,24 @@ import java.util.UUID;
 
 public class FileUploadService {
 
-    /* Upload Directory */
+    /* =========================================
+       UPLOAD DIRECTORY
+    ========================================= */
 
     private static final String
-            UPLOAD_DIR = "uploads/";
+            UPLOAD_DIR = "uploads";
 
-    /* Upload File */
+    /* =========================================
+       BACKEND URL
+    ========================================= */
+
+    private static final String
+            BASE_URL =
+            "https://socialreddit-backend.onrender.com";
+
+    /* =========================================
+       UPLOAD FILE
+    ========================================= */
 
     public String uploadFile(
 
@@ -35,7 +47,9 @@ public class FileUploadService {
 
     ) throws IOException {
 
-        /* Validate File */
+        /* =========================================
+           VALIDATE FILE
+        ========================================= */
 
         if (
 
@@ -47,41 +61,45 @@ public class FileUploadService {
 
             throw new RuntimeException(
 
-                    "File is empty "
+                    "File is empty"
 
             );
 
         }
 
-        /* Create Upload Folder */
+        /* =========================================
+           CREATE UPLOAD DIRECTORY
+        ========================================= */
 
-        File uploadFolder =
-                new File(UPLOAD_DIR);
+        Path uploadPath =
 
-        if (!uploadFolder.exists()) {
+                Paths.get(
+                        UPLOAD_DIR
+                ).toAbsolutePath();
 
-            boolean created =
-                    uploadFolder.mkdirs();
+        if (
 
-            if (!created) {
+                !Files.exists(uploadPath)
 
-                throw new RuntimeException(
+        ) {
 
-                        "Failed to create uploads folder "
-
-                );
-
-            }
+            Files.createDirectories(
+                    uploadPath
+            );
 
         }
 
-        /* Original File Name */
+        /* =========================================
+           ORIGINAL FILE NAME
+        ========================================= */
 
         String originalFileName =
 
                 file.getOriginalFilename();
 
-        /* File Extension */
+        /* =========================================
+           FILE EXTENSION
+        ========================================= */
 
         String extension = "";
 
@@ -103,7 +121,9 @@ public class FileUploadService {
 
         }
 
-        /* Generate Unique File Name */
+        /* =========================================
+           UNIQUE FILE NAME
+        ========================================= */
 
         String fileName =
 
@@ -113,31 +133,9 @@ public class FileUploadService {
 
                         + extension;
 
-        /* Absolute File Path */
-
-        Path uploadPath =
-
-                Paths.get(
-
-                        UPLOAD_DIR
-
-                ).toAbsolutePath();
-
-        /* Create Path */
-
-        if (
-
-                !Files.exists(uploadPath)
-
-        ) {
-
-            Files.createDirectories(
-                    uploadPath
-            );
-
-        }
-
-        /* Final File Path */
+        /* =========================================
+           FINAL FILE PATH
+        ========================================= */
 
         Path filePath =
 
@@ -145,7 +143,9 @@ public class FileUploadService {
                         fileName
                 );
 
-        /* Save File */
+        /* =========================================
+           SAVE FILE
+        ========================================= */
 
         Files.copy(
 
@@ -157,13 +157,17 @@ public class FileUploadService {
 
         );
 
-        /* Return Public URL */
+        /* =========================================
+           RETURN PUBLIC IMAGE URL
+        ========================================= */
 
         return
 
-                "http://localhost:8080/uploads/"
+                BASE_URL +
 
-                        + fileName;
+                        "/uploads/" +
+
+                        fileName;
 
     }
 

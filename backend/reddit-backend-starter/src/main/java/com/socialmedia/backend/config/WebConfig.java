@@ -33,45 +33,73 @@ public class WebConfig
 
                     Paths.get("uploads");
 
-            /* CREATE FOLDER IF NOT EXISTS */
+            /* =========================================
+               CREATE DIRECTORY IF NOT EXISTS
+            ========================================= */
 
-            if (!Files.exists(uploadDir)) {
+            if (
 
-                Files.createDirectories(uploadDir);
+                    !Files.exists(uploadDir)
+
+            ) {
+
+                Files.createDirectories(
+                        uploadDir
+                );
 
             }
 
-            /* ABSOLUTE PATH */
+            /* =========================================
+               ABSOLUTE PATH
+            ========================================= */
 
             String uploadPath =
 
-                    uploadDir.toFile()
+                    uploadDir
+                            .toFile()
                             .getAbsolutePath();
 
             System.out.println(
+
                     "UPLOAD PATH => "
+
                             + uploadPath
+
             );
 
             /* =========================================
-               STATIC RESOURCE MAPPING
+               RESOURCE HANDLER
             ========================================= */
 
-            registry.addResourceHandler(
+            registry
+
+                    .addResourceHandler(
+
                             "/uploads/**"
+
                     )
+
                     .addResourceLocations(
+
                             "file:" +
+
                                     uploadPath +
+
                                     "/"
+
                     );
 
         } catch (Exception e) {
 
             System.out.println(
+
                     "UPLOAD CONFIG ERROR => "
+
                             + e.getMessage()
+
             );
+
+            e.printStackTrace();
 
         }
 

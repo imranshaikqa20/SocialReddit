@@ -28,6 +28,10 @@ import java.util.Map;
 
 public class PostController {
 
+    /* =========================================
+       SERVICES
+    ========================================= */
+
     @Autowired
     private PostService postService;
 
@@ -54,7 +58,9 @@ public class PostController {
 
                     request.getTitle() == null ||
 
-                            request.getTitle().trim().isEmpty()
+                            request.getTitle()
+                                    .trim()
+                                    .isEmpty()
 
             ) {
 
@@ -70,7 +76,9 @@ public class PostController {
 
                     request.getContent() == null ||
 
-                            request.getContent().trim().isEmpty()
+                            request.getContent()
+                                    .trim()
+                                    .isEmpty()
 
             ) {
 
@@ -96,15 +104,21 @@ public class PostController {
 
             }
 
-            /* CREATE */
+            /* CREATE POST */
 
             PostResponse createdPost =
 
-                    postService.createPost(request);
+                    postService.createPost(
+                            request
+                    );
 
             return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(createdPost);
+                    .status(
+                            HttpStatus.CREATED
+                    )
+                    .body(
+                            createdPost
+                    );
 
         } catch (Exception e) {
 
@@ -141,7 +155,13 @@ public class PostController {
 
             /* EMPTY FILE */
 
-            if (file.isEmpty()) {
+            if (
+
+                    file == null ||
+
+                            file.isEmpty()
+
+            ) {
 
                 return ResponseEntity
                         .badRequest()
@@ -151,11 +171,12 @@ public class PostController {
 
             }
 
-            /* UPLOAD */
+            /* UPLOAD FILE */
 
             String imageUrl =
 
-                    fileUploadService.uploadFile(file);
+                    fileUploadService
+                            .uploadFile(file);
 
             /* RESPONSE */
 
@@ -167,7 +188,9 @@ public class PostController {
                     imageUrl
             );
 
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(
+                    response
+            );
 
         } catch (Exception e) {
 
@@ -201,7 +224,9 @@ public class PostController {
 
                     postService.getAllPosts();
 
-            return ResponseEntity.ok(posts);
+            return ResponseEntity.ok(
+                    posts
+            );
 
         } catch (Exception e) {
 
@@ -238,11 +263,14 @@ public class PostController {
 
             List<PostResponse> posts =
 
-                    postService.getPostsByCommunity(
-                            communityId
-                    );
+                    postService
+                            .getPostsByCommunity(
+                                    communityId
+                            );
 
-            return ResponseEntity.ok(posts);
+            return ResponseEntity.ok(
+                    posts
+            );
 
         } catch (Exception e) {
 
@@ -279,9 +307,13 @@ public class PostController {
 
             List<PostResponse> posts =
 
-                    postService.searchPosts(keyword);
+                    postService.searchPosts(
+                            keyword
+                    );
 
-            return ResponseEntity.ok(posts);
+            return ResponseEntity.ok(
+                    posts
+            );
 
         } catch (Exception e) {
 
@@ -320,7 +352,9 @@ public class PostController {
 
                     postService.getPostById(id);
 
-            return ResponseEntity.ok(post);
+            return ResponseEntity.ok(
+                    post
+            );
 
         } catch (Exception e) {
 
@@ -362,7 +396,9 @@ public class PostController {
                             request
                     );
 
-            return ResponseEntity.ok(updatedPost);
+            return ResponseEntity.ok(
+                    updatedPost
+            );
 
         } catch (Exception e) {
 
@@ -401,7 +437,9 @@ public class PostController {
 
                     postService.upvotePost(id);
 
-            return ResponseEntity.ok(updatedPost);
+            return ResponseEntity.ok(
+                    updatedPost
+            );
 
         } catch (Exception e) {
 
@@ -440,7 +478,9 @@ public class PostController {
 
                     postService.downvotePost(id);
 
-            return ResponseEntity.ok(updatedPost);
+            return ResponseEntity.ok(
+                    updatedPost
+            );
 
         } catch (Exception e) {
 

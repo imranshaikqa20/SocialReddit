@@ -2,11 +2,20 @@ import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { createPost } from "../../services/postService";
-
 import {
   getAllCommunities
 } from "../../services/communityService";
+
+/* =========================================
+   API BASE
+========================================= */
+
+const API_BASE =
+  "https://socialreddit-backend.onrender.com";
+
+/* =========================================
+   COMPONENT
+========================================= */
 
 function CreatePostForm() {
 
@@ -26,8 +35,8 @@ function CreatePostForm() {
   const [content, setContent] =
     useState("");
 
-  const [imageUrl, setImageUrl] =
-    useState("");
+  const [imageFile, setImageFile] =
+    useState(null);
 
   const [imagePreview, setImagePreview] =
     useState("");
@@ -67,25 +76,27 @@ function CreatePostForm() {
 
     try {
 
+      const response =
+        await fetch(
+
+          `${API_BASE}/api/communities`
+
+        );
+
       const data =
-        await getAllCommunities();
+        await response.json();
 
       setCommunities(
 
         Array.isArray(data)
-
           ? data
-
           : []
 
       );
 
     } catch (error) {
 
-      console.log(
-        "COMMUNITY ERROR :",
-        error.response?.data || error.message
-      );
+      console.log(error);
 
       setCommunities([]);
 
@@ -108,16 +119,14 @@ function CreatePostForm() {
 
     }
 
+    setImageFile(file);
+
     /* LOCAL PREVIEW */
 
     const previewURL =
       URL.createObjectURL(file);
 
     setImagePreview(previewURL);
-
-    /* TEMPORARY LOCAL IMAGE */
-
-    setImageUrl(previewURL);
 
   };
 
@@ -151,26 +160,70 @@ function CreatePostForm() {
 
       setLoading(true);
 
-      const payload = {
+      /* =========================================
+         FORM DATA
+      ========================================= */
 
-        title:
-          title.trim(),
+      const formData =
+        new FormData();
 
-        content:
-          content.trim(),
+      formData.append(
+        "title",
+        title.trim()
+      );
 
-        imageUrl:
-          imageUrl,
+      formData.append(
+        "content",
+        content.trim()
+      );
 
-        author:
-          username,
+      formData.append(
+        "author",
+        username
+      );
 
-        communityId:
-          Number(communityId)
+      formData.append(
+        "communityId",
+        communityId
+      );
 
-      };
+      /* IMAGE */
 
-      await createPost(payload);
+      if (imageFile) {
+
+        formData.append(
+          "image",
+          imageFile
+        );
+
+      }
+
+      /* =========================================
+         API CALL
+      ========================================= */
+
+      const response =
+        await fetch(
+
+          `${API_BASE}/api/posts/create`,
+
+          {
+
+            method: "POST",
+
+            body: formData
+
+          }
+
+        );
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Failed to create post"
+        );
+
+      }
 
       alert(
         "Post Created Successfully 🚀"
@@ -182,7 +235,7 @@ function CreatePostForm() {
 
       setContent("");
 
-      setImageUrl("");
+      setImageFile(null);
 
       setImagePreview("");
 
@@ -192,17 +245,10 @@ function CreatePostForm() {
 
     } catch (error) {
 
-      console.log(
-        "CREATE POST ERROR :",
-        error.response?.data || error.message
-      );
+      console.log(error);
 
       alert(
-
-        error?.response?.data?.message ||
-
         "Failed to create post ❌"
-
       );
 
     } finally {
@@ -643,11 +689,6 @@ function CreatePostForm() {
           fontWeight: "800",
 
           cursor: "pointer",
-
-          boxShadow:
-            "0px 8px 24px rgba(37,99,235,0.30)",
-
-          transition: "0.3s ease",
 
           opacity:
             loading ? 0.7 : 1
