@@ -66,12 +66,7 @@ function PostCard({
   ========================================= */
 
   const loggedInUser =
-
-    localStorage.getItem("username")
-
-    ||
-
-    "";
+    localStorage.getItem("username") || "";
 
   /* =========================================
      AUTHOR
@@ -90,7 +85,6 @@ function PostCard({
       : "Anonymous";
 
   const displayAuthor =
-
     cleanAuthor.split("@")[0];
 
   /* =========================================
@@ -131,9 +125,10 @@ function PostCard({
 
       setLoading(true);
 
-      const response = await api.put(
-        `/api/posts/${id}/upvote`
-      );
+      const response =
+        await api.put(
+          `/api/posts/${id}/upvote`
+        );
 
       setVoteCount(
         response?.data?.votes || 0
@@ -164,9 +159,10 @@ function PostCard({
 
       setLoading(true);
 
-      const response = await api.put(
-        `/api/posts/${id}/downvote`
-      );
+      const response =
+        await api.put(
+          `/api/posts/${id}/downvote`
+        );
 
       setVoteCount(
         response?.data?.votes || 0
@@ -388,6 +384,8 @@ function PostCard({
         }}
 
       >
+
+        {/* USER */}
 
         <div
 
@@ -711,16 +709,16 @@ function PostCard({
             </p>
 
             {/* =========================================
-               IMAGE
+               POST IMAGE
             ========================================= */}
 
             {
 
-              editImageUrl &&
+              (imageUrl || editImageUrl) &&
 
-              typeof editImageUrl === "string" &&
+              typeof (imageUrl || editImageUrl) === "string" &&
 
-              editImageUrl.trim() !== "" && (
+              (imageUrl || editImageUrl).trim() !== "" && (
 
                 <div
 
@@ -755,11 +753,11 @@ function PostCard({
 
                     src={
 
-                      editImageUrl.startsWith("http")
+                      (imageUrl || editImageUrl).startsWith("http")
 
-                        ? editImageUrl
+                        ? (imageUrl || editImageUrl)
 
-                        : `https://socialreddit-backend.onrender.com/${editImageUrl}`
+                        : `https://socialreddit-backend.onrender.com/${imageUrl || editImageUrl}`
 
                     }
 
@@ -781,7 +779,7 @@ function PostCard({
 
                       console.log(
                         "IMAGE LOAD FAILED :",
-                        editImageUrl
+                        imageUrl || editImageUrl
                       );
 
                       e.target.style.display =
@@ -790,6 +788,39 @@ function PostCard({
                     }}
 
                   />
+
+                  {/* IMAGE LABEL */}
+
+                  <div
+
+                    style={{
+
+                      position: "absolute",
+
+                      bottom: 0,
+
+                      left: 0,
+
+                      width: "100%",
+
+                      padding: "10px 14px",
+
+                      background:
+                        "linear-gradient(to top, rgba(0,0,0,0.55), transparent)",
+
+                      color: "#f8fafc",
+
+                      fontSize: "12px",
+
+                      fontWeight: "600"
+
+                    }}
+
+                  >
+
+                    📸 Uploaded Image
+
+                  </div>
 
                 </div>
 
