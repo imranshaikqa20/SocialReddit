@@ -27,7 +27,13 @@ function LoginForm() {
 
     /* Validation */
 
-    if (!email.trim() || !password.trim()) {
+    if (
+
+      !email.trim() ||
+
+      !password.trim()
+
+    ) {
 
       alert(
         "Please fill all fields ❌"
@@ -45,7 +51,8 @@ function LoginForm() {
          API Call
       ========================================= */
 
-      const response =
+      const userData =
+
         await loginUser({
 
           email:
@@ -58,49 +65,58 @@ function LoginForm() {
 
       console.log(
         "LOGIN RESPONSE :",
-        response.data
+        userData
       );
-
-      /* =========================================
-         Extract Data
-      ========================================= */
-
-      const userData =
-        response.data;
 
       /* =========================================
          Save Local Storage
       ========================================= */
 
       localStorage.setItem(
+
         "token",
-        userData.token
+
+        userData.token || ""
+
       );
 
       localStorage.setItem(
+
         "username",
-        userData.username
+
+        userData.username || ""
+
       );
 
       localStorage.setItem(
+
         "email",
-        userData.email
+
+        userData.email || ""
+
       );
 
       /* =========================================
-         Success
+         Success Message
       ========================================= */
 
       alert(
+
         userData.message ||
+
         "Login Success 🚀"
+
       );
 
-      /* Redirect */
+      /* =========================================
+         Redirect Home
+      ========================================= */
 
       navigate("/home");
 
-      /* Reload */
+      /* =========================================
+         Reload
+      ========================================= */
 
       window.location.reload();
 
@@ -112,7 +128,7 @@ function LoginForm() {
       );
 
       /* =========================================
-         Better Error Handling
+         Error Handling
       ========================================= */
 
       const errorMessage =
@@ -120,6 +136,8 @@ function LoginForm() {
         error.response?.data?.error ||
 
         error.response?.data?.message ||
+
+        error.message ||
 
         "Invalid Email or Password ❌";
 
@@ -149,7 +167,9 @@ function LoginForm() {
       }}
     >
 
-      {/* Background Glow */}
+      {/* =========================================
+         Background Glow
+      ========================================= */}
 
       <div
         style={{
@@ -177,7 +197,9 @@ function LoginForm() {
         }}
       />
 
-      {/* Login Card */}
+      {/* =========================================
+         Login Card
+      ========================================= */}
 
       <div
         style={{
@@ -197,7 +219,9 @@ function LoginForm() {
         }}
       >
 
-        {/* Heading */}
+        {/* =========================================
+           Heading
+        ========================================= */}
 
         <div
           style={{
@@ -237,13 +261,17 @@ function LoginForm() {
 
         </div>
 
-        {/* Form */}
+        {/* =========================================
+           Login Form
+        ========================================= */}
 
         <form
           onSubmit={handleLogin}
         >
 
-          {/* Email */}
+          {/* =========================================
+             Email
+          ========================================= */}
 
           <div
             style={{
@@ -291,7 +319,9 @@ function LoginForm() {
 
           </div>
 
-          {/* Password */}
+          {/* =========================================
+             Password
+          ========================================= */}
 
           <div
             style={{
@@ -339,7 +369,9 @@ function LoginForm() {
 
           </div>
 
-          {/* Login Button */}
+          {/* =========================================
+             Login Button
+          ========================================= */}
 
           <button
             type="submit"
@@ -374,7 +406,9 @@ function LoginForm() {
 
         </form>
 
-        {/* Signup Redirect */}
+        {/* =========================================
+           Signup Redirect
+        ========================================= */}
 
         <p
           style={{
