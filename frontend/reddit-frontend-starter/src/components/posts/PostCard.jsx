@@ -30,6 +30,9 @@ function PostCard({
   comments,
   communityName,
   onPostUpdated,
+
+  /* IMPORTANT */
+
   showActions = false
 
 }) {
@@ -38,7 +41,7 @@ function PostCard({
     useState("");
 
   /* =========================================
-     IMAGE URL FIX
+     FIX IMAGE URL
   ========================================= */
 
   let finalImageUrl = "";
@@ -62,8 +65,8 @@ function PostCard({
   }
 
   console.log(
-    "FINAL IMAGE URL =>",
-    finalImageUrl
+    "SHOW ACTIONS =>",
+    showActions
   );
 
   /* =========================================
@@ -341,11 +344,6 @@ function PostCard({
 
               onError={(e) => {
 
-                console.log(
-                  "IMAGE FAILED =>",
-                  finalImageUrl
-                );
-
                 e.target.style.display =
                   "none";
 
@@ -376,7 +374,7 @@ function PostCard({
 
       />
 
-      {/* ACTION BUTTONS */}
+      {/* BUTTONS */}
 
       <div
 
@@ -393,6 +391,8 @@ function PostCard({
         }}
 
       >
+
+        {/* UPVOTE */}
 
         <button
 
@@ -428,6 +428,8 @@ function PostCard({
 
         </button>
 
+        {/* DOWNVOTE */}
+
         <button
 
           style={{
@@ -462,6 +464,8 @@ function PostCard({
 
         </button>
 
+        {/* COMMENTS */}
+
         <div
 
           style={{
@@ -486,7 +490,7 @@ function PostCard({
 
           <FaComment />
 
-          {votes || 0}
+          {comments || 0}
 
         </div>
 
@@ -499,6 +503,8 @@ function PostCard({
           showActions && (
 
             <>
+
+              {/* EDIT */}
 
               <button
 
@@ -533,6 +539,8 @@ function PostCard({
                 Edit
 
               </button>
+
+              {/* DELETE */}
 
               <button
 
