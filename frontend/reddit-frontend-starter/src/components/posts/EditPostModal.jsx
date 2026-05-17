@@ -11,7 +11,7 @@ function EditPostModal({
 }) {
 
   /* =========================================
-     States
+     STATES
   ========================================= */
 
   const [title, setTitle] =
@@ -27,12 +27,15 @@ function EditPostModal({
     useState(false);
 
   /* =========================================
-     Save Edit
+     HANDLE SAVE
   ========================================= */
 
   const handleSave = async () => {
 
-    if (!title || !content) {
+    if (
+      !title.trim() ||
+      !content.trim()
+    ) {
 
       alert(
         "Please fill all fields ❌"
@@ -51,13 +54,11 @@ function EditPostModal({
       ========================================= */
 
       let finalImageUrl =
-        imageUrl;
+        imageUrl || "";
 
-      /* REMOVE INVALID BLOB URL */
+      /* REMOVE BLOB URL */
 
       if (
-
-        finalImageUrl &&
 
         finalImageUrl.startsWith(
           "blob:"
@@ -72,8 +73,6 @@ function EditPostModal({
       /* REMOVE DOMAIN */
 
       if (
-
-        finalImageUrl &&
 
         finalImageUrl.includes(
           "socialreddit-backend.onrender.com"
@@ -93,35 +92,57 @@ function EditPostModal({
       }
 
       console.log(
-        "FINAL UPDATE IMAGE =>",
+        "FINAL IMAGE URL:",
         finalImageUrl
+      );
+
+      /* =========================================
+         UPDATE PAYLOAD
+      ========================================= */
+
+      const payload = {
+
+        title:
+          title.trim(),
+
+        content:
+          content.trim(),
+
+        imageUrl:
+          finalImageUrl
+
+      };
+
+      console.log(
+        "UPDATE PAYLOAD:",
+        payload
       );
 
       /* =========================================
          API UPDATE
       ========================================= */
 
-      await api.put(
+      const response =
+        await api.put(
 
-        `/posts/${post.id}`,
+          `/api/posts/${post.id}`,
 
-        {
+          payload
 
-          title,
-          content,
+        );
 
-          imageUrl:
-            finalImageUrl
-
-        }
-
+      console.log(
+        "UPDATE RESPONSE:",
+        response.data
       );
 
       alert(
         "Post Updated Successfully 🚀"
       );
 
-      /* REFRESH POSTS */
+      /* =========================================
+         REFRESH POSTS
+      ========================================= */
 
       if (onPostUpdated) {
 
@@ -129,13 +150,18 @@ function EditPostModal({
 
       }
 
-      /* CLOSE MODAL */
+      /* =========================================
+         CLOSE MODAL
+      ========================================= */
 
       onClose();
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "UPDATE ERROR:",
+        error.response?.data || error
+      );
 
       alert(
         "Failed to update post ❌"
@@ -178,9 +204,7 @@ function EditPostModal({
 
     >
 
-      {/* =========================================
-         Modal Card
-      ========================================= */}
+      {/* MODAL CARD */}
 
       <div
 
@@ -209,7 +233,7 @@ function EditPostModal({
 
       >
 
-        {/* CLOSE */}
+        {/* CLOSE BUTTON */}
 
         <button
 
@@ -252,309 +276,177 @@ function EditPostModal({
 
         {/* HEADING */}
 
-        <div
+        <h2
+
           style={{
-            marginBottom: "24px"
+
+            marginBottom: "20px",
+
+            color: "#f8fafc",
+
+            fontSize: "28px",
+
+            fontWeight: "800"
+
           }}
+
         >
 
-          <h2
+          Edit Post
 
-            style={{
-
-              margin: 0,
-
-              color: "#f8fafc",
-
-              fontSize: "30px",
-
-              fontWeight: "800"
-
-            }}
-
-          >
-
-            Edit Post
-
-          </h2>
-
-          <p
-
-            style={{
-
-              marginTop: "10px",
-
-              color: "#94a3b8",
-
-              fontSize: "14px",
-
-              lineHeight: "24px"
-
-            }}
-
-          >
-
-            Update your post content
-            and image.
-
-          </p>
-
-        </div>
+        </h2>
 
         {/* TITLE */}
 
-        <div
+        <input
+
+          type="text"
+
+          value={title}
+
+          onChange={(e) =>
+            setTitle(e.target.value)
+          }
+
+          placeholder="Post title"
+
           style={{
-            marginBottom: "20px"
+
+            width: "100%",
+
+            padding: "14px",
+
+            borderRadius: "14px",
+
+            border:
+              "1px solid rgba(59,130,246,0.14)",
+
+            background:
+              "rgba(30,41,59,0.85)",
+
+            color: "#fff",
+
+            marginBottom: "18px",
+
+            outline: "none",
+
+            boxSizing: "border-box"
+
           }}
-        >
 
-          <label
-
-            style={{
-
-              display: "block",
-
-              marginBottom: "10px",
-
-              color: "#dbeafe",
-
-              fontWeight: "600",
-
-              fontSize: "14px"
-
-            }}
-
-          >
-
-            Post Title
-
-          </label>
-
-          <input
-
-            type="text"
-
-            value={title}
-
-            onChange={(e) =>
-              setTitle(e.target.value)
-            }
-
-            placeholder="Enter post title"
-
-            style={{
-
-              width: "100%",
-
-              padding: "15px",
-
-              borderRadius: "14px",
-
-              border:
-                "1px solid rgba(59,130,246,0.14)",
-
-              background:
-                "rgba(30,41,59,0.85)",
-
-              color: "#f8fafc",
-
-              outline: "none",
-
-              fontSize: "14px",
-
-              boxSizing: "border-box"
-
-            }}
-
-          />
-
-        </div>
+        />
 
         {/* CONTENT */}
 
-        <div
+        <textarea
+
+          rows="6"
+
+          value={content}
+
+          onChange={(e) =>
+            setContent(e.target.value)
+          }
+
+          placeholder="Update content"
+
           style={{
-            marginBottom: "20px"
+
+            width: "100%",
+
+            padding: "16px",
+
+            borderRadius: "14px",
+
+            border:
+              "1px solid rgba(59,130,246,0.14)",
+
+            background:
+              "rgba(30,41,59,0.85)",
+
+            color: "#fff",
+
+            marginBottom: "18px",
+
+            outline: "none",
+
+            resize: "none",
+
+            boxSizing: "border-box"
+
           }}
-        >
 
-          <label
-
-            style={{
-
-              display: "block",
-
-              marginBottom: "10px",
-
-              color: "#dbeafe",
-
-              fontWeight: "600",
-
-              fontSize: "14px"
-
-            }}
-
-          >
-
-            Content
-
-          </label>
-
-          <textarea
-
-            rows="6"
-
-            value={content}
-
-            onChange={(e) =>
-              setContent(e.target.value)
-            }
-
-            placeholder="Write updated content..."
-
-            style={{
-
-              width: "100%",
-
-              padding: "16px",
-
-              borderRadius: "14px",
-
-              border:
-                "1px solid rgba(59,130,246,0.14)",
-
-              background:
-                "rgba(30,41,59,0.85)",
-
-              color: "#f8fafc",
-
-              outline: "none",
-
-              resize: "none",
-
-              fontSize: "14px",
-
-              lineHeight: "26px",
-
-              boxSizing: "border-box"
-
-            }}
-
-          />
-
-        </div>
+        />
 
         {/* IMAGE URL */}
 
-        <div
+        <input
+
+          type="text"
+
+          value={imageUrl}
+
+          onChange={(e) =>
+            setImageUrl(
+              e.target.value
+            )
+          }
+
+          placeholder="Image URL"
+
           style={{
-            marginBottom: "24px"
+
+            width: "100%",
+
+            padding: "14px",
+
+            borderRadius: "14px",
+
+            border:
+              "1px solid rgba(59,130,246,0.14)",
+
+            background:
+              "rgba(30,41,59,0.85)",
+
+            color: "#fff",
+
+            marginBottom: "20px",
+
+            outline: "none",
+
+            boxSizing: "border-box"
+
           }}
-        >
 
-          <label
+        />
 
-            style={{
-
-              display: "block",
-
-              marginBottom: "10px",
-
-              color: "#dbeafe",
-
-              fontWeight: "600",
-
-              fontSize: "14px"
-
-            }}
-
-          >
-
-            Image URL
-
-          </label>
-
-          <input
-
-            type="text"
-
-            value={imageUrl}
-
-            onChange={(e) =>
-              setImageUrl(
-                e.target.value
-              )
-            }
-
-            placeholder="Enter image URL"
-
-            style={{
-
-              width: "100%",
-
-              padding: "15px",
-
-              borderRadius: "14px",
-
-              border:
-                "1px solid rgba(59,130,246,0.14)",
-
-              background:
-                "rgba(30,41,59,0.85)",
-
-              color: "#f8fafc",
-
-              outline: "none",
-
-              fontSize: "14px",
-
-              boxSizing: "border-box"
-
-            }}
-
-          />
-
-        </div>
-
-        {/* PREVIEW */}
+        {/* IMAGE PREVIEW */}
 
         {
 
-          imageUrl &&
+          imageUrl && (
 
-          !imageUrl.startsWith("blob:") && (
+            <img
 
-            <div
+              src={imageUrl}
+
+              alt="preview"
+
               style={{
-                marginBottom: "24px"
+
+                width: "100%",
+
+                maxHeight: "260px",
+
+                objectFit: "cover",
+
+                borderRadius: "14px",
+
+                marginBottom: "20px"
+
               }}
-            >
 
-              <img
-
-                src={imageUrl}
-
-                alt="Preview"
-
-                style={{
-
-                  width: "100%",
-
-                  maxHeight: "320px",
-
-                  objectFit: "cover",
-
-                  borderRadius: "16px",
-
-                  border:
-                    "1px solid rgba(255,255,255,0.08)"
-
-                }}
-
-              />
-
-            </div>
+            />
 
           )
 
@@ -570,9 +462,7 @@ function EditPostModal({
 
             justifyContent: "flex-end",
 
-            gap: "12px",
-
-            flexWrap: "wrap"
+            gap: "12px"
 
           }}
 
@@ -588,21 +478,16 @@ function EditPostModal({
 
               padding: "12px 18px",
 
-              borderRadius: "14px",
+              borderRadius: "12px",
 
-              border:
-                "1px solid rgba(255,255,255,0.10)",
+              border: "none",
 
               background:
-                "rgba(255,255,255,0.05)",
+                "#334155",
 
-              color: "#f8fafc",
+              color: "white",
 
-              cursor: "pointer",
-
-              fontWeight: "600",
-
-              fontSize: "14px"
+              cursor: "pointer"
 
             }}
 
@@ -624,7 +509,7 @@ function EditPostModal({
 
               padding: "12px 20px",
 
-              borderRadius: "14px",
+              borderRadius: "12px",
 
               border: "none",
 
@@ -637,7 +522,8 @@ function EditPostModal({
 
               fontWeight: "700",
 
-              fontSize: "14px"
+              opacity:
+                loading ? 0.7 : 1
 
             }}
 
@@ -646,9 +532,7 @@ function EditPostModal({
             {
 
               loading
-
                 ? "Saving..."
-
                 : "💾 Save Changes"
 
             }
