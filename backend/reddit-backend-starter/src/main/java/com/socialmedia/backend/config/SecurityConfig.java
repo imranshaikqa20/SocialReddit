@@ -3,6 +3,8 @@ package com.socialmedia.backend.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.http.HttpMethod;
+
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
@@ -19,7 +21,9 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
-    /* Password Encoder */
+    /* =========================================
+       Password Encoder
+    ========================================= */
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -28,7 +32,9 @@ public class SecurityConfig {
 
     }
 
-    /* Security Configuration */
+    /* =========================================
+       Security Configuration
+    ========================================= */
 
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -60,6 +66,13 @@ public class SecurityConfig {
                 /* Authorization Rules */
 
                 .authorizeHttpRequests(auth -> auth
+
+                        /* Allow OPTIONS Requests */
+
+                        .requestMatchers(
+                                HttpMethod.OPTIONS,
+                                "/**"
+                        ).permitAll()
 
                         /* Public Auth APIs */
 
@@ -116,7 +129,9 @@ public class SecurityConfig {
 
     }
 
-    /* CORS Configuration */
+    /* =========================================
+       CORS Configuration
+    ========================================= */
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -131,7 +146,8 @@ public class SecurityConfig {
                 List.of(
 
                         "http://localhost:5173",
-                        "https://socialreddit-frontend.onrender.com"
+
+                        "https://socialreddit.onrender.com"
 
                 )
 
