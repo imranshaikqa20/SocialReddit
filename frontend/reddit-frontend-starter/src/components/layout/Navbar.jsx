@@ -51,17 +51,53 @@ function Navbar({
 
   const handleLogout = () => {
 
-    localStorage.removeItem("token");
+    try {
 
-    localStorage.removeItem("username");
+      /* CLEAR LOCAL STORAGE */
 
-    localStorage.removeItem("email");
+      localStorage.removeItem("token");
 
-    alert(
-      "Logout Successful ✅"
-    );
+      localStorage.removeItem("username");
 
-    navigate("/login");
+      localStorage.removeItem("email");
+
+      localStorage.clear();
+
+      /* CLEAR SESSION STORAGE */
+
+      sessionStorage.clear();
+
+      /* SUCCESS MESSAGE */
+
+      alert(
+        "Logout Successful ✅"
+      );
+
+      /* REDIRECT TO LOGIN */
+
+      navigate(
+        "/login",
+        { replace: true }
+      );
+
+      /* FORCE PAGE REFRESH */
+
+      setTimeout(() => {
+
+        window.location.href =
+          "/login";
+
+      }, 100);
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert(
+        "Logout Failed ❌"
+      );
+
+    }
 
   };
 
@@ -128,7 +164,7 @@ function Navbar({
     >
 
       {/* =========================================
-         Left Section
+         LEFT SECTION
       ========================================= */}
 
       <div
@@ -147,7 +183,7 @@ function Navbar({
 
       >
 
-        {/* Avatar */}
+        {/* AVATAR */}
 
         <div
 
@@ -193,7 +229,7 @@ function Navbar({
 
         </div>
 
-        {/* Logo */}
+        {/* LOGO */}
 
         <div>
 
@@ -256,7 +292,7 @@ function Navbar({
       </div>
 
       {/* =========================================
-         Search Bar
+         SEARCH BAR
       ========================================= */}
 
       <div
@@ -312,7 +348,7 @@ function Navbar({
       </div>
 
       {/* =========================================
-         Right Buttons
+         RIGHT BUTTONS
       ========================================= */}
 
       <div
@@ -331,7 +367,7 @@ function Navbar({
 
       >
 
-        {/* Home */}
+        {/* HOME */}
 
         <Link to="/home">
 
@@ -367,7 +403,7 @@ function Navbar({
 
         </Link>
 
-        {/* Profile */}
+        {/* PROFILE */}
 
         <Link to="/profile">
 
@@ -402,7 +438,7 @@ function Navbar({
 
         </Link>
 
-        {/* Create Post */}
+        {/* CREATE POST */}
 
         <Link to="/post">
 
@@ -431,13 +467,13 @@ function Navbar({
 
           >
 
-             Post
+            ✍️ Post
 
           </button>
 
         </Link>
 
-        {/* Community */}
+        {/* COMMUNITY */}
 
         <Link to="/create-community">
 
@@ -466,13 +502,13 @@ function Navbar({
 
           >
 
-             Community
+            👥 Community
 
           </button>
 
         </Link>
 
-        {/* Logout */}
+        {/* LOGOUT */}
 
         <button
 
@@ -501,7 +537,7 @@ function Navbar({
 
         >
 
-          Logout
+          🚪 Logout
 
         </button>
 
