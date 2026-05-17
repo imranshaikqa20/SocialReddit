@@ -1,5 +1,10 @@
 import { useState } from "react";
 
+import {
+  Link,
+  useNavigate
+} from "react-router-dom";
+
 function Navbar({
 
   searchTerm,
@@ -7,6 +12,12 @@ function Navbar({
   setSearchTerm
 
 }) {
+
+  /* =========================================
+     Navigation
+  ========================================= */
+
+  const navigate = useNavigate();
 
   /* =========================================
      Search State
@@ -48,8 +59,7 @@ function Navbar({
       "Logout Successful ✅"
     );
 
-    window.location.href =
-      "/login";
+    navigate("/login");
 
   };
 
@@ -185,39 +195,41 @@ function Navbar({
 
         <div>
 
-          <h2
-
-            onClick={() =>
-
-              window.location.href =
-                "/home"
-
-            }
-
+          <Link
+            to="/home"
             style={{
-
-              margin: 0,
-
-              cursor: "pointer",
-
-              fontSize: "25px",
-
-              fontWeight: "800",
-
-              color: "#f8fafc",
-
-              letterSpacing: "0.5px",
-
-              textShadow:
-                "0px 0px 10px rgba(59,130,246,0.20)"
-
+              textDecoration: "none"
             }}
-
           >
 
-            Social Reddit
+            <h2
 
-          </h2>
+              style={{
+
+                margin: 0,
+
+                cursor: "pointer",
+
+                fontSize: "25px",
+
+                fontWeight: "800",
+
+                color: "#f8fafc",
+
+                letterSpacing: "0.5px",
+
+                textShadow:
+                  "0px 0px 10px rgba(59,130,246,0.20)"
+
+              }}
+
+            >
+
+              Social Reddit
+
+            </h2>
+
+          </Link>
 
           <span
 
@@ -319,156 +331,144 @@ function Navbar({
 
         {/* Home */}
 
-        <button
+        <Link to="/home">
 
-          onClick={() =>
+          <button
 
-            window.location.href =
-              "/home"
+            style={{
 
-          }
+              padding: "10px 16px",
 
-          style={{
+              background:
+                "rgba(30,41,59,0.92)",
 
-            padding: "10px 16px",
+              color: "#f8fafc",
 
-            background:
-              "rgba(30,41,59,0.92)",
+              border:
+                "1px solid rgba(59,130,246,0.12)",
 
-            color: "#f8fafc",
+              borderRadius: "12px",
 
-            border:
-              "1px solid rgba(59,130,246,0.12)",
+              cursor: "pointer",
 
-            borderRadius: "12px",
+              fontSize: "13px",
 
-            cursor: "pointer",
+              fontWeight: "600"
 
-            fontSize: "13px",
+            }}
 
-            fontWeight: "600"
+          >
 
-          }}
+            🏠 Home
 
-        >
+          </button>
 
-          🏠 Home
-
-        </button>
+        </Link>
 
         {/* Profile */}
 
-        <button
+        <Link to="/profile">
 
-          onClick={() =>
+          <button
 
-            window.location.href =
-              "/profile"
+            style={{
 
-          }
+              padding: "10px 16px",
 
-          style={{
+              background:
+                "linear-gradient(to right,#0f766e,#14b8a6)",
 
-            padding: "10px 16px",
+              color: "white",
 
-            background:
-              "linear-gradient(to right,#0f766e,#14b8a6)",
+              border: "none",
 
-            color: "white",
+              borderRadius: "12px",
 
-            border: "none",
+              cursor: "pointer",
 
-            borderRadius: "12px",
+              fontSize: "13px",
 
-            cursor: "pointer",
+              fontWeight: "700"
 
-            fontSize: "13px",
+            }}
 
-            fontWeight: "700"
+          >
 
-          }}
+            👤 Profile
 
-        >
+          </button>
 
-          👤 Profile
-
-        </button>
+        </Link>
 
         {/* Create Post */}
 
-        <button
+        <Link to="/post">
 
-          onClick={() =>
+          <button
 
-            window.location.href =
-              "/post"
+            style={{
 
-          }
+              padding: "10px 16px",
 
-          style={{
+              background:
+                "linear-gradient(to right,#2563eb,#3b82f6)",
 
-            padding: "10px 16px",
+              color: "white",
 
-            background:
-              "linear-gradient(to right,#2563eb,#3b82f6)",
+              border: "none",
 
-            color: "white",
+              borderRadius: "12px",
 
-            border: "none",
+              cursor: "pointer",
 
-            borderRadius: "12px",
+              fontSize: "13px",
 
-            cursor: "pointer",
+              fontWeight: "700"
 
-            fontSize: "13px",
+            }}
 
-            fontWeight: "700"
+          >
 
-          }}
+             Post
 
-        >
+          </button>
 
-           Post
+        </Link>
 
-        </button>
+        {/* Community */}
 
-        {/* Create Community */}
+        <Link to="/community">
 
-        <button
+          <button
 
-          onClick={() =>
+            style={{
 
-            window.location.href =
-              "/create-community"
+              padding: "10px 16px",
 
-          }
+              background:
+                "linear-gradient(to right,#7c3aed,#8b5cf6)",
 
-          style={{
+              color: "white",
 
-            padding: "10px 16px",
+              border: "none",
 
-            background:
-              "linear-gradient(to right,#7c3aed,#8b5cf6)",
+              borderRadius: "12px",
 
-            color: "white",
+              cursor: "pointer",
 
-            border: "none",
+              fontSize: "13px",
 
-            borderRadius: "12px",
+              fontWeight: "700"
 
-            cursor: "pointer",
+            }}
 
-            fontSize: "13px",
+          >
 
-            fontWeight: "700"
+             Community
 
-          }}
+          </button>
 
-        >
-
-           Community
-
-        </button>
+        </Link>
 
         {/* Logout */}
 
