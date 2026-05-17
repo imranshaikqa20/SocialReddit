@@ -52,7 +52,7 @@ function PostCard({
     useState(false);
 
   /* =========================================
-     IMAGE URL
+     IMAGE URL FIX
   ========================================= */
 
   let finalImageUrl = "";
@@ -155,7 +155,7 @@ function PostCard({
     <>
 
       {/* =========================================
-         MAIN CARD
+         MAIN POST CARD
       ========================================= */}
 
       <div
@@ -389,7 +389,7 @@ function PostCard({
         </p>
 
         {/* =========================================
-           IMAGE
+           IMAGE SECTION
         ========================================= */}
 
         {
@@ -400,6 +400,8 @@ function PostCard({
 
               style={{
 
+                width: "100%",
+
                 marginBottom: "12px",
 
                 borderRadius: "12px",
@@ -407,9 +409,10 @@ function PostCard({
                 overflow: "hidden",
 
                 background:
-                  "rgba(15,23,42,0.70)",
+                  "#0f172a",
 
-                padding: "4px"
+                border:
+                  "1px solid rgba(59,130,246,0.08)"
 
               }}
 
@@ -425,13 +428,20 @@ function PostCard({
 
                   width: "100%",
 
-                  maxHeight: "220px",
+                  height: "260px",
 
                   objectFit: "cover",
 
-                  borderRadius: "10px",
+                  display: "block",
 
-                  display: "block"
+                  borderRadius: "12px"
+
+                }}
+
+                onError={(e) => {
+
+                  e.target.style.display =
+                    "none";
 
                 }}
 
@@ -461,9 +471,7 @@ function PostCard({
 
         >
 
-          {/* =========================================
-             UPVOTE
-          ========================================= */}
+          {/* UPVOTE */}
 
           <button
 
@@ -502,9 +510,7 @@ function PostCard({
 
           </button>
 
-          {/* =========================================
-             DOWNVOTE
-          ========================================= */}
+          {/* DOWNVOTE */}
 
           <button
 
@@ -543,9 +549,7 @@ function PostCard({
 
           </button>
 
-          {/* =========================================
-             COMMENTS
-          ========================================= */}
+          {/* COMMENTS */}
 
           <button
 
