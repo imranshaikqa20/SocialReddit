@@ -1,6 +1,5 @@
 package com.socialmedia.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -12,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,6 +30,7 @@ public class Post {
     ========================================= */
 
     @Id
+
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
@@ -94,7 +95,7 @@ public class Post {
     ========================================= */
 
     @ManyToOne(
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
 
     @JoinColumn(
@@ -115,7 +116,7 @@ public class Post {
     ========================================= */
 
     @ManyToOne(
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
 
     @JoinColumn(
@@ -123,6 +124,8 @@ public class Post {
     )
 
     @JsonIgnoreProperties({
+            "posts",
+            "user",
             "hibernateLazyInitializer",
             "handler"
     })
@@ -145,7 +148,8 @@ public class Post {
 
     @JsonManagedReference
 
-    private List<Comment> commentsList;
+    private List<Comment> commentsList =
+            new ArrayList<>();
 
     /* =========================================
        CREATED TIME

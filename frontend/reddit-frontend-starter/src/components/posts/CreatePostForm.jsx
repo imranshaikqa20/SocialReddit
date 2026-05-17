@@ -29,6 +29,9 @@ function CreatePostForm() {
   const [imageUrl, setImageUrl] =
     useState("");
 
+  const [imagePreview, setImagePreview] =
+    useState("");
+
   const [communityId, setCommunityId] =
     useState("");
 
@@ -91,6 +94,34 @@ function CreatePostForm() {
   };
 
   /* =========================================
+     HANDLE IMAGE
+  ========================================= */
+
+  const handleImageChange = (e) => {
+
+    const file =
+      e.target.files[0];
+
+    if (!file) {
+
+      return;
+
+    }
+
+    /* LOCAL PREVIEW */
+
+    const previewURL =
+      URL.createObjectURL(file);
+
+    setImagePreview(previewURL);
+
+    /* TEMPORARY LOCAL IMAGE */
+
+    setImageUrl(previewURL);
+
+  };
+
+  /* =========================================
      SUBMIT
   ========================================= */
 
@@ -129,7 +160,7 @@ function CreatePostForm() {
           content.trim(),
 
         imageUrl:
-          imageUrl.trim(),
+          imageUrl,
 
         author:
           username,
@@ -152,6 +183,8 @@ function CreatePostForm() {
       setContent("");
 
       setImageUrl("");
+
+      setImagePreview("");
 
       setCommunityId("");
 
@@ -439,12 +472,12 @@ function CreatePostForm() {
       </div>
 
       {/* =========================================
-         IMAGE URL
+         IMAGE UPLOAD
       ========================================= */}
 
       <div
         style={{
-          marginBottom: "18px"
+          marginBottom: "24px"
         }}
       >
 
@@ -454,7 +487,7 @@ function CreatePostForm() {
 
             display: "block",
 
-            marginBottom: "10px",
+            marginBottom: "12px",
 
             color: "#dbeafe",
 
@@ -466,31 +499,23 @@ function CreatePostForm() {
 
         >
 
-          Add Image URL 🖼️
+          Upload Image 🖼️
 
         </label>
 
         <input
 
-          type="text"
+          type="file"
 
-          placeholder="Paste image URL..."
+          accept="image/*"
 
-          value={imageUrl}
-
-          onChange={(e) =>
-
-            setImageUrl(
-              e.target.value
-            )
-
-          }
+          onChange={handleImageChange}
 
           style={{
 
             width: "100%",
 
-            padding: "16px",
+            padding: "14px",
 
             borderRadius: "16px",
 
@@ -502,11 +527,9 @@ function CreatePostForm() {
 
             color: "#f8fafc",
 
-            outline: "none",
+            cursor: "pointer",
 
-            fontSize: "15px",
-
-            boxSizing: "border-box"
+            fontSize: "14px"
 
           }}
 
@@ -520,7 +543,7 @@ function CreatePostForm() {
 
       {
 
-        imageUrl && (
+        imagePreview && (
 
           <div
 
@@ -566,7 +589,7 @@ function CreatePostForm() {
 
             <img
 
-              src={imageUrl}
+              src={imagePreview}
 
               alt="Preview"
 
@@ -579,13 +602,6 @@ function CreatePostForm() {
                 objectFit: "cover",
 
                 borderRadius: "16px"
-
-              }}
-
-              onError={(e) => {
-
-                e.target.style.display =
-                  "none";
 
               }}
 

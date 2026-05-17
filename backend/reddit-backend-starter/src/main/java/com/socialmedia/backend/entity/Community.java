@@ -1,6 +1,5 @@
 package com.socialmedia.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
@@ -51,7 +50,7 @@ public class Community {
     ========================================= */
 
     @ManyToOne(
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
 
     @JoinColumn(name = "user_id")
@@ -79,7 +78,11 @@ public class Community {
 
     )
 
-    @JsonIgnoreProperties("community")
+    @JsonIgnoreProperties({
+            "community",
+            "user",
+            "commentsList"
+    })
 
     private List<Post> posts =
             new ArrayList<>();
