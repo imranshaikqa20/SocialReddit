@@ -43,21 +43,28 @@ function CommunitySidebar() {
       const data =
         await getAllCommunities();
 
-      const safeData =
+      console.log(
+        "COMMUNITIES =>",
+        data
+      );
 
-        Array.isArray(data)
+      /* IMPORTANT FIX */
 
-          ? data
+      if (Array.isArray(data)) {
 
-          : [];
+        setCommunities(data);
 
-      setCommunities(safeData);
+      } else {
+
+        setCommunities([]);
+
+      }
 
     } catch (error) {
 
       console.log(
         "COMMUNITY FETCH ERROR :",
-        error.response?.data || error.message
+        error.response?.data || error
       );
 
       setCommunities([]);
@@ -75,12 +82,6 @@ function CommunitySidebar() {
   ========================================= */
 
   const openCommunity = (communityId) => {
-
-    if (!communityId) {
-
-      return;
-
-    }
 
     navigate(
       `/community/${communityId}`
@@ -300,38 +301,13 @@ function CommunitySidebar() {
 
                   cursor: "pointer",
 
-                  transition: "0.3s ease",
-
-                  boxShadow:
-                    "0px 4px 14px rgba(0,0,0,0.18)"
-
-                }}
-
-                onMouseEnter={(e) => {
-
-                  e.currentTarget.style.transform =
-                    "translateY(-3px)";
-
-                  e.currentTarget.style.border =
-                    "1px solid rgba(59,130,246,0.28)";
-
-                }}
-
-                onMouseLeave={(e) => {
-
-                  e.currentTarget.style.transform =
-                    "translateY(0px)";
-
-                  e.currentTarget.style.border =
-                    "1px solid rgba(255,255,255,0.06)";
+                  transition: "0.3s ease"
 
                 }}
 
               >
 
-                {/* =========================================
-                   COMMUNITY NAME
-                ========================================= */}
+                {/* COMMUNITY NAME */}
 
                 <h3
 
@@ -355,9 +331,7 @@ function CommunitySidebar() {
 
                 </h3>
 
-                {/* =========================================
-                   DESCRIPTION
-                ========================================= */}
+                {/* DESCRIPTION */}
 
                 <p
 
