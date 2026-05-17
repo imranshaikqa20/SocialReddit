@@ -98,7 +98,7 @@ function HomePage() {
       </style>
 
       {/* =========================================
-         BACKGROUND GLOW
+         BLUE GLOW EFFECTS
       ========================================= */}
 
       <div
@@ -107,18 +107,18 @@ function HomePage() {
 
           position: "fixed",
 
-          top: "-120px",
+          top: "-140px",
 
-          left: "-120px",
+          left: "-140px",
 
-          width: "280px",
+          width: "320px",
 
-          height: "280px",
+          height: "320px",
 
           background:
-            "rgba(37,99,235,0.15)",
+            "rgba(37,99,235,0.18)",
 
-          filter: "blur(120px)",
+          filter: "blur(140px)",
 
           zIndex: 0
 
@@ -132,18 +132,18 @@ function HomePage() {
 
           position: "fixed",
 
-          bottom: "-120px",
+          bottom: "-140px",
 
-          right: "-120px",
+          right: "-140px",
 
-          width: "280px",
+          width: "320px",
 
-          height: "280px",
+          height: "320px",
 
           background:
-            "rgba(59,130,246,0.12)",
+            "rgba(59,130,246,0.14)",
 
-          filter: "blur(120px)",
+          filter: "blur(140px)",
 
           zIndex: 0
 
@@ -189,11 +189,11 @@ function HomePage() {
 
         style={{
 
-          width: "92%",
+          width: "94%",
 
-          maxWidth: "1500px",
+          maxWidth: "1600px",
 
-          margin: "30px auto",
+          margin: "24px auto",
 
           display: "flex",
 
@@ -213,14 +213,26 @@ function HomePage() {
            SIDEBAR
         ========================================= */}
 
-        <div className="sidebar-wrapper">
+        <div
+
+          className="sidebar-wrapper"
+
+          style={{
+
+            width: "280px",
+
+            flexShrink: 0
+
+          }}
+
+        >
 
           <CommunitySidebar />
 
         </div>
 
         {/* =========================================
-           FEED WRAPPER
+           FEED SECTION
         ========================================= */}
 
         <div
@@ -238,7 +250,7 @@ function HomePage() {
         >
 
           {/* =========================================
-             HEADER SECTION
+             TOP HEADER
           ========================================= */}
 
           <div
@@ -255,15 +267,13 @@ function HomePage() {
 
               gap: "20px",
 
-              marginBottom: "28px"
+              marginBottom: "34px"
 
             }}
 
           >
 
-            {/* =========================================
-               LEFT
-            ========================================= */}
+            {/* LEFT */}
 
             <div>
 
@@ -273,22 +283,24 @@ function HomePage() {
 
                   margin: 0,
 
-                  fontSize: "44px",
+                  fontSize: "58px",
 
-                  fontWeight: "800",
+                  fontWeight: "900",
 
-                  lineHeight: "54px",
+                  lineHeight: "72px",
 
                   color: "#f8fafc",
 
+                  letterSpacing: "-1px",
+
                   textShadow:
-                    "0px 0px 18px rgba(59,130,246,0.20)"
+                    "0px 0px 24px rgba(59,130,246,0.25)"
 
                 }}
 
               >
 
-                Trending Posts 🚀
+                Trending Posts
 
               </h1>
 
@@ -296,15 +308,15 @@ function HomePage() {
 
                 style={{
 
-                  marginTop: "12px",
+                  marginTop: "16px",
 
                   color: "#94a3b8",
 
-                  fontSize: "15px",
+                  fontSize: "18px",
 
-                  lineHeight: "30px",
+                  lineHeight: "34px",
 
-                  maxWidth: "760px"
+                  maxWidth: "860px"
 
                 }}
 
@@ -313,41 +325,39 @@ function HomePage() {
                 Discover trending discussions,
                 memes, gaming updates,
                 technology news, ISRO launches
-                and community posts from
-                creators around the world.
+                and community posts from creators
+                around the world.
 
               </p>
 
             </div>
 
-            {/* =========================================
-               LIVE BADGE
-            ========================================= */}
+            {/* LIVE FEED */}
 
             <div
 
               style={{
 
                 background:
-                  "rgba(15,23,42,0.75)",
+                  "rgba(15,23,42,0.82)",
 
                 border:
                   "1px solid rgba(59,130,246,0.18)",
 
-                padding: "14px 22px",
+                padding: "16px 26px",
 
                 borderRadius: "18px",
 
                 color: "#dbeafe",
 
-                fontSize: "13px",
+                fontSize: "15px",
 
                 fontWeight: "700",
 
-                backdropFilter: "blur(14px)",
+                backdropFilter: "blur(16px)",
 
                 boxShadow:
-                  "0px 0px 24px rgba(37,99,235,0.12)"
+                  "0px 0px 28px rgba(37,99,235,0.12)"
 
               }}
 
@@ -360,7 +370,7 @@ function HomePage() {
           </div>
 
           {/* =========================================
-             POSTS CARD
+             POSTS CONTAINER
           ========================================= */}
 
           <div
@@ -368,21 +378,21 @@ function HomePage() {
             style={{
 
               background:
-                "rgba(15,23,42,0.58)",
+                "rgba(15,23,42,0.62)",
 
               border:
                 "1px solid rgba(255,255,255,0.05)",
 
-              borderRadius: "30px",
+              borderRadius: "34px",
 
-              padding: "26px",
+              padding: "34px",
 
-              backdropFilter: "blur(16px)",
+              backdropFilter: "blur(18px)",
 
               boxShadow:
-                "0px 10px 40px rgba(0,0,0,0.34)",
+                "0px 14px 50px rgba(0,0,0,0.38)",
 
-              minHeight: "500px"
+              minHeight: "600px"
 
             }}
 
