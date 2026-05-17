@@ -39,9 +39,13 @@ function VoteButtons({
         postId
       );
 
+      /* =========================================
+         API CALL
+      ========================================= */
+
       const response = await api.put(
 
-        `/posts/${postId}/upvote`
+        `/api/posts/${postId}/upvote`
 
       );
 
@@ -57,13 +61,13 @@ function VoteButtons({
       const updatedVotes =
 
         response.data?.votes ??
-        response.data ??
+
         voteCount + 1;
 
       setVoteCount(updatedVotes);
 
       /* =========================================
-         OPTIONAL CALLBACK
+         CALLBACK
       ========================================= */
 
       if (onVoteUpdate) {
@@ -76,7 +80,7 @@ function VoteButtons({
 
       console.log(
         "Upvote Error:",
-        error
+        error.response?.data || error
       );
 
       alert("Failed to upvote ❌");
@@ -104,9 +108,13 @@ function VoteButtons({
         postId
       );
 
+      /* =========================================
+         API CALL
+      ========================================= */
+
       const response = await api.put(
 
-        `/posts/${postId}/downvote`
+        `/api/posts/${postId}/downvote`
 
       );
 
@@ -122,13 +130,13 @@ function VoteButtons({
       const updatedVotes =
 
         response.data?.votes ??
-        response.data ??
+
         voteCount - 1;
 
       setVoteCount(updatedVotes);
 
       /* =========================================
-         OPTIONAL CALLBACK
+         CALLBACK
       ========================================= */
 
       if (onVoteUpdate) {
@@ -141,7 +149,7 @@ function VoteButtons({
 
       console.log(
         "Downvote Error:",
-        error
+        error.response?.data || error
       );
 
       alert("Failed to downvote ❌");
@@ -199,13 +207,15 @@ function VoteButtons({
 
           fontWeight: "700",
 
-          cursor: loading
-            ? "not-allowed"
-            : "pointer",
+          cursor:
+            loading
+              ? "not-allowed"
+              : "pointer",
 
-          opacity: loading
-            ? 0.7
-            : 1,
+          opacity:
+            loading
+              ? 0.7
+              : 1,
 
           transition: "0.3s",
 
@@ -250,13 +260,15 @@ function VoteButtons({
 
           fontWeight: "700",
 
-          cursor: loading
-            ? "not-allowed"
-            : "pointer",
+          cursor:
+            loading
+              ? "not-allowed"
+              : "pointer",
 
-          opacity: loading
-            ? 0.7
-            : 1,
+          opacity:
+            loading
+              ? 0.7
+              : 1,
 
           transition: "0.3s",
 

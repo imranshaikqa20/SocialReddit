@@ -52,6 +52,13 @@ function PostCard({
     useState(false);
 
   /* =========================================
+     VOTE STATE
+  ========================================= */
+
+  const [voteCount, setVoteCount] =
+    useState(votes || 0);
+
+  /* =========================================
      IMAGE URL
   ========================================= */
 
@@ -99,7 +106,10 @@ function PostCard({
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "FETCH COMMENTS ERROR:",
+        error
+      );
 
     }
 
@@ -110,6 +120,108 @@ function PostCard({
     fetchComments();
 
   }, [id]);
+
+  /* =========================================
+     HANDLE UPVOTE
+  ========================================= */
+
+  const handleUpvote = async () => {
+
+    try {
+
+      const response = await fetch(
+
+        `${API_BASE}/api/posts/${id}/upvote`,
+
+        {
+          method: "PUT"
+        }
+
+      );
+
+      const data =
+        await response.json();
+
+      console.log(
+        "UPVOTE RESPONSE:",
+        data
+      );
+
+      /* =========================================
+         UPDATE VOTE COUNT
+      ========================================= */
+
+      setVoteCount(
+
+        data?.votes ??
+
+        voteCount + 1
+
+      );
+
+    } catch (error) {
+
+      console.log(
+        "UPVOTE ERROR:",
+        error
+      );
+
+      alert("Failed to upvote ❌");
+
+    }
+
+  };
+
+  /* =========================================
+     HANDLE DOWNVOTE
+  ========================================= */
+
+  const handleDownvote = async () => {
+
+    try {
+
+      const response = await fetch(
+
+        `${API_BASE}/api/posts/${id}/downvote`,
+
+        {
+          method: "PUT"
+        }
+
+      );
+
+      const data =
+        await response.json();
+
+      console.log(
+        "DOWNVOTE RESPONSE:",
+        data
+      );
+
+      /* =========================================
+         UPDATE VOTE COUNT
+      ========================================= */
+
+      setVoteCount(
+
+        data?.votes ??
+
+        voteCount - 1
+
+      );
+
+    } catch (error) {
+
+      console.log(
+        "DOWNVOTE ERROR:",
+        error
+      );
+
+      alert("Failed to downvote ❌");
+
+    }
+
+  };
 
   /* =========================================
      DELETE POST
@@ -144,7 +256,10 @@ function PostCard({
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "DELETE ERROR:",
+        error
+      );
 
     }
 
@@ -308,7 +423,7 @@ function PostCard({
           </div>
 
           {/* =========================================
-             VOTES
+             VOTE COUNT
           ========================================= */}
 
           <div
@@ -334,7 +449,7 @@ function PostCard({
 
           >
 
-            {votes || 0} Votes
+            {voteCount} Votes
 
           </div>
 
@@ -406,13 +521,7 @@ function PostCard({
 
                 borderRadius: "12px",
 
-                overflow: "hidden",
-
-                background:
-                  "#0f172a",
-
-                border:
-                  "1px solid rgba(255,255,255,0.05)"
+                overflow: "hidden"
 
               }}
 
@@ -469,9 +578,13 @@ function PostCard({
 
         >
 
-          {/* UPVOTE */}
+          {/* =========================================
+             UPVOTE
+          ========================================= */}
 
           <button
+
+            onClick={handleUpvote}
 
             style={{
 
@@ -508,9 +621,13 @@ function PostCard({
 
           </button>
 
-          {/* DOWNVOTE */}
+          {/* =========================================
+             DOWNVOTE
+          ========================================= */}
 
           <button
+
+            onClick={handleDownvote}
 
             style={{
 
@@ -547,237 +664,9 @@ function PostCard({
 
           </button>
 
-          {/* COMMENTS */}
-
-          <button
-
-            onClick={() =>
-              setShowComments(
-                !showComments
-              )
-            }
-
-            style={{
-
-              background:
-                "linear-gradient(to right,#2563eb,#3b82f6)",
-
-              border: "none",
-
-              color: "white",
-
-              padding: "6px 10px",
-
-              borderRadius: "8px",
-
-              display: "flex",
-
-              alignItems: "center",
-
-              gap: "4px",
-
-              fontWeight: "700",
-
-              cursor: "pointer",
-
-              fontSize: "10px"
-
-            }}
-
-          >
-
-            <FaComment />
-
-            {
-
-              showComments
-                ? "Hide"
-                : commentsList.length
-
-            }
-
-          </button>
-
-          {/* =========================================
-             EDIT / DELETE
-          ========================================= */}
-
-          {
-
-            showActions && (
-
-              <>
-
-                <button
-
-                  onClick={() =>
-                    setShowEditModal(true)
-                  }
-
-                  style={{
-
-                    background:
-                      "linear-gradient(to right,#f59e0b,#d97706)",
-
-                    border: "none",
-
-                    color: "white",
-
-                    padding: "6px 10px",
-
-                    borderRadius: "8px",
-
-                    display: "flex",
-
-                    alignItems: "center",
-
-                    gap: "4px",
-
-                    fontWeight: "700",
-
-                    cursor: "pointer",
-
-                    fontSize: "10px"
-
-                  }}
-
-                >
-
-                  <FaEdit />
-
-                  Edit
-
-                </button>
-
-                <button
-
-                  onClick={handleDelete}
-
-                  style={{
-
-                    background:
-                      "linear-gradient(to right,#dc2626,#b91c1c)",
-
-                    border: "none",
-
-                    color: "white",
-
-                    padding: "6px 10px",
-
-                    borderRadius: "8px",
-
-                    display: "flex",
-
-                    alignItems: "center",
-
-                    gap: "4px",
-
-                    fontWeight: "700",
-
-                    cursor: "pointer",
-
-                    fontSize: "10px"
-
-                  }}
-
-                >
-
-                  <FaTrash />
-
-                  Delete
-
-                </button>
-
-              </>
-
-            )
-
-          }
-
         </div>
 
-        {/* =========================================
-           COMMENTS SECTION
-        ========================================= */}
-
-        {
-
-          showComments && (
-
-            <div
-              style={{
-                marginTop: "12px"
-              }}
-            >
-
-              <AddCommentForm
-
-                postId={id}
-
-                onCommentAdded={() => {
-
-                  fetchComments();
-
-                }}
-
-              />
-
-              <div
-                style={{
-                  marginTop: "12px"
-                }}
-              >
-
-                <CommentList
-
-                  postId={id}
-
-                  refreshTrigger={
-                    commentsList.length
-                  }
-
-                />
-
-              </div>
-
-            </div>
-
-          )
-
-        }
-
       </div>
-
-      {/* =========================================
-         EDIT MODAL
-      ========================================= */}
-
-      {
-
-        showEditModal && (
-
-          <EditPostModal
-
-            post={{
-              id,
-              title,
-              content,
-              imageUrl
-            }}
-
-            onClose={() =>
-              setShowEditModal(false)
-            }
-
-            onPostUpdated={
-              onPostUpdated
-            }
-
-          />
-
-        )
-
-      }
 
     </>
 
