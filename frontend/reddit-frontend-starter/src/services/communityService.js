@@ -14,42 +14,24 @@ export const getAllCommunities =
           "/api/communities"
         );
 
-      /* SAFE ARRAY */
-
-      const communities =
-
-        Array.isArray(response.data)
-
-          ? response.data
-
-          : [];
-
-      return communities.map(
-        (community) => ({
-
-          ...community,
-
-          id:
-            community.id || null,
-
-          name:
-            community.name ||
-            "Unknown Community",
-
-          description:
-            community.description || "",
-
-          posts:
-            community.posts || []
-
-        })
+      console.log(
+        "COMMUNITIES API =>",
+        response.data
       );
+
+      return Array.isArray(
+        response.data
+      )
+
+        ? response.data
+
+        : [];
 
     } catch (error) {
 
       console.log(
         "GET COMMUNITIES ERROR :",
-        error.response?.data || error.message
+        error.response?.data || error
       );
 
       return [];
@@ -80,7 +62,7 @@ export const getCommunityById =
 
       console.log(
         "GET COMMUNITY ERROR :",
-        error.response?.data || error.message
+        error.response?.data || error
       );
 
       return null;
@@ -98,24 +80,20 @@ export const createCommunity =
 
     try {
 
-      /* SAFE PAYLOAD */
-
-      const payload = {
-
-        name:
-          communityData.name?.trim(),
-
-        description:
-          communityData.description?.trim()
-
-      };
-
       const response =
         await api.post(
 
           "/api/communities",
 
-          payload
+          {
+
+            name:
+              communityData.name,
+
+            description:
+              communityData.description
+
+          }
 
         );
 
@@ -125,7 +103,7 @@ export const createCommunity =
 
       console.log(
         "CREATE COMMUNITY ERROR :",
-        error.response?.data || error.message
+        error.response?.data || error
       );
 
       throw error;
@@ -150,57 +128,19 @@ export const getPostsByCommunity =
 
         );
 
-      const posts =
+      return Array.isArray(
+        response.data
+      )
 
-        Array.isArray(response.data)
+        ? response.data
 
-          ? response.data
-
-          : [];
-
-      /* SAFE FORMAT */
-
-      return posts.map((post) => ({
-
-        ...post,
-
-        communityName:
-
-          post.community?.name ||
-
-          "General",
-
-        communityId:
-
-          post.community?.id ||
-
-          null,
-
-        author:
-
-          post.author ||
-
-          "Anonymous",
-
-        votes:
-
-          post.votes || 0,
-
-        comments:
-
-          post.comments || 0,
-
-        imageUrl:
-
-          post.imageUrl || ""
-
-      }));
+        : [];
 
     } catch (error) {
 
       console.log(
         "GET POSTS ERROR :",
-        error.response?.data || error.message
+        error.response?.data || error
       );
 
       return [];
@@ -247,7 +187,7 @@ export const joinCommunity =
 
       console.log(
         "JOIN COMMUNITY ERROR :",
-        error.response?.data || error.message
+        error.response?.data || error
       );
 
       throw error;
@@ -292,7 +232,7 @@ export const leaveCommunity =
 
       console.log(
         "LEAVE COMMUNITY ERROR :",
-        error.response?.data || error.message
+        error.response?.data || error
       );
 
       throw error;
@@ -302,7 +242,7 @@ export const leaveCommunity =
   };
 
 /* =========================================
-   GET MEMBER COUNT
+   MEMBER COUNT
 ========================================= */
 
 export const getMemberCount =
@@ -318,14 +258,14 @@ export const getMemberCount =
         );
 
       return (
-        response.data?.members || 0
+        response.data.members || 0
       );
 
     } catch (error) {
 
       console.log(
         "MEMBER COUNT ERROR :",
-        error.response?.data || error.message
+        error.response?.data || error
       );
 
       return 0;
@@ -335,7 +275,7 @@ export const getMemberCount =
   };
 
 /* =========================================
-   CHECK JOINED STATUS
+   JOINED STATUS
 ========================================= */
 
 export const isJoined =
@@ -365,14 +305,14 @@ export const isJoined =
         );
 
       return (
-        response.data?.joined || false
+        response.data.joined || false
       );
 
     } catch (error) {
 
       console.log(
         "JOINED STATUS ERROR :",
-        error.response?.data || error.message
+        error.response?.data || error
       );
 
       return false;

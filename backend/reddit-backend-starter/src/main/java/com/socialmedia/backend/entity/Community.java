@@ -1,5 +1,6 @@
 package com.socialmedia.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
@@ -57,6 +58,7 @@ public class Community {
 
     @JsonIgnoreProperties({
             "posts",
+            "communities",
             "password",
             "hibernateLazyInitializer",
             "handler"
@@ -74,15 +76,13 @@ public class Community {
 
             cascade = CascadeType.ALL,
 
-            orphanRemoval = true
+            orphanRemoval = true,
+
+            fetch = FetchType.LAZY
 
     )
 
-    @JsonIgnoreProperties({
-            "community",
-            "user",
-            "commentsList"
-    })
+    @JsonIgnore
 
     private List<Post> posts =
             new ArrayList<>();

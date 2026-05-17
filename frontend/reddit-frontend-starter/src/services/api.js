@@ -8,17 +8,19 @@ export const API_BASE_URL =
   "https://socialreddit-backend.onrender.com";
 
 /* =========================================
-   Create Axios Instance
+   AXIOS INSTANCE
 ========================================= */
 
 const api = axios.create({
+
   baseURL: API_BASE_URL,
 
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type": "application/json"
   },
 
-  timeout: 30000,
+  timeout: 30000
+
 });
 
 /* =========================================
@@ -26,23 +28,33 @@ const api = axios.create({
 ========================================= */
 
 api.interceptors.request.use(
+
   (config) => {
-    /* Get JWT Token */
 
-    const token = localStorage.getItem("token");
+    /* GET TOKEN */
 
-    /* Attach Authorization Header */
+    const token =
+      localStorage.getItem("token");
+
+    /* ATTACH TOKEN */
 
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+
+      config.headers.Authorization =
+        `Bearer ${token}`;
+
     }
 
     return config;
+
   },
 
   (error) => {
+
     return Promise.reject(error);
+
   }
+
 );
 
 /* =========================================
@@ -50,110 +62,182 @@ api.interceptors.request.use(
 ========================================= */
 
 api.interceptors.response.use(
+
   (response) => {
+
     return response;
+
   },
 
   async (error) => {
+
     console.log(
+
       "API ERROR :",
-      error.response?.data || error.message
+
+      error.response?.data ||
+
+      error.message ||
+
+      error
+
     );
 
     /* =====================================
-       Unauthorized
+       UNAUTHORIZED
     ===================================== */
 
-    if (error.response?.status === 401) {
+    if (
+
+      error.response?.status === 401
+
+    ) {
+
       localStorage.removeItem("token");
 
+      localStorage.removeItem("username");
+
       alert(
+
         "Session Expired. Please Login Again ❌"
+
       );
 
-      window.location.href = "/login";
+      window.location.href =
+        "/login";
+
     }
 
     /* =====================================
-       Forbidden
+       FORBIDDEN
     ===================================== */
 
-    else if (error.response?.status === 403) {
+    else if (
+
+      error.response?.status === 403
+
+    ) {
+
       alert(
         "Access Denied ❌"
       );
+
     }
 
     /* =====================================
-       Bad Request
+       BAD REQUEST
     ===================================== */
 
-    else if (error.response?.status === 400) {
+    else if (
+
+      error.response?.status === 400
+
+    ) {
+
       const errorMessage =
+
         error.response?.data?.message ||
+
         error.response?.data?.error ||
+
         error.response?.data ||
+
         "Bad Request ❌";
 
       alert(errorMessage);
+
     }
 
     /* =====================================
-       Not Found
+       NOT FOUND
     ===================================== */
 
-    else if (error.response?.status === 404) {
-      alert(
-        "API Endpoint Not Found ❌"
+    else if (
+
+      error.response?.status === 404
+
+    ) {
+
+      console.log(
+        "API Endpoint Not Found"
       );
+
     }
 
     /* =====================================
-       Internal Server Error
+       INTERNAL SERVER ERROR
     ===================================== */
 
-    else if (error.response?.status === 500) {
+    else if (
+
+      error.response?.status === 500
+
+    ) {
+
       const errorMessage =
+
         error.response?.data?.message ||
+
         error.response?.data?.error ||
+
         error.response?.data ||
+
         "Internal Server Error ❌";
 
       console.error(
+
         "SERVER ERROR :",
+
         errorMessage
+
       );
 
       alert(errorMessage);
+
     }
 
     /* =====================================
-       Network Error / Backend Sleeping
+       NETWORK ERROR
     ===================================== */
 
     else if (
+
       error.code === "ERR_NETWORK" ||
+
       error.message === "Network Error"
+
     ) {
+
       alert(
+
         "Backend server is starting. Please wait 30 seconds and try again 🚀"
+
       );
+
     }
 
     /* =====================================
-       Timeout Error
+       TIMEOUT ERROR
     ===================================== */
 
     else if (
+
       error.code === "ECONNABORTED"
+
     ) {
+
       alert(
+
         "Request Timeout ❌ Backend took too long to respond."
+
       );
+
     }
 
     return Promise.reject(error);
+
   }
+
 );
 
 export default api;
