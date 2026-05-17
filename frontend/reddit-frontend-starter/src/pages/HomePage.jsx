@@ -93,6 +93,20 @@ function HomePage() {
 
           }
 
+          @media (max-width: 768px) {
+
+            .main-heading {
+              font-size: 36px !important;
+              line-height: 46px !important;
+            }
+
+            .main-subtext {
+              font-size: 15px !important;
+              line-height: 28px !important;
+            }
+
+          }
+
         `}
 
       </style>
@@ -193,11 +207,11 @@ function HomePage() {
 
           maxWidth: "1600px",
 
-          margin: "24px auto",
+          margin: "20px auto",
 
           display: "flex",
 
-          gap: "28px",
+          gap: "26px",
 
           alignItems: "flex-start",
 
@@ -265,9 +279,9 @@ function HomePage() {
 
               flexWrap: "wrap",
 
-              gap: "20px",
+              gap: "18px",
 
-              marginBottom: "34px"
+              marginBottom: "28px"
 
             }}
 
@@ -279,22 +293,24 @@ function HomePage() {
 
               <h1
 
+                className="main-heading"
+
                 style={{
 
                   margin: 0,
 
-                  fontSize: "58px",
+                  fontSize: "42px",
 
-                  fontWeight: "900",
+                  fontWeight: "800",
 
-                  lineHeight: "72px",
+                  lineHeight: "54px",
 
                   color: "#f8fafc",
 
                   letterSpacing: "-1px",
 
                   textShadow:
-                    "0px 0px 24px rgba(59,130,246,0.25)"
+                    "0px 0px 18px rgba(59,130,246,0.18)"
 
                 }}
 
@@ -306,17 +322,21 @@ function HomePage() {
 
               <p
 
+                className="main-subtext"
+
                 style={{
 
-                  marginTop: "16px",
+                  marginTop: "12px",
 
                   color: "#94a3b8",
 
-                  fontSize: "18px",
+                  fontSize: "16px",
 
-                  lineHeight: "34px",
+                  lineHeight: "30px",
 
-                  maxWidth: "860px"
+                  maxWidth: "760px",
+
+                  fontWeight: "400"
 
                 }}
 
@@ -344,20 +364,20 @@ function HomePage() {
                 border:
                   "1px solid rgba(59,130,246,0.18)",
 
-                padding: "16px 26px",
+                padding: "14px 22px",
 
-                borderRadius: "18px",
+                borderRadius: "16px",
 
                 color: "#dbeafe",
 
-                fontSize: "15px",
+                fontSize: "14px",
 
                 fontWeight: "700",
 
                 backdropFilter: "blur(16px)",
 
                 boxShadow:
-                  "0px 0px 28px rgba(37,99,235,0.12)"
+                  "0px 0px 20px rgba(37,99,235,0.10)"
 
               }}
 
@@ -383,9 +403,9 @@ function HomePage() {
               border:
                 "1px solid rgba(255,255,255,0.05)",
 
-              borderRadius: "34px",
+              borderRadius: "30px",
 
-              padding: "34px",
+              padding: "30px",
 
               backdropFilter: "blur(18px)",
 
