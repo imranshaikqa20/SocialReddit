@@ -34,7 +34,6 @@ function PostCard({
   imageUrl,
   votes,
   author,
-  comments,
   communityName,
   onPostUpdated,
   showActions = false
@@ -79,7 +78,7 @@ function PostCard({
   }
 
   /* =========================================
-     LOAD COMMENTS COUNT
+     FETCH COMMENTS
   ========================================= */
 
   const fetchComments = async () => {
@@ -716,70 +715,74 @@ function PostCard({
         </div>
 
         {/* =========================================
-           ADD COMMENT FORM
-        ========================================= */}
-
-        <div
-          style={{
-            marginTop: "18px"
-          }}
-        >
-
-          <AddCommentForm
-
-            postId={id}
-
-            onCommentAdded={() => {
-
-              fetchComments();
-
-              setShowComments(true);
-
-            }}
-
-          />
-
-        </div>
-
-        {/* =========================================
-           COMMENTS LIST
+           COMMENTS SECTION
         ========================================= */}
 
         {
 
           showComments && (
 
-            <div
+            <>
 
-              style={{
+              {/* ADD COMMENT */}
 
-                marginTop: "24px",
+              <div
+                style={{
+                  marginTop: "18px"
+                }}
+              >
 
-                background:
-                  "rgba(15,23,42,0.45)",
+                <AddCommentForm
 
-                border:
-                  "1px solid rgba(255,255,255,0.05)",
+                  postId={id}
 
-                borderRadius: "18px",
+                  onCommentAdded={() => {
 
-                padding: "18px"
+                    fetchComments();
 
-              }}
+                    setShowComments(true);
 
-            >
+                  }}
 
-              <CommentList
+                />
 
-                postId={id}
+              </div>
 
-                refreshTrigger={
-                  commentsList.length
-                }
+              {/* COMMENTS LIST */}
 
-              />
+              <div
 
-            </div>
+                style={{
+
+                  marginTop: "24px",
+
+                  background:
+                    "rgba(15,23,42,0.45)",
+
+                  border:
+                    "1px solid rgba(255,255,255,0.05)",
+
+                  borderRadius: "18px",
+
+                  padding: "18px"
+
+                }}
+
+              >
+
+                <CommentList
+
+                  postId={id}
+
+                  refreshTrigger={
+                    commentsList.length
+                  }
+
+                />
+
+              </div>
+
+            </>
 
           )
 
