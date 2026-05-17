@@ -11,7 +11,7 @@ export const getAllCommunities =
 
       const response =
         await api.get(
-          "/communities"
+          "/api/communities"
         );
 
       return response.data;
@@ -20,7 +20,7 @@ export const getAllCommunities =
 
       console.log(
         "Get Communities Error :",
-        error
+        error.response?.data || error
       );
 
       return [];
@@ -41,7 +41,7 @@ export const getCommunityById =
       const response =
         await api.get(
 
-          `/communities/${communityId}`
+          `/api/communities/${communityId}`
 
         );
 
@@ -51,7 +51,7 @@ export const getCommunityById =
 
       console.log(
         "Get Community Error :",
-        error
+        error.response?.data || error
       );
 
       return null;
@@ -72,7 +72,7 @@ export const createCommunity =
       const response =
         await api.post(
 
-          "/communities",
+          "/api/communities",
 
           {
             name:
@@ -90,7 +90,7 @@ export const createCommunity =
 
       console.log(
         "Create Community Error :",
-        error
+        error.response?.data || error
       );
 
       throw error;
@@ -107,8 +107,6 @@ export const getPostsByCommunity =
   async (communityId) => {
 
     try {
-
-      /* IMPORTANT FIX */
 
       const response =
         await api.get(
@@ -127,7 +125,7 @@ export const getPostsByCommunity =
 
       console.log(
         "Get Posts Error :",
-        error
+        error.response?.data || error
       );
 
       return [];
@@ -154,7 +152,7 @@ export const joinCommunity =
       const response =
         await api.post(
 
-          `/communities/${communityId}/join`,
+          `/api/communities/${communityId}/join`,
 
           null,
 
@@ -174,7 +172,7 @@ export const joinCommunity =
 
       console.log(
         "Join Community Error :",
-        error
+        error.response?.data || error
       );
 
       throw error;
@@ -201,7 +199,7 @@ export const leaveCommunity =
       const response =
         await api.delete(
 
-          `/communities/${communityId}/leave`,
+          `/api/communities/${communityId}/leave`,
 
           {
 
@@ -219,7 +217,7 @@ export const leaveCommunity =
 
       console.log(
         "Leave Community Error :",
-        error
+        error.response?.data || error
       );
 
       throw error;
@@ -240,7 +238,7 @@ export const getMemberCount =
       const response =
         await api.get(
 
-          `/communities/${communityId}/members`
+          `/api/communities/${communityId}/members`
 
         );
 
@@ -252,7 +250,7 @@ export const getMemberCount =
 
       console.log(
         "Member Count Error :",
-        error
+        error.response?.data || error
       );
 
       return 0;
@@ -279,7 +277,7 @@ export const isJoined =
       const response =
         await api.get(
 
-          `/communities/${communityId}/joined`,
+          `/api/communities/${communityId}/joined`,
 
           {
 
@@ -299,7 +297,7 @@ export const isJoined =
 
       console.log(
         "Joined Status Error :",
-        error
+        error.response?.data || error
       );
 
       return false;
