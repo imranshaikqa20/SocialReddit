@@ -29,9 +29,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private JwtService jwtService;
 
-    /* =========================
+    /* =========================================
        Signup Logic
-       ========================= */
+    ========================================= */
 
     @Override
     public User signup(
@@ -40,8 +40,13 @@ public class AuthServiceImpl implements AuthService {
 
         /* Validate Username */
 
-        if (request.getUsername() == null
-                || request.getUsername().trim().isEmpty()) {
+        if (
+
+                request.getUsername() == null ||
+
+                        request.getUsername().trim().isEmpty()
+
+        ) {
 
             throw new RuntimeException(
                     "Username is required"
@@ -51,8 +56,13 @@ public class AuthServiceImpl implements AuthService {
 
         /* Validate Email */
 
-        if (request.getEmail() == null
-                || request.getEmail().trim().isEmpty()) {
+        if (
+
+                request.getEmail() == null ||
+
+                        request.getEmail().trim().isEmpty()
+
+        ) {
 
             throw new RuntimeException(
                     "Email is required"
@@ -62,8 +72,13 @@ public class AuthServiceImpl implements AuthService {
 
         /* Validate Password */
 
-        if (request.getPassword() == null
-                || request.getPassword().trim().isEmpty()) {
+        if (
+
+                request.getPassword() == null ||
+
+                        request.getPassword().trim().isEmpty()
+
+        ) {
 
             throw new RuntimeException(
                     "Password is required"
@@ -71,11 +86,25 @@ public class AuthServiceImpl implements AuthService {
 
         }
 
-        /* Check Email Exists */
+        /* =========================================
+           Normalize Email
+        ========================================= */
 
-        if (userRepository.existsByEmail(
+        String email =
+
                 request.getEmail()
-        )) {
+                        .trim()
+                        .toLowerCase();
+
+        /* =========================================
+           Check Existing Email
+        ========================================= */
+
+        if (
+
+                userRepository.existsByEmail(email)
+
+        ) {
 
             throw new RuntimeException(
                     "Email already exists"
@@ -83,11 +112,19 @@ public class AuthServiceImpl implements AuthService {
 
         }
 
-        /* Check Username Exists */
+        /* =========================================
+           Check Existing Username
+        ========================================= */
 
-        if (userRepository.existsByUsername(
-                request.getUsername()
-        )) {
+        if (
+
+                userRepository.existsByUsername(
+
+                        request.getUsername().trim()
+
+                )
+
+        ) {
 
             throw new RuntimeException(
                     "Username already exists"
@@ -95,35 +132,45 @@ public class AuthServiceImpl implements AuthService {
 
         }
 
-        /* Create User */
+        /* =========================================
+           Create User
+        ========================================= */
 
         User user = new User();
 
         user.setUsername(
+
                 request.getUsername().trim()
+
         );
 
-        user.setEmail(
-                request.getEmail().trim().toLowerCase()
-        );
+        user.setEmail(email);
 
-        /* Encrypt Password */
+        /* =========================================
+           Encrypt Password
+        ========================================= */
 
-        user.setPassword(
+        String encryptedPassword =
+
                 passwordEncoder.encode(
-                        request.getPassword()
-                )
-        );
 
-        /* Save User */
+                        request.getPassword().trim()
+
+                );
+
+        user.setPassword(encryptedPassword);
+
+        /* =========================================
+           Save User
+        ========================================= */
 
         return userRepository.save(user);
 
     }
 
-    /* =========================
+    /* =========================================
        Login Logic
-       ========================= */
+    ========================================= */
 
     @Override
     public String login(
@@ -132,8 +179,13 @@ public class AuthServiceImpl implements AuthService {
 
         /* Validate Email */
 
-        if (request.getEmail() == null
-                || request.getEmail().trim().isEmpty()) {
+        if (
+
+                request.getEmail() == null ||
+
+                        request.getEmail().trim().isEmpty()
+
+        ) {
 
             throw new RuntimeException(
                     "Email is required"
@@ -143,8 +195,13 @@ public class AuthServiceImpl implements AuthService {
 
         /* Validate Password */
 
-        if (request.getPassword() == null
-                || request.getPassword().trim().isEmpty()) {
+        if (
+
+                request.getPassword() == null ||
+
+                        request.getPassword().trim().isEmpty()
+
+        ) {
 
             throw new RuntimeException(
                     "Password is required"
@@ -152,35 +209,57 @@ public class AuthServiceImpl implements AuthService {
 
         }
 
-        /* Find User */
+        /* =========================================
+           Normalize Email
+        ========================================= */
+
+        String email =
+
+                request.getEmail()
+                        .trim()
+                        .toLowerCase();
+
+        /* =========================================
+           Find User
+        ========================================= */
 
         User user = userRepository
-                .findByEmail(
-                        request.getEmail().trim().toLowerCase()
-                )
+
+                .findByEmail(email)
+
                 .orElseThrow(() ->
+
                         new RuntimeException(
                                 "User not found"
                         )
+
                 );
 
-        /* Check Password */
+        /* =========================================
+           Password Match
+        ========================================= */
 
-        boolean isPasswordCorrect =
+        boolean passwordMatched =
+
                 passwordEncoder.matches(
-                        request.getPassword(),
+
+                        request.getPassword().trim(),
+
                         user.getPassword()
+
                 );
 
-        if (!isPasswordCorrect) {
+        if (!passwordMatched) {
 
             throw new RuntimeException(
-                    "Invalid password"
+                    "Invalid Email or Password"
             );
 
         }
 
-        /* Generate JWT Token */
+        /* =========================================
+           Generate JWT
+        ========================================= */
 
         return jwtService.generateToken(
                 user.getEmail()
