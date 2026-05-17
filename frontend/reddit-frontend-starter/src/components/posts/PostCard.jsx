@@ -171,10 +171,6 @@ function PostCard({
 
     <>
 
-      {/* =========================================
-         MAIN POST CARD
-      ========================================= */}
-
       <div
 
         style={{
@@ -185,20 +181,20 @@ function PostCard({
           border:
             "1px solid rgba(255,255,255,0.05)",
 
-          borderRadius: "16px",
+          borderRadius: "22px",
 
-          padding: "14px",
+          padding: "22px",
 
           color: "white",
 
           width: "100%",
 
-          maxWidth: "540px",
+          maxWidth: "900px",
 
-          margin: "0 auto 18px auto",
+          margin: "0 auto",
 
           boxShadow:
-            "0px 4px 14px rgba(0,0,0,0.20)",
+            "0px 8px 26px rgba(0,0,0,0.24)",
 
           backdropFilter: "blur(12px)"
 
@@ -220,7 +216,7 @@ function PostCard({
 
             justifyContent: "center",
 
-            padding: "4px 10px",
+            padding: "6px 14px",
 
             borderRadius: "999px",
 
@@ -229,11 +225,11 @@ function PostCard({
 
             color: "#60a5fa",
 
-            fontSize: "9px",
+            fontSize: "11px",
 
             fontWeight: "700",
 
-            marginBottom: "12px"
+            marginBottom: "18px"
 
           }}
 
@@ -255,7 +251,7 @@ function PostCard({
 
             alignItems: "center",
 
-            marginBottom: "14px"
+            marginBottom: "20px"
 
           }}
 
@@ -265,9 +261,9 @@ function PostCard({
 
             style={{
 
-              width: "38px",
+              width: "48px",
 
-              height: "38px",
+              height: "48px",
 
               borderRadius: "50%",
 
@@ -282,9 +278,9 @@ function PostCard({
 
               fontWeight: "800",
 
-              fontSize: "14px",
+              fontSize: "18px",
 
-              marginRight: "10px"
+              marginRight: "14px"
 
             }}
 
@@ -302,7 +298,7 @@ function PostCard({
 
                 fontWeight: "700",
 
-                fontSize: "13px",
+                fontSize: "16px",
 
                 color: "#f8fafc"
 
@@ -318,11 +314,11 @@ function PostCard({
 
               style={{
 
-                fontSize: "10px",
+                fontSize: "12px",
 
                 color: "#94a3b8",
 
-                marginTop: "2px"
+                marginTop: "3px"
 
               }}
 
@@ -331,37 +327,6 @@ function PostCard({
               Posted in community
 
             </div>
-
-          </div>
-
-          {/* =========================================
-             VOTES
-          ========================================= */}
-
-          <div
-
-            style={{
-
-              marginLeft: "auto",
-
-              background:
-                "rgba(37,99,235,0.18)",
-
-              padding: "5px 10px",
-
-              borderRadius: "8px",
-
-              color: "#60a5fa",
-
-              fontWeight: "700",
-
-              fontSize: "9px"
-
-            }}
-
-          >
-
-            {votes || 0} Votes
 
           </div>
 
@@ -375,11 +340,11 @@ function PostCard({
 
           style={{
 
-            fontSize: "20px",
+            fontSize: "28px",
 
-            lineHeight: "28px",
+            lineHeight: "40px",
 
-            marginBottom: "10px",
+            marginBottom: "14px",
 
             fontWeight: "800",
 
@@ -403,11 +368,11 @@ function PostCard({
 
             color: "#cbd5e1",
 
-            lineHeight: "22px",
+            lineHeight: "30px",
 
-            marginBottom: "14px",
+            marginBottom: "20px",
 
-            fontSize: "13px"
+            fontSize: "16px"
 
           }}
 
@@ -418,7 +383,7 @@ function PostCard({
         </p>
 
         {/* =========================================
-           IMAGE SECTION
+           IMAGE
         ========================================= */}
 
         {
@@ -431,23 +396,11 @@ function PostCard({
 
                 width: "100%",
 
-                marginBottom: "14px",
-
-                borderRadius: "14px",
+                marginBottom: "20px",
 
                 overflow: "hidden",
 
-                background:
-                  "#0f172a",
-
-                border:
-                  "1px solid rgba(255,255,255,0.06)",
-
-                display: "flex",
-
-                alignItems: "center",
-
-                justifyContent: "center"
+                borderRadius: "18px"
 
               }}
 
@@ -463,15 +416,14 @@ function PostCard({
 
                   width: "100%",
 
-                  height: "auto",
+                  maxHeight: "420px",
 
-                  maxHeight: "320px",
+                  objectFit: "cover",
 
-                  objectFit: "contain",
+                  borderRadius: "18px",
 
-                  display: "block",
-
-                  borderRadius: "14px"
+                  border:
+                    "1px solid rgba(255,255,255,0.06)"
 
                 }}
 
@@ -503,7 +455,7 @@ function PostCard({
             borderTop:
               "1px solid rgba(255,255,255,0.06)",
 
-            marginBottom: "14px"
+            marginBottom: "20px"
 
           }}
 
@@ -519,9 +471,9 @@ function PostCard({
 
             display: "flex",
 
-            gap: "6px",
+            gap: "10px",
 
-            marginBottom: "14px",
+            marginBottom: "18px",
 
             flexWrap: "wrap"
 
@@ -542,9 +494,9 @@ function PostCard({
 
               color: "white",
 
-              padding: "7px 12px",
+              padding: "10px 16px",
 
-              borderRadius: "10px",
+              borderRadius: "12px",
 
               fontWeight: "700",
 
@@ -554,9 +506,9 @@ function PostCard({
 
               alignItems: "center",
 
-              gap: "5px",
+              gap: "8px",
 
-              fontSize: "11px"
+              fontSize: "13px"
 
             }}
 
@@ -581,9 +533,9 @@ function PostCard({
 
               color: "white",
 
-              padding: "7px 12px",
+              padding: "10px 16px",
 
-              borderRadius: "10px",
+              borderRadius: "12px",
 
               fontWeight: "700",
 
@@ -593,9 +545,9 @@ function PostCard({
 
               alignItems: "center",
 
-              gap: "5px",
+              gap: "8px",
 
-              fontSize: "11px"
+              fontSize: "13px"
 
             }}
 
@@ -626,9 +578,9 @@ function PostCard({
 
               color: "white",
 
-              padding: "7px 12px",
+              padding: "10px 16px",
 
-              borderRadius: "10px",
+              borderRadius: "12px",
 
               fontWeight: "700",
 
@@ -638,9 +590,9 @@ function PostCard({
 
               alignItems: "center",
 
-              gap: "5px",
+              gap: "8px",
 
-              fontSize: "11px"
+              fontSize: "13px"
 
             }}
 
@@ -652,9 +604,9 @@ function PostCard({
 
               showComments
 
-                ? "Hide"
+                ? "Hide Comments"
 
-                : `${commentsList.length}`
+                : `${commentsList.length} Comments`
 
             }
 
@@ -687,9 +639,9 @@ function PostCard({
 
                     color: "white",
 
-                    padding: "7px 12px",
+                    padding: "10px 16px",
 
-                    borderRadius: "10px",
+                    borderRadius: "12px",
 
                     fontWeight: "700",
 
@@ -699,9 +651,9 @@ function PostCard({
 
                     alignItems: "center",
 
-                    gap: "5px",
+                    gap: "8px",
 
-                    fontSize: "11px"
+                    fontSize: "13px"
 
                   }}
 
@@ -728,9 +680,9 @@ function PostCard({
 
                     color: "white",
 
-                    padding: "7px 12px",
+                    padding: "10px 16px",
 
-                    borderRadius: "10px",
+                    borderRadius: "12px",
 
                     fontWeight: "700",
 
@@ -740,9 +692,9 @@ function PostCard({
 
                     alignItems: "center",
 
-                    gap: "5px",
+                    gap: "8px",
 
-                    fontSize: "11px"
+                    fontSize: "13px"
 
                   }}
 
@@ -776,7 +728,7 @@ function PostCard({
 
               <div
                 style={{
-                  marginTop: "14px"
+                  marginTop: "18px"
                 }}
               >
 
@@ -802,7 +754,7 @@ function PostCard({
 
                 style={{
 
-                  marginTop: "18px",
+                  marginTop: "24px",
 
                   background:
                     "rgba(15,23,42,0.45)",
@@ -810,9 +762,9 @@ function PostCard({
                   border:
                     "1px solid rgba(255,255,255,0.05)",
 
-                  borderRadius: "14px",
+                  borderRadius: "18px",
 
-                  padding: "14px"
+                  padding: "18px"
 
                 }}
 
