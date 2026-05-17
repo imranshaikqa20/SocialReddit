@@ -383,7 +383,7 @@ function PostCard({
         </p>
 
         {/* =========================================
-           IMAGE
+           IMAGE SECTION
         ========================================= */}
 
         {
@@ -396,11 +396,22 @@ function PostCard({
 
                 width: "100%",
 
-                marginBottom: "20px",
+                marginBottom: "24px",
+
+                borderRadius: "22px",
 
                 overflow: "hidden",
 
-                borderRadius: "18px"
+                background:
+                  "linear-gradient(135deg,#020617,#0f172a)",
+
+                padding: "14px",
+
+                border:
+                  "1px solid rgba(59,130,246,0.12)",
+
+                boxShadow:
+                  "0px 0px 28px rgba(37,99,235,0.10)"
 
               }}
 
@@ -416,14 +427,16 @@ function PostCard({
 
                   width: "100%",
 
-                  maxHeight: "420px",
+                  maxHeight: "520px",
 
                   objectFit: "cover",
 
                   borderRadius: "18px",
 
+                  display: "block",
+
                   border:
-                    "1px solid rgba(255,255,255,0.06)"
+                    "1px solid rgba(255,255,255,0.05)"
 
                 }}
 
