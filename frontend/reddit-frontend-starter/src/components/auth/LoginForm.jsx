@@ -17,9 +17,7 @@ function LoginForm() {
   const [loading, setLoading] =
     useState(false);
 
-  /* =========================================
-     Handle Login
-  ========================================= */
+  /* Handle Login */
 
   const handleLogin = async (e) => {
 
@@ -27,11 +25,9 @@ function LoginForm() {
 
     /* Validation */
 
-    if (!email.trim() || !password.trim()) {
+    if (!email || !password) {
 
-      alert(
-        "Please fill all fields ❌"
-      );
+      alert("Please fill all fields ❌");
 
       return;
 
@@ -41,89 +37,55 @@ function LoginForm() {
 
       setLoading(true);
 
-      /* =========================================
-         API Call
-      ========================================= */
+      /* API Call */
 
       const response =
         await loginUser({
 
-          email:
-            email.trim().toLowerCase(),
-
-          password:
-            password.trim()
+          email,
+          password
 
         });
 
-      console.log(
-        "LOGIN RESPONSE :",
-        response.data
-      );
+      console.log(response.data);
 
-      /* =========================================
-         Extract Data
-      ========================================= */
-
-      const userData =
-        response.data;
-
-      /* =========================================
-         Save Local Storage
-      ========================================= */
+      /* Save JWT Token */
 
       localStorage.setItem(
+
         "token",
-        userData.token
+
+        response.data.token
+
       );
 
+      /* Save Username */
+
       localStorage.setItem(
+
         "username",
-        userData.username
+
+        email
+
       );
 
-      localStorage.setItem(
-        "email",
-        userData.email
-      );
+      alert("Login Success ");
 
-      /* =========================================
-         Success
-      ========================================= */
-
-      alert(
-        userData.message ||
-        "Login Success 🚀"
-      );
-
-      /* Redirect */
+      /* Redirect To Home */
 
       navigate("/home");
 
-      /* Reload */
+      /* Refresh Application */
 
       window.location.reload();
 
     } catch (error) {
 
-      console.log(
-        "LOGIN ERROR :",
-        error.response?.data || error
+      console.log(error);
+
+      alert(
+        "Invalid Email or Password ❌"
       );
-
-      /* =========================================
-         Better Error Handling
-      ========================================= */
-
-      const errorMessage =
-
-        error.response?.data?.error ||
-
-        error.response?.data?.message ||
-
-        "Invalid Email or Password ❌";
-
-      alert(errorMessage);
 
     } finally {
 
@@ -355,8 +317,8 @@ function LoginForm() {
               fontSize: "15px",
               fontWeight: "700",
               cursor: "pointer",
-              opacity:
-                loading ? 0.7 : 1
+              boxShadow:
+                "0px 0px 18px rgba(37,99,235,0.35)"
             }}
           >
 
