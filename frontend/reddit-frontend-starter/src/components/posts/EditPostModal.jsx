@@ -5,9 +5,7 @@ import api from "../../services/api";
 function EditPostModal({
 
   post,
-
   onClose,
-
   onPostUpdated
 
 }) {
@@ -48,6 +46,61 @@ function EditPostModal({
 
       setLoading(true);
 
+      /* =========================================
+         FIX IMAGE URL
+      ========================================= */
+
+      let finalImageUrl =
+        imageUrl;
+
+      /* REMOVE INVALID BLOB URL */
+
+      if (
+
+        finalImageUrl &&
+
+        finalImageUrl.startsWith(
+          "blob:"
+        )
+
+      ) {
+
+        finalImageUrl = "";
+
+      }
+
+      /* REMOVE DOMAIN */
+
+      if (
+
+        finalImageUrl &&
+
+        finalImageUrl.includes(
+          "socialreddit-backend.onrender.com"
+        )
+
+      ) {
+
+        finalImageUrl =
+          finalImageUrl.replace(
+
+            "https://socialreddit-backend.onrender.com",
+
+            ""
+
+          );
+
+      }
+
+      console.log(
+        "FINAL UPDATE IMAGE =>",
+        finalImageUrl
+      );
+
+      /* =========================================
+         API UPDATE
+      ========================================= */
+
       await api.put(
 
         `/posts/${post.id}`,
@@ -55,10 +108,10 @@ function EditPostModal({
         {
 
           title,
-
           content,
 
-          imageUrl
+          imageUrl:
+            finalImageUrl
 
         }
 
@@ -68,7 +121,7 @@ function EditPostModal({
         "Post Updated Successfully 🚀"
       );
 
-      /* Refresh Parent */
+      /* REFRESH POSTS */
 
       if (onPostUpdated) {
 
@@ -76,7 +129,7 @@ function EditPostModal({
 
       }
 
-      /* Close Modal */
+      /* CLOSE MODAL */
 
       onClose();
 
@@ -156,7 +209,7 @@ function EditPostModal({
 
       >
 
-        {/* Close */}
+        {/* CLOSE */}
 
         <button
 
@@ -197,7 +250,7 @@ function EditPostModal({
 
         </button>
 
-        {/* Heading */}
+        {/* HEADING */}
 
         <div
           style={{
@@ -248,7 +301,7 @@ function EditPostModal({
 
         </div>
 
-        {/* Title */}
+        {/* TITLE */}
 
         <div
           style={{
@@ -318,7 +371,7 @@ function EditPostModal({
 
         </div>
 
-        {/* Content */}
+        {/* CONTENT */}
 
         <div
           style={{
@@ -392,7 +445,7 @@ function EditPostModal({
 
         </div>
 
-        {/* Image URL */}
+        {/* IMAGE URL */}
 
         <div
           style={{
@@ -464,11 +517,13 @@ function EditPostModal({
 
         </div>
 
-        {/* Preview */}
+        {/* PREVIEW */}
 
         {
 
-          imageUrl && (
+          imageUrl &&
+
+          !imageUrl.startsWith("blob:") && (
 
             <div
               style={{
@@ -505,7 +560,7 @@ function EditPostModal({
 
         }
 
-        {/* Buttons */}
+        {/* BUTTONS */}
 
         <div
 
@@ -523,7 +578,7 @@ function EditPostModal({
 
         >
 
-          {/* Cancel */}
+          {/* CANCEL */}
 
           <button
 
@@ -557,7 +612,7 @@ function EditPostModal({
 
           </button>
 
-          {/* Save */}
+          {/* SAVE */}
 
           <button
 
