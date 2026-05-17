@@ -1,9 +1,10 @@
 services:
   - type: web
-    name: socialreddit-frontend
+    name: socialreddit
     env: static
+    rootDir: frontend/reddit-frontend-starter
     buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
+    staticPublishPath: dist
 
     routes:
       - type: rewrite
