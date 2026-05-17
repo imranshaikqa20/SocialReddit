@@ -5,21 +5,28 @@ import api from "../../services/api";
 function VoteButtons({
 
   postId,
-  votes
+  votes,
+  onVoteUpdate
 
 }) {
 
-  /* Vote Count State */
+  /* =========================================
+     VOTE STATE
+  ========================================= */
 
   const [voteCount, setVoteCount] =
     useState(votes || 0);
 
-  /* Loading State */
+  /* =========================================
+     LOADING STATE
+  ========================================= */
 
   const [loading, setLoading] =
     useState(false);
 
-  /* Handle Upvote */
+  /* =========================================
+     HANDLE UPVOTE
+  ========================================= */
 
   const handleUpvote = async () => {
 
@@ -43,11 +50,27 @@ function VoteButtons({
         response.data
       );
 
-      /* Update Vote Count */
+      /* =========================================
+         UPDATED VOTES
+      ========================================= */
 
-      setVoteCount(
-        response.data.votes
-      );
+      const updatedVotes =
+
+        response.data?.votes ??
+        response.data ??
+        voteCount + 1;
+
+      setVoteCount(updatedVotes);
+
+      /* =========================================
+         OPTIONAL CALLBACK
+      ========================================= */
+
+      if (onVoteUpdate) {
+
+        onVoteUpdate(updatedVotes);
+
+      }
 
     } catch (error) {
 
@@ -66,7 +89,9 @@ function VoteButtons({
 
   };
 
-  /* Handle Downvote */
+  /* =========================================
+     HANDLE DOWNVOTE
+  ========================================= */
 
   const handleDownvote = async () => {
 
@@ -90,11 +115,27 @@ function VoteButtons({
         response.data
       );
 
-      /* Update Vote Count */
+      /* =========================================
+         UPDATED VOTES
+      ========================================= */
 
-      setVoteCount(
-        response.data.votes
-      );
+      const updatedVotes =
+
+        response.data?.votes ??
+        response.data ??
+        voteCount - 1;
+
+      setVoteCount(updatedVotes);
+
+      /* =========================================
+         OPTIONAL CALLBACK
+      ========================================= */
+
+      if (onVoteUpdate) {
+
+        onVoteUpdate(updatedVotes);
+
+      }
 
     } catch (error) {
 
@@ -115,9 +156,25 @@ function VoteButtons({
 
   return (
 
-    <div className="flex items-center gap-4 flex-wrap">
+    <div
 
-      {/* Upvote Button */}
+      style={{
+
+        display: "flex",
+
+        alignItems: "center",
+
+        gap: "6px",
+
+        flexWrap: "wrap"
+
+      }}
+
+    >
+
+      {/* =========================================
+         UPVOTE BUTTON
+      ========================================= */}
 
       <button
 
@@ -125,7 +182,40 @@ function VoteButtons({
 
         disabled={loading}
 
-        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-300"
+        style={{
+
+          background:
+            "linear-gradient(to right,#22c55e,#16a34a)",
+
+          border: "none",
+
+          color: "white",
+
+          padding: "6px 12px",
+
+          borderRadius: "8px",
+
+          fontSize: "11px",
+
+          fontWeight: "700",
+
+          cursor: loading
+            ? "not-allowed"
+            : "pointer",
+
+          opacity: loading
+            ? 0.7
+            : 1,
+
+          transition: "0.3s",
+
+          display: "flex",
+
+          alignItems: "center",
+
+          gap: "4px"
+
+        }}
 
       >
 
@@ -133,7 +223,9 @@ function VoteButtons({
 
       </button>
 
-      {/* Downvote Button */}
+      {/* =========================================
+         DOWNVOTE BUTTON
+      ========================================= */}
 
       <button
 
@@ -141,7 +233,40 @@ function VoteButtons({
 
         disabled={loading}
 
-        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300"
+        style={{
+
+          background:
+            "linear-gradient(to right,#ef4444,#dc2626)",
+
+          border: "none",
+
+          color: "white",
+
+          padding: "6px 12px",
+
+          borderRadius: "8px",
+
+          fontSize: "11px",
+
+          fontWeight: "700",
+
+          cursor: loading
+            ? "not-allowed"
+            : "pointer",
+
+          opacity: loading
+            ? 0.7
+            : 1,
+
+          transition: "0.3s",
+
+          display: "flex",
+
+          alignItems: "center",
+
+          gap: "4px"
+
+        }}
 
       >
 
@@ -149,13 +274,34 @@ function VoteButtons({
 
       </button>
 
-      {/* Vote Count */}
+      {/* =========================================
+         VOTE COUNT
+      ========================================= */}
 
-      <span className="font-semibold text-gray-700">
+      <div
+
+        style={{
+
+          background:
+            "rgba(37,99,235,0.16)",
+
+          color: "#60a5fa",
+
+          padding: "6px 10px",
+
+          borderRadius: "8px",
+
+          fontSize: "11px",
+
+          fontWeight: "700"
+
+        }}
+
+      >
 
         {voteCount} Votes
 
-      </span>
+      </div>
 
     </div>
 
