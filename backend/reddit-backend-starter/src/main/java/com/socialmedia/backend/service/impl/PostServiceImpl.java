@@ -2,6 +2,7 @@ package com.socialmedia.backend.service.impl;
 
 import com.socialmedia.backend.dto.request.CreatePostRequest;
 import com.socialmedia.backend.dto.response.PostResponse;
+
 import com.socialmedia.backend.entity.Comment;
 import com.socialmedia.backend.entity.Community;
 import com.socialmedia.backend.entity.Post;
@@ -21,8 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Optional;
+
 import java.util.stream.Collectors;
 
 @Service
@@ -182,7 +185,7 @@ public class PostServiceImpl
 
         }
 
-        /* DEFAULTS */
+        /* DEFAULT VALUES */
 
         post.setVotes(0);
 
@@ -404,7 +407,7 @@ public class PostServiceImpl
     }
 
     /* =========================================
-       UPVOTE
+       UPVOTE POST
     ========================================= */
 
     @Override
@@ -501,7 +504,7 @@ public class PostServiceImpl
     }
 
     /* =========================================
-       DOWNVOTE
+       DOWNVOTE POST
     ========================================= */
 
     @Override
@@ -620,55 +623,37 @@ public class PostServiceImpl
 
                         );
 
-        /* DELETE ALL COMMENTS */
+        /* DELETE VOTES FIRST */
 
-        List<Comment> comments =
+        voteRepository.deleteByPost(post);
 
-                post.getCommentsList();
+        /* DELETE COMMENTS */
 
         if (
-                comments != null &&
-                        !comments.isEmpty()
+
+                post.getCommentsList() != null &&
+
+                        !post.getCommentsList().isEmpty()
+
         ) {
 
             commentRepository.deleteAll(
-                    comments
+                    post.getCommentsList()
             );
 
         }
 
-        /* DELETE ALL VOTES */
+        /* FLUSH */
 
-        List<Vote> votes =
+        voteRepository.flush();
 
-                voteRepository.findAll()
-                        .stream()
-
-                        .filter(vote ->
-
-                                vote.getPost() != null &&
-
-                                        vote.getPost()
-                                                .getId()
-                                                .equals(id)
-
-                        )
-
-                        .collect(Collectors.toList());
-
-        if (
-                !votes.isEmpty()
-        ) {
-
-            voteRepository.deleteAll(
-                    votes
-            );
-
-        }
+        commentRepository.flush();
 
         /* DELETE POST */
 
         postRepository.delete(post);
+
+        postRepository.flush();
 
     }
 
