@@ -58,6 +58,8 @@ public class Comment {
        CREATED TIME
     ========================================= */
 
+    @Column(nullable = false)
+
     private LocalDateTime createdAt;
 
     /* =========================================
@@ -65,11 +67,13 @@ public class Comment {
     ========================================= */
 
     @ManyToOne(
-            fetch = FetchType.LAZY
+            fetch = FetchType.LAZY,
+            optional = false
     )
 
     @JoinColumn(
-            name = "post_id"
+            name = "post_id",
+            nullable = false
     )
 
     @JsonBackReference

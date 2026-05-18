@@ -2,17 +2,23 @@ package com.socialmedia.backend.service.impl;
 
 import com.socialmedia.backend.dto.request.CreatePostRequest;
 import com.socialmedia.backend.dto.response.PostResponse;
+import com.socialmedia.backend.entity.Comment;
 import com.socialmedia.backend.entity.Community;
 import com.socialmedia.backend.entity.Post;
 import com.socialmedia.backend.entity.Vote;
 import com.socialmedia.backend.entity.VoteType;
+
+import com.socialmedia.backend.repository.CommentRepository;
 import com.socialmedia.backend.repository.CommunityRepository;
 import com.socialmedia.backend.repository.PostRepository;
 import com.socialmedia.backend.repository.VoteRepository;
+
 import com.socialmedia.backend.service.PostService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +37,9 @@ public class PostServiceImpl
 
     @Autowired
     private VoteRepository voteRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     /* =========================================
        CREATE POST
@@ -65,25 +74,19 @@ public class PostServiceImpl
 
         Post post = new Post();
 
-        /* =========================================
-           TITLE
-        ========================================= */
+        /* TITLE */
 
         post.setTitle(
                 request.getTitle().trim()
         );
 
-        /* =========================================
-           CONTENT
-        ========================================= */
+        /* CONTENT */
 
         post.setContent(
                 request.getContent().trim()
         );
 
-        /* =========================================
-           FIX IMAGE URL
-        ========================================= */
+        /* IMAGE */
 
         String imageUrl =
                 request.getImageUrl();
@@ -93,15 +96,11 @@ public class PostServiceImpl
                         !imageUrl.trim().isEmpty()
         ) {
 
-            /* WINDOWS SLASH FIX */
-
             imageUrl =
                     imageUrl.replace(
                             "\\",
                             "/"
                     );
-
-            /* REMOVE DOMAIN */
 
             imageUrl =
                     imageUrl.replace(
@@ -109,15 +108,11 @@ public class PostServiceImpl
                             ""
                     );
 
-            /* REMOVE EXTRA SLASHES */
-
             imageUrl =
                     imageUrl.replaceAll(
                             "^/+",
                             ""
                     );
-
-            /* ENSURE uploads/ */
 
             if (
                     !imageUrl.startsWith(
@@ -131,15 +126,8 @@ public class PostServiceImpl
 
             }
 
-            /* FINAL FORMAT */
-
             imageUrl =
                     "/" + imageUrl;
-
-            System.out.println(
-                    "FINAL IMAGE URL => "
-                            + imageUrl
-            );
 
             post.setImageUrl(
                     imageUrl
@@ -147,9 +135,7 @@ public class PostServiceImpl
 
         }
 
-        /* =========================================
-           AUTHOR
-        ========================================= */
+        /* AUTHOR */
 
         post.setAuthor(
 
@@ -169,9 +155,7 @@ public class PostServiceImpl
 
         );
 
-        /* =========================================
-           COMMUNITY
-        ========================================= */
+        /* COMMUNITY */
 
         if (
                 request.getCommunityId() != null
@@ -198,9 +182,7 @@ public class PostServiceImpl
 
         }
 
-        /* =========================================
-           DEFAULT VALUES
-        ========================================= */
+        /* DEFAULTS */
 
         post.setVotes(0);
 
@@ -210,9 +192,7 @@ public class PostServiceImpl
                 LocalDateTime.now()
         );
 
-        /* =========================================
-           SAVE
-        ========================================= */
+        /* SAVE */
 
         Post savedPost =
                 postRepository.save(post);
@@ -367,9 +347,7 @@ public class PostServiceImpl
 
         }
 
-        /* =========================================
-           FIX IMAGE URL
-        ========================================= */
+        /* IMAGE */
 
         String imageUrl =
                 request.getImageUrl();
@@ -624,6 +602,7 @@ public class PostServiceImpl
     ========================================= */
 
     @Override
+    @Transactional
     public void deletePost(
             Long id
     ) {
@@ -640,6 +619,54 @@ public class PostServiceImpl
                                 )
 
                         );
+
+        /* DELETE ALL COMMENTS */
+
+        List<Comment> comments =
+
+                post.getCommentsList();
+
+        if (
+                comments != null &&
+                        !comments.isEmpty()
+        ) {
+
+            commentRepository.deleteAll(
+                    comments
+            );
+
+        }
+
+        /* DELETE ALL VOTES */
+
+        List<Vote> votes =
+
+                voteRepository.findAll()
+                        .stream()
+
+                        .filter(vote ->
+
+                                vote.getPost() != null &&
+
+                                        vote.getPost()
+                                                .getId()
+                                                .equals(id)
+
+                        )
+
+                        .collect(Collectors.toList());
+
+        if (
+                !votes.isEmpty()
+        ) {
+
+            voteRepository.deleteAll(
+                    votes
+            );
+
+        }
+
+        /* DELETE POST */
 
         postRepository.delete(post);
 

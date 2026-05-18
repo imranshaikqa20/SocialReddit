@@ -142,7 +142,9 @@ public class Post {
 
             cascade = CascadeType.ALL,
 
-            orphanRemoval = true
+            orphanRemoval = true,
+
+            fetch = FetchType.LAZY
 
     )
 
@@ -154,6 +156,8 @@ public class Post {
     /* =========================================
        CREATED TIME
     ========================================= */
+
+    @Column(nullable = false)
 
     private LocalDateTime createdAt;
 
@@ -203,6 +207,34 @@ public class Post {
             author = "Anonymous";
 
         }
+
+    }
+
+    /* =========================================
+       HELPER METHODS
+    ========================================= */
+
+    public void addComment(
+            Comment comment
+    ) {
+
+        commentsList.add(comment);
+
+        comment.setPost(this);
+
+        comments = commentsList.size();
+
+    }
+
+    public void removeComment(
+            Comment comment
+    ) {
+
+        commentsList.remove(comment);
+
+        comment.setPost(null);
+
+        comments = commentsList.size();
 
     }
 

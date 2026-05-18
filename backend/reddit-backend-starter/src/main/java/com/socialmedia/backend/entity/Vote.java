@@ -3,18 +3,15 @@ package com.socialmedia.backend.entity;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
-
 import lombok.Getter;
-
 import lombok.NoArgsConstructor;
-
 import lombok.Setter;
 
 @Entity
 
 @Table(
 
-        name = "vote",
+        name = "votes",
 
         uniqueConstraints = {
 
@@ -42,7 +39,9 @@ import lombok.Setter;
 
 public class Vote {
 
-    /* Primary Key */
+    /* =========================================
+       PRIMARY KEY
+    ========================================= */
 
     @Id
 
@@ -52,13 +51,17 @@ public class Vote {
 
     private Long id;
 
-    /* Username */
+    /* =========================================
+       USERNAME
+    ========================================= */
 
     @Column(nullable = false)
 
     private String username;
 
-    /* Vote Type */
+    /* =========================================
+       VOTE TYPE
+    ========================================= */
 
     @Enumerated(EnumType.STRING)
 
@@ -66,10 +69,13 @@ public class Vote {
 
     private VoteType type;
 
-    /* Post Relation */
+    /* =========================================
+       POST RELATION
+    ========================================= */
 
     @ManyToOne(
-            fetch = FetchType.LAZY
+            fetch = FetchType.LAZY,
+            optional = false
     )
 
     @JoinColumn(
