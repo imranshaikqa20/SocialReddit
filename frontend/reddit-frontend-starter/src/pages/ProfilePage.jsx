@@ -400,7 +400,7 @@ function ProfilePage() {
 
           >
 
-            My Posts 🚀
+            My Posts 
 
           </h2>
 
@@ -466,7 +466,7 @@ function ProfilePage() {
 
               >
 
-                No posts created yet 🚀
+                No posts created yet
 
               </div>
 
