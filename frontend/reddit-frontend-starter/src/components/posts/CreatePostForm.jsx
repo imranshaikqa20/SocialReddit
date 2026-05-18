@@ -267,7 +267,7 @@ function CreatePostForm() {
       }
 
       alert(
-        "Post Created Successfully 🚀"
+        "Post Created Successfully "
       );
 
       navigate("/home");
@@ -577,7 +577,7 @@ function CreatePostForm() {
 
             ? "Publishing Post..."
 
-            : "🚀 Publish Post"
+            : " Publish Post"
 
         }
 

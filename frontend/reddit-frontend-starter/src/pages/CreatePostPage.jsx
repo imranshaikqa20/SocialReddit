@@ -232,7 +232,7 @@ function CreatePostPage() {
 
             >
 
-              Create New Post 🚀
+              Create New Post
 
             </h1>
 
