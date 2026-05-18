@@ -3,13 +3,11 @@ package com.socialmedia.backend.service.impl;
 import com.socialmedia.backend.dto.request.CreatePostRequest;
 import com.socialmedia.backend.dto.response.PostResponse;
 
-import com.socialmedia.backend.entity.Comment;
 import com.socialmedia.backend.entity.Community;
 import com.socialmedia.backend.entity.Post;
 import com.socialmedia.backend.entity.Vote;
 import com.socialmedia.backend.entity.VoteType;
 
-import com.socialmedia.backend.repository.CommentRepository;
 import com.socialmedia.backend.repository.CommunityRepository;
 import com.socialmedia.backend.repository.PostRepository;
 import com.socialmedia.backend.repository.VoteRepository;
@@ -40,9 +38,6 @@ public class PostServiceImpl
 
     @Autowired
     private VoteRepository voteRepository;
-
-    @Autowired
-    private CommentRepository commentRepository;
 
     /* =========================================
        CREATE POST
@@ -610,50 +605,9 @@ public class PostServiceImpl
             Long id
     ) {
 
-        Post post =
+        /* DELETE POST DIRECTLY */
 
-                postRepository
-                        .findById(id)
-
-                        .orElseThrow(
-
-                                () -> new RuntimeException(
-                                        "Post Not Found"
-                                )
-
-                        );
-
-        /* DELETE VOTES FIRST */
-
-        voteRepository.deleteByPost(post);
-
-        /* DELETE COMMENTS */
-
-        if (
-
-                post.getCommentsList() != null &&
-
-                        !post.getCommentsList().isEmpty()
-
-        ) {
-
-            commentRepository.deleteAll(
-                    post.getCommentsList()
-            );
-
-        }
-
-        /* FLUSH */
-
-        voteRepository.flush();
-
-        commentRepository.flush();
-
-        /* DELETE POST */
-
-        postRepository.delete(post);
-
-        postRepository.flush();
+        postRepository.deleteById(id);
 
     }
 
