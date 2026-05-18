@@ -400,7 +400,7 @@ function ProfilePage() {
 
           >
 
-            My Posts 
+            My Posts
 
           </h2>
 

@@ -54,6 +54,9 @@ function PostCard({
   const [voteCount, setVoteCount] =
     useState(votes || 0);
 
+  const [deleting, setDeleting] =
+    useState(false);
+
   /* =========================================
      IMAGE URL
   ========================================= */
@@ -138,15 +141,9 @@ function PostCard({
       const data =
         await response.json();
 
-      console.log(
-        "UPVOTE RESPONSE:",
-        data
-      );
-
       setVoteCount(
 
         data?.votes ??
-
         voteCount + 1
 
       );
@@ -185,15 +182,9 @@ function PostCard({
       const data =
         await response.json();
 
-      console.log(
-        "DOWNVOTE RESPONSE:",
-        data
-      );
-
       setVoteCount(
 
         data?.votes ??
-
         voteCount - 1
 
       );
@@ -219,22 +210,45 @@ function PostCard({
 
     const confirmDelete =
       window.confirm(
-        "Delete this post?"
+        "Are you sure you want to delete this post?"
       );
 
     if (!confirmDelete) return;
 
     try {
 
-      await fetch(
+      setDeleting(true);
+
+      const response = await fetch(
 
         `${API_BASE}/api/posts/${id}`,
 
         {
-          method: "DELETE"
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json"
+          }
         }
 
       );
+
+      /* CHECK RESPONSE */
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Failed to delete post"
+        );
+
+      }
+
+      /* SUCCESS */
+
+      alert(
+        "Post deleted successfully ✅"
+      );
+
+      /* REFRESH POSTS */
 
       if (onPostUpdated) {
 
@@ -248,6 +262,14 @@ function PostCard({
         "DELETE ERROR:",
         error
       );
+
+      alert(
+        "Unable to delete post ❌"
+      );
+
+    } finally {
+
+      setDeleting(false);
 
     }
 
@@ -731,10 +753,14 @@ function PostCard({
 
                   onClick={handleDelete}
 
+                  disabled={deleting}
+
                   style={{
 
                     background:
-                      "linear-gradient(to right,#dc2626,#b91c1c)",
+                      deleting
+                        ? "#7f1d1d"
+                        : "linear-gradient(to right,#dc2626,#b91c1c)",
 
                     border: "none",
 
@@ -752,9 +778,17 @@ function PostCard({
 
                     fontWeight: "700",
 
-                    cursor: "pointer",
+                    cursor:
+                      deleting
+                        ? "not-allowed"
+                        : "pointer",
 
-                    fontSize: "10px"
+                    fontSize: "10px",
+
+                    opacity:
+                      deleting
+                        ? 0.7
+                        : 1
 
                   }}
 
@@ -762,7 +796,13 @@ function PostCard({
 
                   <FaTrash />
 
-                  Delete
+                  {
+
+                    deleting
+                      ? "Deleting..."
+                      : "Delete"
+
+                  }
 
                 </button>
 
